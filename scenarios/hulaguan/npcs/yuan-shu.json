@@ -1,0 +1,17 @@
+{
+  "id": "yuan-shu",
+  "name": "袁术",
+  "title": "后将军",
+  "personality": "骄傲、嫉妒、野心勃勃",
+  "motivation": "讨伐董卓，但不满袁绍为盟主",
+  "speakingStyle": "傲慢、自称\"公路\"",
+  "equipment": ["长剑", "锦袍"],
+  "mount": "高头大马",
+  "relationships": {
+    "yuan-shao": { "initial": -20, "label": "哥哥（不和）" },
+    "sun-jian": { "initial": 30, "label": "部下" },
+    "liu-bei": { "initial": -10, "label": "轻视" },
+    "dong-zhuo": { "initial": -80, "label": "死敌" }
+  },
+  "redLines": ["被顶撞", "被说嫉妒", "被说野心"]
+}

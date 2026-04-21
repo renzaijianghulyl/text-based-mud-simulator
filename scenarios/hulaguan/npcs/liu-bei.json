@@ -1,0 +1,18 @@
+{
+  "id": "liu-bei",
+  "name": "刘备",
+  "title": "刘皇叔",
+  "personality": "仁德、宽厚、重义气",
+  "motivation": "匡扶汉室，拯救百姓",
+  "speakingStyle": "温和、自称\"备\"",
+  "equipment": ["双股剑", "仁德袍"],
+  "mount": "普通战马",
+  "relationships": {
+    "lv-bu": { "initial": 0, "label": "陌生" },
+    "zhang-fei": { "initial": 100, "label": "三弟" },
+    "guan-yu": { "initial": 100, "label": "二弟" },
+    "cao-cao": { "initial": 20, "label": "盟友" },
+    "yuan-shao": { "initial": 10, "label": "盟主" }
+  },
+  "redLines": ["被说伪君子", "伤害百姓", "背叛兄弟"]
+}

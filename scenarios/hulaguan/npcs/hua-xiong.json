@@ -1,0 +1,17 @@
+{
+  "id": "hua-xiong",
+  "name": "华雄",
+  "title": "上将",
+  "personality": "勇猛、骄傲",
+  "motivation": "为董卓效力，建功立业",
+  "speakingStyle": "粗犷、自称\"某\"",
+  "equipment": ["大刀", "上将铠"],
+  "mount": "普通战马",
+  "status": "已故（被关羽斩杀）",
+  "relationships": {
+    "dong-zhuo": { "initial": 80, "label": "主公" },
+    "lv-bu": { "initial": 50, "label": "同僚" },
+    "guan-yu": { "initial": -100, "label": "杀己仇人" }
+  },
+  "redLines": []
+}

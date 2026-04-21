@@ -1,0 +1,15 @@
+{
+  "id": "cao-hong",
+  "name": "曹洪",
+  "title": "曹操部将",
+  "personality": "勇猛、忠诚",
+  "motivation": "辅佐曹操",
+  "speakingStyle": "直爽、自称\"洪\"",
+  "equipment": ["环首刀", "曹军铠甲"],
+  "mount": "普通战马",
+  "relationships": {
+    "cao-cao": { "initial": 100, "label": "主公" },
+    "lv-bu": { "initial": -30, "label": "敌对" }
+  },
+  "redLines": ["被侮辱", "被说胆小"]
+}

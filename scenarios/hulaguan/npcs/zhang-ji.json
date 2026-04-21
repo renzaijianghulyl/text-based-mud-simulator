@@ -1,0 +1,15 @@
+{
+  "id": "zhang-ji",
+  "name": "张济",
+  "title": "董卓部将",
+  "personality": "勇猛、忠诚",
+  "motivation": "效忠董卓",
+  "speakingStyle": "粗犷、自称\"济\"",
+  "equipment": ["长矛", "西凉甲"],
+  "mount": "普通战马",
+  "relationships": {
+    "dong-zhuo": { "initial": 80, "label": "主公" },
+    "lv-bu": { "initial": 40, "label": "同僚" }
+  },
+  "redLines": ["被侮辱", "被说背叛"]
+}

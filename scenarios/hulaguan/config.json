@@ -1,0 +1,11 @@
+{
+  "id": "hulaguan",
+  "name": "虎牢关之战",
+  "description": "东汉末年，诸侯讨董，虎牢关前对峙。玩家可以选择扮演原创角色或三国人物，体验这场传奇战役。",
+  "version": "1.0",
+  "era": "东汉末年",
+  "eraFeatures": "群雄割据、忠义、智谋",
+  "openingNarration": "初平元年的凛冬，虎牢关前旌旗蔽日，喊杀震天。董卓专权，天下共愤，十八路诸侯联军讨董。你站在这历史的关键节点，即将见证或参与这场传奇战役...",
+  "availableNpcs": ["lv-bu", "dong-zhuo", "liu-bei", "guan-yu", "zhang-fei", "cao-cao", "yuan-shao"],
+  "defaultTarget": "lv-bu"
+}

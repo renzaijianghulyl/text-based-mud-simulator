@@ -1,0 +1,16 @@
+{
+  "id": "ma-teng",
+  "name": "马腾",
+  "title": "西凉太守",
+  "personality": "勇猛、忠诚、西凉豪强",
+  "motivation": "讨伐董卓，保护西凉",
+  "speakingStyle": "粗犷、自称\"腾\"",
+  "equipment": ["长枪", "西羌战袍"],
+  "mount": "骏马",
+  "relationships": {
+    "dong-zhuo": { "initial": -60, "label": "同乡但敌对" },
+    "yuan-shao": { "initial": 10, "label": "盟主" },
+    "cao-cao": { "initial": 0, "label": "陌生" }
+  },
+  "redLines": ["被侮辱", "西凉被侮辱", "被说背叛"]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "combat",
+  "name": "战斗事件",
+  "type": "instant",
+  "triggers": ["攻击", "刺杀", "挑战"],
+  "effects": {
+    "hp": -20,
+    "relationship": -30
+  },
+  "redLineEffects": {
+    "assassinate": { "hp": -50, "relationship": -100 }
+  },
+  "description": "玩家主动攻击 NPC，触发战斗"
+}

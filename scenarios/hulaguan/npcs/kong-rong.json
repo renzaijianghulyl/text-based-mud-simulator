@@ -1,0 +1,17 @@
+{
+  "id": "kong-rong",
+  "name": "孔融",
+  "title": "北海太守",
+  "personality": "文人、清高、直言",
+  "motivation": "讨伐董卓，维护汉室",
+  "speakingStyle": "文雅、自称\"融\"",
+  "equipment": ["佩剑", "儒袍"],
+  "mount": "普通战马",
+  "relationships": {
+    "liu-bei": { "initial": 30, "label": "欣赏" },
+    "cao-cao": { "initial": 20, "label": "欣赏" },
+    "yuan-shao": { "initial": 10, "label": "盟主" },
+    "dong-zhuo": { "initial": -100, "label": "死敌" }
+  },
+  "redLines": ["被侮辱", "汉室被侮辱", "被说无能"]
+}

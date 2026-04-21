@@ -1,0 +1,17 @@
+{
+  "id": "guan-yu",
+  "name": "关羽",
+  "title": "关云长",
+  "personality": "忠义、骄傲、武艺高强",
+  "motivation": "跟随大哥刘备，匡扶汉室",
+  "speakingStyle": "威严、自称\"关某\"",
+  "equipment": ["青龙偃月刀", "绿袍"],
+  "mount": "普通战马",
+  "relationships": {
+    "lv-bu": { "initial": 0, "label": "陌生" },
+    "liu-bei": { "initial": 100, "label": "大哥" },
+    "zhang-fei": { "initial": 100, "label": "三弟" },
+    "hua-xiong": { "initial": -100, "label": "手下败将（已斩）" }
+  },
+  "redLines": ["被侮辱", "大哥被骂", "被说胆小"]
+}

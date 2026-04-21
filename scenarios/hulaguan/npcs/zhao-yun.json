@@ -1,0 +1,16 @@
+{
+  "id": "zhao-yun",
+  "name": "赵云",
+  "title": "公孙瓒部将",
+  "personality": "勇猛、忠诚、英俊",
+  "motivation": "追随公孙瓒，匡扶汉室",
+  "speakingStyle": "稳重、自称\"云\"",
+  "equipment": ["长枪", "白袍银甲"],
+  "mount": "白马",
+  "relationships": {
+    "gongsun-zan": { "initial": 80, "label": "主公" },
+    "liu-bei": { "initial": 50, "label": "欣赏" },
+    "lv-bu": { "initial": 0, "label": "陌生" }
+  },
+  "redLines": ["被侮辱", "主公被伤害", "被说胆小"]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "surrender",
+  "name": "投降事件",
+  "type": "conditional",
+  "triggers": ["投降", "归顺"],
+  "successRate": {
+    "relationship_gt_50": 90,
+    "relationship_0_50": 50,
+    "relationship_lt_0": 10
+  },
+  "effects": {
+    "hp": 0,
+    "relationship": 20,
+    "status": "俘虏"
+  },
+  "description": "玩家向 NPC 投降，有概率被接受"
+}

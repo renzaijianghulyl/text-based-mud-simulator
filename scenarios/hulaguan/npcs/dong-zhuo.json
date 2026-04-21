@@ -1,0 +1,21 @@
+{
+  "id": "dong-zhuo",
+  "name": "董卓",
+  "title": "相国",
+  "personality": "阴险、多疑、残暴",
+  "motivation": "掌控朝政，废立皇帝",
+  "speakingStyle": "傲慢、自称\"咱家\"",
+  "equipment": ["大刀", "锦袍"],
+  "mount": "肥胖战马",
+  "relationships": {
+    "lv-bu": { "initial": 60, "label": "义父子" },
+    "cao-cao": { "initial": -100, "label": "死敌" },
+    "yuan-shao": { "initial": -80, "label": "敌对" },
+    "dong-zhuo": { "initial": 100, "label": "自己" }
+  },
+  "redLines": [
+    "被顶撞",
+    "被威胁",
+    "被说篡位"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "locations": [
+    {
+      "id": "hulaguan-battlefield",
+      "name": "虎牢关战场",
+      "type": "战场",
+      "description": "两军对垒，喊杀震天，旌旗蔽日。远处可见虎牢关城楼高耸，近处是联军与董军的对峙阵地。",
+      "connections": ["lv-bu-camp", "hulaguan-city", "yuan-shao-camp"],
+      "rules": [
+        "在战场上攻击 NPC 不会立即被处决",
+        "可以逃跑（有成功率）",
+        "其他 NPC 可能介入战斗",
+        "可以观察战场形势"
+      ],
+      "npcs": ["lv-bu", "yuan-shao", "cao-cao", "liu-bei"]
+    },
+    {
+      "id": "lv-bu-camp",
+      "name": "吕布营帐",
+      "type": "营帐",
+      "description": "帐内烛火摇曳，方天画戟立在案旁。墙上挂着弓箭和铠甲，地上铺着兽皮。",
+      "connections": ["hulaguan-battlefield"],
+      "rules": [
+        "在吕布营帐攻击吕布会立即被处决",
+        "可以投降（有概率被接受）",
+        "可以展示奇物（吕布会好奇）",
+        "可以询问吕布武功"
+      ],
+      "npcs": ["lv-bu"]
+    },
+    {
+      "id": "hulaguan-city",
+      "name": "虎牢关城楼",
+      "type": "城楼",
+      "description": "城墙高耸，俯瞰整个战场。站在城楼上可以看到联军大营和远处的洛阳方向。",
+      "connections": ["hulaguan-battlefield"],
+      "rules": ["可以跳城自杀（必死）", "可以观察战场", "可以思考人生"],
+      "npcs": []
+    },
+    {
+      "id": "yuan-shao-camp",
+      "name": "袁绍大营",
+      "type": "大营",
+      "description": "联军盟主袁绍的大营，帐内聚集了各路诸侯和谋士。",
+      "connections": ["hulaguan-battlefield"],
+      "rules": ["可以拜见袁绍", "可以与其他诸侯交谈", "可以提议军事策略"],
+      "npcs": ["yuan-shao", "cao-cao", "liu-bei", "guan-yu", "zhang-fei"]
+    },
+    {
+      "id": "dong-zhuo-camp",
+      "name": "董卓大营",
+      "type": "大营",
+      "description": "董卓军队的后方大营，戒备森严。",
+      "connections": ["hulaguan-battlefield"],
+      "rules": ["可以投靠董卓", "可以传递情报", "危险区域（容易被怀疑）"],
+      "npcs": ["dong-zhuo"]
+    }
+  ]
+}

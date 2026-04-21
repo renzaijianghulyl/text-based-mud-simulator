@@ -1,0 +1,30 @@
+{
+  "miniprogramRoot": "src/frontend/dist/",
+  "cloudfunctionRoot": "cloud-dist/",
+  "projectname": "mud-weapp",
+  "description": "文字 RPG 模拟器",
+  "setting": {
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "uglifyFileName": false,
+    "enhance": true,
+    "packNpmRelationList": [],
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "useCompilerPlugins": false,
+    "minifyWXML": true
+  },
+  "compileType": "miniprogram",
+  "simulatorPluginLibVersion": {},
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "appid": "wxc4d54bef3a1b3349",
+  "editorSetting": {},
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/"
+}

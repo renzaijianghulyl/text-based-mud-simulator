@@ -1,0 +1,17 @@
+{
+  "id": "sun-jian",
+  "name": "孙坚",
+  "title": "长沙太守",
+  "personality": "勇猛、正直、忠诚",
+  "motivation": "讨伐董卓，匡扶汉室",
+  "speakingStyle": "直爽、自称\"坚\"",
+  "equipment": ["古锭刀", "江东铠甲"],
+  "mount": "普通战马",
+  "relationships": {
+    "yuan-shu": { "initial": 30, "label": "上司" },
+    "yuan-shao": { "initial": 20, "label": "盟主" },
+    "dong-zhuo": { "initial": -100, "label": "死敌" },
+    "lv-bu": { "initial": -50, "label": "敌对" }
+  },
+  "redLines": ["被侮辱", "被说胆小", "被说背叛"]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "flee",
+  "name": "逃跑事件",
+  "type": "conditional",
+  "triggers": ["逃跑", "溜走"],
+  "successRate": {
+    "hp_gt_80": 70,
+    "hp_50_80": 50,
+    "hp_lt_50": 30,
+    "relationship_lt_minus_50": 20
+  },
+  "effects": {
+    "hp": -10,
+    "status": "逃跑中"
+  },
+  "description": "玩家尝试逃跑，有成功率"
+}

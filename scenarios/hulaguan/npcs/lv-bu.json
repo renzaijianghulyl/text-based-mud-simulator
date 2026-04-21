@@ -1,0 +1,25 @@
+{
+  "id": "lv-bu",
+  "name": "吕布",
+  "title": "飞将",
+  "personality": "高傲、易怒、但爱才",
+  "motivation": "证明自己是天下第一猛将",
+  "speakingStyle": "简短、直接、自称\"某家\"",
+  "equipment": ["方天画戟", "兽面吞头连环铠"],
+  "mount": "赤兔马",
+  "relationships": {
+    "dong-zhuo": { "initial": 60, "label": "义父子" },
+    "zhang-fei": { "initial": -80, "label": "死敌" },
+    "liu-bei": { "initial": 0, "label": "陌生" },
+    "guan-yu": { "initial": 0, "label": "陌生" },
+    "hua-xiong": { "initial": 50, "label": "同僚" }
+  },
+  "redLines": [
+    "被骂\"三姓家奴\"",
+    "被刺杀",
+    "被背叛",
+    "被说怕死"
+  ],
+  "era": "东汉末年",
+  "eraFeatures": "群雄割据、忠义、智谋"
+}

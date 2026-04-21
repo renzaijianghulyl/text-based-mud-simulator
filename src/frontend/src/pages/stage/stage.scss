@@ -1,0 +1,80 @@
+.st {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.st__bar {
+  display: flex;
+  justify-content: space-around;
+  padding: 16rpx;
+  background: #eee;
+  font-size: 24rpx;
+}
+
+.st__scroll {
+  flex: 1;
+  box-sizing: border-box;
+}
+
+.st__scrollInner {
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.st__msg {
+  margin-bottom: 16rpx;
+  padding: 16rpx;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+}
+
+.st__msg--user {
+  background: #e8f5e9;
+}
+
+.st__msg--narration {
+  background: #fafafa;
+  color: #444;
+}
+
+.st__msg--dialogue {
+  background: #e3f2fd;
+}
+
+.st__msg--loading {
+  color: #888;
+  font-style: italic;
+}
+
+.st__quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  padding: 16rpx;
+  border-top: 1px solid #ddd;
+}
+
+.st__quickBtn {
+  flex: 1 1 22%;
+  margin: 0;
+  font-size: 22rpx;
+}
+
+.st__inputRow {
+  display: flex;
+  gap: 12rpx;
+  padding: 16rpx;
+  align-items: center;
+}
+
+.st__input {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 8rpx;
+  padding: 12rpx;
+}
+
+.st__send {
+  margin: 0;
+}

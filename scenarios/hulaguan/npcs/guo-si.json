@@ -1,0 +1,17 @@
+{
+  "id": "guo-si",
+  "name": "郭汜",
+  "title": "董卓部将",
+  "personality": "勇猛、忠诚于董卓",
+  "motivation": "效忠董卓，建功立业",
+  "speakingStyle": "粗犷、自称\"汜\"",
+  "equipment": ["大刀", "西凉甲"],
+  "mount": "普通战马",
+  "relationships": {
+    "dong-zhuo": { "initial": 80, "label": "主公" },
+    "lv-bu": { "initial": 40, "label": "同僚" },
+    "li-jue": { "initial": 60, "label": "同僚" },
+    "yuan-shao": { "initial": -80, "label": "敌对" }
+  },
+  "redLines": ["被侮辱", "董卓被侮辱", "被说背叛"]
+}

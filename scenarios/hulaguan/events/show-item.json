@@ -1,0 +1,11 @@
+{
+  "id": "show-item",
+  "name": "展示奇物事件",
+  "type": "instant",
+  "triggers": ["展示", "给...看"],
+  "effects": {
+    "hp": 0,
+    "relationship": 30
+  },
+  "description": "玩家向 NPC 展示现代物品（如手机、打火机），NPC 会好奇"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "tao-qian",
+  "name": "陶谦",
+  "title": "徐州刺史",
+  "personality": "仁厚、年老体弱",
+  "motivation": "讨伐董卓，保护徐州百姓",
+  "speakingStyle": "温和、自称\"谦\"",
+  "equipment": ["佩剑", "刺史袍"],
+  "mount": "普通战马",
+  "relationships": {
+    "liu-bei": { "initial": 40, "label": "欣赏" },
+    "cao-cao": { "initial": -30, "label": "警惕" },
+    "yuan-shao": { "initial": 10, "label": "盟主" },
+    "dong-zhuo": { "initial": -80, "label": "死敌" }
+  },
+  "redLines": ["被侮辱", "百姓被伤害", "被说无能"]
+}

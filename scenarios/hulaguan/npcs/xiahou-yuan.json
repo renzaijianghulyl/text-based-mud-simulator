@@ -1,0 +1,16 @@
+{
+  "id": "xiahou-yuan",
+  "name": "夏侯渊",
+  "title": "曹操部将",
+  "personality": "勇猛、忠诚、擅长骑兵",
+  "motivation": "辅佐曹操，成就大业",
+  "speakingStyle": "直爽、自称\"渊\"",
+  "equipment": ["大刀", "曹军铠甲"],
+  "mount": "普通战马",
+  "relationships": {
+    "cao-cao": { "initial": 100, "label": "主公" },
+    "xiahou-dun": { "initial": 80, "label": "族兄" },
+    "lv-bu": { "initial": -30, "label": "敌对" }
+  },
+  "redLines": ["被侮辱", "被说胆小"]
+}

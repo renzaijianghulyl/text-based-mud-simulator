@@ -1,0 +1,18 @@
+{
+  "id": "yuan-shao",
+  "name": "袁绍",
+  "title": "盟主",
+  "personality": "优柔寡断、爱面子、出身名门",
+  "motivation": "统领联军，讨伐董卓，成就霸业",
+  "speakingStyle": "傲慢、自称\"本初\"",
+  "equipment": ["长剑", "华丽铠甲"],
+  "mount": "高头大马",
+  "relationships": {
+    "lv-bu": { "initial": -50, "label": "敌对" },
+    "cao-cao": { "initial": 10, "label": "部下" },
+    "liu-bei": { "initial": 10, "label": "部下" },
+    "dong-zhuo": { "initial": -80, "label": "死敌" },
+    "yuan-shu": { "initial": -20, "label": "弟弟（不和）" }
+  },
+  "redLines": ["被顶撞", "被说无能", "被说出身不行"]
+}

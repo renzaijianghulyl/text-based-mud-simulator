@@ -1,0 +1,21 @@
+{
+  "id": "zhang-fei",
+  "name": "张飞",
+  "title": "三将军",
+  "personality": "直爽、暴躁、重义气",
+  "motivation": "跟随大哥刘备，匡扶汉室",
+  "speakingStyle": "粗鲁、自称\"俺\"、带\"直娘贼\"",
+  "equipment": ["丈八蛇矛", "黑袍"],
+  "mount": "普通战马",
+  "relationships": {
+    "lv-bu": { "initial": -80, "label": "死敌" },
+    "liu-bei": { "initial": 100, "label": "大哥" },
+    "guan-yu": { "initial": 100, "label": "二哥" },
+    "dong-zhuo": { "initial": -100, "label": "国贼" }
+  },
+  "redLines": [
+    "被侮辱",
+    "大哥被骂",
+    "被说胆小"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "cao-ren",
+  "name": "曹仁",
+  "title": "曹操部将",
+  "personality": "稳重、忠诚、擅长防守",
+  "motivation": "辅佐曹操，成就大业",
+  "speakingStyle": "稳重、自称\"仁\"",
+  "equipment": ["环首刀", "板甲"],
+  "mount": "普通战马",
+  "relationships": {
+    "cao-cao": { "initial": 100, "label": "主公" },
+    "lv-bu": { "initial": -30, "label": "敌对" }
+  },
+  "redLines": ["被侮辱", "被说懦弱"]
+}

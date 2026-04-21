@@ -1,0 +1,17 @@
+{
+  "id": "gongsun-zan",
+  "name": "公孙瓒",
+  "title": "北平太守",
+  "personality": "勇猛、爱护部下",
+  "motivation": "讨伐董卓，保护边疆",
+  "speakingStyle": "直爽、自称\"瓒\"",
+  "equipment": ["长矛", "白袍银甲"],
+  "mount": "白马",
+  "relationships": {
+    "liu-bei": { "initial": 60, "label": "旧识（刘备曾跟随公孙瓒）" },
+    "zhao-yun": { "initial": 80, "label": "部下" },
+    "yuan-shao": { "initial": 10, "label": "盟主" },
+    "dong-zhuo": { "initial": -80, "label": "死敌" }
+  },
+  "redLines": ["被侮辱", "部下被伤害", "被说懦弱"]
+}

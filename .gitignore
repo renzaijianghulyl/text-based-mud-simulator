@@ -1,0 +1,14 @@
+node_modules/
+dist/
+src/frontend/dist/
+src/frontend/node_modules/
+cloud-dist/
+coverage/
+.env
+*.log
+.DS_Store
+.swc/
+**/.swc/
+.sessions/
+project.private.config.json
+**/project.private.config.json
