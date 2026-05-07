@@ -1,0 +1,283 @@
+{
+  "period": {
+    "year": 190,
+    "eraName": "初平元年",
+    "season": "冬",
+    "event": "诸侯讨董，联军与董卓军对峙虎牢关一带"
+  },
+  "location": {
+    "current": "虎牢关（关东联军与董军前线）",
+    "caoCaoBase": "陈留/兖州盟军阵营（非许都；曹操此时尚未迎献帝）",
+    "forbiddenLocations": ["许都", "许昌", "邺城"]
+  },
+  "characters": {
+    "present": [
+      { "npcId": "cao-cao", "role": "盟军将领", "status": "active" },
+      { "npcId": "yuan-shao", "role": "关东盟主", "status": "active" },
+      { "npcId": "liu-bei", "role": "平原相/随公孙瓒系盟军出战", "status": "ally" },
+      { "npcId": "guan-yu", "role": "刘备部将", "status": "ally", "note": "随刘备，不在曹操阵营" },
+      { "npcId": "zhang-fei", "role": "刘备部将", "status": "ally" },
+      { "npcId": "lv-bu", "role": "董卓义子、守关猛将", "status": "enemy" },
+      { "npcId": "hua-xiong", "role": "董卓部将（正史为孙坚所破）", "status": "alive" }
+    ],
+    "absent": [
+      {
+        "npcId": "dong-zhuo",
+        "labels": ["董卓", "仲颖", "董仲颖"],
+        "reason": "坐镇洛阳朝堂、控制献帝与中枢；讨董前线在虎牢关一带，宜由吕布、华雄等将镇守。不宜叙事为亲临关前升帐与吕布同阵主议。",
+        "location": "洛阳",
+        "forbidDialogueSpeaker": false
+      },
+      {
+        "npcId": "guo-jia",
+        "labels": ["郭嘉", "奉孝", "郭奉孝"],
+        "reason": "此时尚在袁绍侧活动，约初平二年以后方归曹操",
+        "forbiddenUntil": 192
+      },
+      {
+        "npcId": "xu-chu",
+        "labels": ["许褚", "仲康", "许仲康"],
+        "reason": "此时尚未投奔曹操",
+        "forbiddenUntil": 194
+      },
+      {
+        "npcId": "xun-yu",
+        "labels": ["荀彧", "文若", "荀文若"],
+        "reason": "多在兖州后方筹划，非虎牢关前线主角；可侧写提及，勿令其如亲临前线升帐主议",
+        "forbiddenUntil": null,
+        "forbidDialogueSpeaker": false
+      }
+    ]
+  },
+  "forbiddenEvents": [
+    {
+      "label": "十胜十败论",
+      "keywords": ["十胜十败"],
+      "severity": "hard",
+      "actualYear": 200,
+      "reason": "郭嘉官渡前对曹操之论，非讨董时期"
+    },
+    {
+      "label": "白马之战",
+      "keywords": ["白马之战", "白马坡"],
+      "severity": "hard",
+      "actualYear": 200,
+      "reason": "官渡阶段战事"
+    },
+    {
+      "label": "迎奉汉献帝于许",
+      "keywords": ["迎奉汉献帝", "迎奉天子", "奉天子以令不臣"],
+      "severity": "hard",
+      "actualYear": 196,
+      "reason": "此时献帝在长安，曹操尚未都许"
+    },
+    {
+      "label": "温酒斩华雄（作史实叙述）",
+      "keywords": [],
+      "severity": "soft",
+      "actualYear": 190,
+      "reason": "演义情节流传广；若写须区分「世说/演义」与正史——正史中华雄为孙坚军所破，勿将关羽阵斩华雄写为史实定论。"
+    }
+  ],
+  "historicalNotes": [
+    "本剧本时间锚点为初平元年讨董联军阶段，勿混用建安末年地名、官制与典故。",
+    "曹操此时尚未迎献帝，根据地叙事勿称「都于许都」；可用陈留、盟军大营、兖州后方等表述。",
+    "关羽、张飞为刘备部将，随刘备在联军中，不应写成曹操麾下听令。",
+    "郭嘉、许褚等勿以前线谋士/亲卫身份强行登场对白；荀彧可后方提及，勿写成虎牢关帐内主议核心。",
+    "涉及华雄结局：可写演义传闻，但若写「史实」口径须与《三国志》孙坚破卓将记载相容。",
+    "若玩家刻意混用后期典故，NPC 可礼貌纠偏，不必硬杠，但勿主动编造后期大事件为已发生。",
+    "讨董联军语境下：袁绍为盟主，曹操为诸侯之一听盟主号令；公开场合宜有礼数与位阶感，勿写成官渡对决时的仇敌口吻。",
+    "诸侯内部张力（袁术–袁绍、孙坚–袁绍等）宜作联军暗线，勿写成官渡决裂之后的事实口吻。",
+    "董卓讨董时期多在洛阳把控朝政；虎牢关前线董军宜以吕布、华雄等为主将叙事，勿将董卓写成常驻虎牢关帐内主阵。",
+    "吕布为董卓义子：对董卓当面宜称义父；勿用神职头衔单独替代父子礼数（军报转述、对第三方提及时可用相国、太师）。"
+  ],
+  "dramaticRelationships": [
+    {
+      "from": "cao-cao",
+      "to": "yuan-shao",
+      "public": {
+        "tone": "礼敬盟主、称本初/盟主，议事先让上座",
+        "note": "联军讨董：曹为诸侯、袁为盟主；表面协和，可写各自保留。"
+      },
+      "private": {
+        "tone": "内心可保留对盟主号令与诸侯格局的谋断，不宜直呼诋毁",
+        "note": "勿提前写成官渡决裂后的敌意。"
+      }
+    },
+    {
+      "from": "yuan-shao",
+      "to": "cao-cao",
+      "public": {
+        "tone": "以盟主身份礼接孟德，军议可点名问策",
+        "note": "倚重其才而防其权；非日后官渡时的公开决裂语气。"
+      },
+      "private": {
+        "tone": "可写对诸将离心与曹操锋芒的隐忧，仍以盟主体面收束",
+        "note": "联军阶段仍以「诸侯之长」自居。"
+      }
+    },
+    {
+      "from": "cao-cao",
+      "to": "sun-jian",
+      "public": {
+        "tone": "盟军同僚，敬称乌程侯/孙将军",
+        "note": "前锋战功可互致礼；勿抢其破华雄之史书脉络为曹氏之功。"
+      }
+    },
+    {
+      "from": "yuan-shao",
+      "to": "sun-jian",
+      "public": {
+        "tone": "盟主对部将，可嘉奖可调度",
+        "note": "孙坚破卓将有功时袁绍既赏且忌，担心其锋太露。"
+      },
+      "private": {
+        "tone": "内心忌惮孙坚勇烈，可写暗中制衡",
+        "note": "勿提前写玉玺、追杀等后期情节为已定案。"
+      }
+    },
+    {
+      "from": "yuan-shao",
+      "to": "gongsun-zan",
+      "public": {
+        "tone": "盟主对诸侯，表面客气",
+        "note": "二人已有旧隙苗头，勿写成界桥之战已发生。"
+      },
+      "private": {
+        "tone": "内心轻视公孙瓒武人出身",
+        "note": "袁绍自视名门，语气宜收在礼数之内。"
+      }
+    },
+    {
+      "from": "yuan-shao",
+      "to": "yuan-shu",
+      "public": {
+        "tone": "兄长对弟弟，表面和睦",
+        "note": "联军面上维持袁氏门面。"
+      },
+      "private": {
+        "tone": "兄弟嫌隙已深，可侧写嫡庶心结",
+        "note": "勿写成日后称帝、兄弟公开决裂的既成事。"
+      }
+    },
+    {
+      "from": "liu-bei",
+      "to": "gongsun-zan",
+      "public": {
+        "tone": "部下对上级，恭敬",
+        "note": "刘备此阶段随公孙瓒系出战，听其号令。"
+      },
+      "private": {
+        "tone": "胸怀大志而暂居人下",
+        "note": "语气克制，勿写成已据荆益。"
+      }
+    },
+    {
+      "from": "liu-bei",
+      "to": "cao-cao",
+      "public": {
+        "tone": "盟军同僚，互相礼敬",
+        "note": "刘备知曹操器重自己，仍保持距离。"
+      },
+      "private": {
+        "tone": "内心警惕曹操非池中物",
+        "note": "勿写成日后仇敌口吻，仅可微妙试探。"
+      }
+    },
+    {
+      "from": "sun-jian",
+      "to": "yuan-shao",
+      "public": {
+        "tone": "部将对盟主，不卑不亢",
+        "note": "有功时受赏，对调度可有保留。"
+      },
+      "private": {
+        "tone": "内心不满盟主优柔或掣肘",
+        "note": "勿写成公开撕破脸。"
+      }
+    },
+    {
+      "from": "lv-bu",
+      "to": "dong-zhuo",
+      "public": {
+        "tone": "义子对义父/相国：当面宜称义父；公务或军报转述可称相国、太师；口头上勿单用太师顶替父子礼数",
+        "note": "表面恭敬仍听节制；董卓本人宜在洛阳发令，关前以吕布等执行军令，可写细微不服。"
+      },
+      "private": {
+        "tone": "怨董卓专横跋扈（含掷戟等心结），义父子名下已积怨，可与后世董吕反目作伏笔",
+        "note": "勿写成本时期已定貂蝉私通或已定计诛董；初平元年以讨董军前矛盾为限。"
+      }
+    },
+    {
+      "from": "lv-bu",
+      "to": "liu-bei",
+      "public": {
+        "tone": "轻视，可带傲气",
+        "note": "演义口吻可称大耳儿，须符合当前联军对峙语境。"
+      },
+      "private": {
+        "tone": "忌惮刘备得人心",
+        "note": "忌恨宜短促，勿铺陈日后白门楼。"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "from": "lv-bu",
+      "to": "dong-zhuo",
+      "relationship": "名义上的父子义从，兼有温差与怨忌",
+      "addressForm": "义父（当面与父子语境）；军报或对下属转述其命令时可称相国、太师",
+      "knowledgeLevel": "礼数与私怨并存，口吻随场合切换",
+      "note": "吕布口语对董卓勿仅以「太师」等官称代之而省略义父；对外人提及董卓时可用相国、太师。"
+    },
+    {
+      "from": "cao-cao",
+      "to": "guo-jia",
+      "relationship": "闻其名，未谋面，未深交",
+      "addressForm": "郭嘉 / 颍川郭嘉",
+      "forbiddenAddress": ["奉孝", "郭奉孝"],
+      "knowledgeLevel": "知其有才名，但此时尚无君臣定交",
+      "note": "初平二年前后方有荐举与归附脉络"
+    },
+    {
+      "from": "cao-cao",
+      "to": "xun-yu",
+      "relationship": "已知其才，倚为后方筹划",
+      "addressForm": "文若 / 荀彧",
+      "knowledgeLevel": "可用表字，语气可见器重",
+      "note": "此时偏后方角色，非虎牢关前线主议核心"
+    },
+    {
+      "from": "cao-cao",
+      "to": "liu-bei",
+      "relationship": "盟军同僚，知其宗室名分",
+      "addressForm": "玄德 / 刘备",
+      "knowledgeLevel": "有交集但未深交"
+    },
+    {
+      "from": "cao-cao",
+      "to": "guan-yu",
+      "relationship": "闻名其勇，未深交",
+      "addressForm": "关羽 / 云长",
+      "knowledgeLevel": "可称其名或字，语气应保持克制",
+      "note": "此时从属于刘备阵营"
+    },
+    {
+      "from": "cao-cao",
+      "to": "zhang-fei",
+      "relationship": "闻名其勇，未深交",
+      "addressForm": "张飞 / 翼德",
+      "knowledgeLevel": "可称其名或字，语气应保持克制",
+      "note": "此时从属于刘备阵营"
+    }
+  ],
+  "addressRules": {
+    "description": "称谓规范：按熟悉度与关系使用名/字，避免后见之明",
+    "rules": [
+      "熟悉且尊重者可称表字（如文若）；闻名未深交者优先用全名或地望+全名。",
+      "玩家若先用不合时宜称谓，NPC 可礼貌纠偏，或引用后改回合规称谓。",
+      "不得因为玩家提法而直接沿用错误称谓当作 NPC 自身立场。",
+      "称谓变化应与时代关系一致，不可提前使用后期亲密口吻。"
+    ]
+  }
+}

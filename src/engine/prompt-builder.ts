@@ -1,6 +1,26 @@
-import type { CumulativeState, CurrentNpc, KeyEvent, RecentPhrase, SessionNpcsContext } from '../types';
+import type {
+  CumulativeState,
+  CurrentNpc,
+  KeyEvent,
+  PlayerRoleProfile,
+  RecentPhrase,
+  SessionNpcsContext,
+} from '../types';
 import { PROMPT_DIRECTOR_MARKDOWN } from './prompt-director-markdown';
 import { getScenarioNarrativeHint } from './scenario-narrative-hint';
+import { getEnsembleElasticPromptLine, getScenarioEnsembleHint } from './scenario-ensemble-hint';
+import { buildEnsembleBeatsHint, buildScenarioEmotionalHint } from './scenario-emotional-hint';
+import {
+  buildDramaticRelationshipsHint,
+  buildHistoricalContextHint,
+  buildRelationshipHint,
+} from './historical-context';
+import {
+  isOpeningRoundIntent,
+  OPENING_PROMPT_DIRECTOR,
+  readScenarioOpeningNarration,
+  readScenarioOpeningPlayerHint,
+} from './opening-intent';
 
 export interface PromptMemoryInput {
   recentSummaryLines: string[];
@@ -8,6 +28,8 @@ export interface PromptMemoryInput {
   keyEvents: KeyEvent[];
   cumulativeState: CumulativeState;
 }
+
+export type PromptProfile = 'fast' | 'balanced' | 'rich' | 'auto';
 
 /** 粗略按字符预算控制各段长度（中文场景约 2 字符 ≈ 1 token，仅作量级约束） */
 const BUDGET_NPC = 280;
@@ -18,8 +40,25 @@ const BUDGET_RECENT_PHRASES = 400;
 const BUDGET_CUMULATIVE = 400;
 const BUDGET_ENVIRONMENT = 240;
 const BUDGET_INTENT = 200;
-/** narrative-prompt-guide-v3 建议的系统导演稿预算（+400 为 clip 上限；略提高以多注入导演技巧段） */
-const BUDGET_SYSTEM = 2800;
+/** 开局合成意图可能较长，单独放宽 clip */
+const BUDGET_INTENT_OPENING = 400;
+const BUDGET_OPENING_REF = 520;
+/** 策划配置的首局情境锚点（openingPlayerHint） */
+const BUDGET_OPENING_PLAYER_HINT = 220;
+const BUDGET_PLAYER_ROLE = 900;
+/** 历史背景与约束（剧本 historical-context.json） */
+const BUDGET_HISTORICAL = 800;
+/** 人物关系与称谓约束（当前主 NPC 视角） */
+const BUDGET_RELATIONSHIP_HINT = 600;
+/** 情感高潮引导（剧本 emotional-beats.json） */
+const BUDGET_EMOTIONAL_HINT = 500;
+/** 联军戏剧关系（historical-context dramaticRelationships） */
+const BUDGET_DRAMATIC_REL_HINT = 420;
+/** 群像节拍（emotional-beats ensemble / optional romance） */
+const BUDGET_ENSEMBLE_BEATS_HINT = 480;
+/** narrative-prompt-guide-v3 建议的系统导演稿预算（+400 为 clip 上限；须覆盖「篇幅与信息密度」等中段导演约束） */
+const BUDGET_SYSTEM = 5000;
+const DIRECTOR_CACHE = new Map<string, string[]>();
 
 /** 不经过 clip，每轮完整注入；与累计状态中的 HP 呼应，表述为导演倾向而非死规则 */
 const LIFE_CONFLICT_DIRECTOR_BLOCK = `【导演原则：生命、冲突与结局】
@@ -290,6 +329,21 @@ const EMOTION_DIRECTOR_BLOCK = `【导演原则：情感共鸣（软性约束）
 - 是否长期只有打斗与对白、无情感落点？→ 若剧情已到，可否有一场面的震动或沉默反应。
 - 牺牲或相护是否突兀？→ 宜有前因或侧写铺垫。`;
 
+const ENSEMBLE_CAST_DIRECTOR_BLOCK = `【导演原则：群像与点名（强倾向）】
+与【卡司与点名】【群像与轮次弹性】一并阅读：战争/军议类场景宜让读者感到军营与关隘是活的，而不是只有「主 NPC + 玩家」二人转。
+
+【点名与代答】
+- 若【玩家意图】或对白中明确点名某一卡司角色（含其字、号、常见称呼，参见【卡司与点名】中的别名），该角色须在本轮 scenes 内亲自开口：至少一幕 type 为 dialogue，且 speaker 须写其正名（与卡司名单中的主名一致），不得仅由他人转述其态度了事。
+- 禁止「代答」：当前主 NPC 不得用一句「某某尚未开口」「某某让你退下」等完全顶替该被点名者的立场与台词；若剧情需要其暂默，仍须给该 NPC 独立一幕（可为极短 dialogue 或 action 明确其在场与态度），不得整轮缺席。
+- 职能人物（斥候、传令兵等）可用 speaker 写其职能称谓，但不宜每轮同名复读；与主名卡司冲突时仍以卡司正名为准。
+
+【军议 / 大战 / 升帐 / 出战 / 追击 / 围城】
+- 语义上出现上述类场景时，优先安排至少 2 名不同 speaker 的 dialogue（可分幕交错），避免同一幕内主公一人长篇包办所有谋士武将态度。
+- 第三方发言宜占独立幕：先 action 写其上前、闯帐、急步等，再下一幕 dialogue，勿把多人台词挤在同一 content 长段里冒充一幕。
+
+【与剧情推进的配合】
+- 外部打断（军情、请战、献策）须因果成立；插入后仍给玩家反应空间，勿替玩家裁决。`;
+
 const PLOT_PROGRESS_DIRECTOR_BLOCK = `【导演原则：剧情推进（软性约束）】
 不要只做「玩家一句 → NPC 一句」的问答机；让剧情自然流动。玩家是世界的一部分，不必每轮都成为唯一焦点。
 
@@ -321,6 +375,91 @@ function clip(text: string, maxChars: number): string {
   return `${text.slice(0, maxChars)}…`;
 }
 
+function getPromptProfileFromEnv(): PromptProfile {
+  const raw = process.env.PROMPT_PROFILE?.trim().toLowerCase();
+  if (raw === 'fast' || raw === 'rich' || raw === 'balanced' || raw === 'auto') {
+    return raw;
+  }
+  return 'balanced';
+}
+
+function getProfileBudgets(profile: PromptProfile) {
+  const effectiveProfile: Exclude<PromptProfile, 'auto'> = profile === 'auto' ? 'balanced' : profile;
+  if (effectiveProfile === 'fast') {
+    return {
+      keyEvents: 500,
+      recent: 700,
+      recentPhrases: 240,
+      cumulative: 320,
+      system: 1700,
+      directorBlock: 900,
+    };
+  }
+  if (effectiveProfile === 'rich') {
+    return {
+      keyEvents: BUDGET_KEY_EVENTS,
+      recent: BUDGET_RECENT,
+      recentPhrases: BUDGET_RECENT_PHRASES,
+      cumulative: BUDGET_CUMULATIVE,
+      system: BUDGET_SYSTEM + 400,
+      directorBlock: 2600,
+    };
+  }
+  return {
+    keyEvents: 650,
+    recent: 900,
+    recentPhrases: 300,
+    cumulative: 360,
+    system: BUDGET_SYSTEM + 400,
+    directorBlock: 1300,
+  };
+}
+
+function directorBlockFrame(
+  scenarioId: string,
+  profile: PromptProfile,
+  totalRounds: number
+): string[] {
+  const effectiveProfile: Exclude<PromptProfile, 'auto'> = profile === 'auto' ? 'balanced' : profile;
+  const bucket = Math.floor(Math.max(totalRounds, 0) / 3);
+  const key = `${scenarioId}|${effectiveProfile}|${bucket}`;
+  const cached = DIRECTOR_CACHE.get(key);
+  if (cached) {
+    return cached;
+  }
+  const core = [
+    LIFE_CONFLICT_DIRECTOR_BLOCK,
+    NARRATIVE_DIVERSITY_DIRECTOR_BLOCK,
+    RELATIONSHIP_DIRECTOR_BLOCK,
+    TIME_CONSISTENCY_DIRECTOR_BLOCK,
+    ENSEMBLE_CAST_DIRECTOR_BLOCK,
+  ];
+  const optional = [
+    COMBAT_VARIETY_DIRECTOR_BLOCK,
+    NPC_EMOTION_DIRECTOR_BLOCK,
+    PLAYER_GROWTH_DIRECTOR_BLOCK,
+    CAMPAIGN_PACING_DIRECTOR_BLOCK,
+    NPC_DEPTH_DIRECTOR_BLOCK,
+    PLAYER_ARC_DIRECTOR_BLOCK,
+    SUSPENSE_THEME_DIRECTOR_BLOCK,
+    EMOTION_DIRECTOR_BLOCK,
+    PLOT_PROGRESS_DIRECTOR_BLOCK,
+  ];
+  let pickedOptional: string[] = [];
+  if (effectiveProfile === 'rich') {
+    pickedOptional = optional;
+  } else if (effectiveProfile === 'fast') {
+    const idx = bucket % optional.length;
+    pickedOptional = [optional[idx]];
+  } else {
+    const start = (bucket * 2) % optional.length;
+    pickedOptional = [optional[start], optional[(start + 1) % optional.length], optional[(start + 2) % optional.length]];
+  }
+  const frame = [...core, ...pickedOptional];
+  DIRECTOR_CACHE.set(key, frame);
+  return frame;
+}
+
 function getRelationshipLabel(score: number): string {
   if (score >= 80) return '生死之交';
   if (score >= 50) return '好友';
@@ -331,6 +470,29 @@ function getRelationshipLabel(score: number): string {
   return '死敌';
 }
 
+function buildPlayerRoleBlocks(playerRoleProfile?: PlayerRoleProfile): { role: string; detail: string; hook: string } {
+  if (!playerRoleProfile) {
+    return {
+      role: '未设定（按普通参战者处理）',
+      detail: '（暂无）',
+      hook: '若玩家后续补充身世、家事、关系与师承，请自然吸收进叙事，不要生硬改设定。',
+    };
+  }
+  if (playerRoleProfile.mode === 'oc') {
+    return {
+      role: '原创角色',
+      detail: `姓名：${playerRoleProfile.name}；背景：${playerRoleProfile.background}`,
+      hook:
+        '可从背景中自然抽取家世、旧怨、盟友、师承等线索推进剧情；先埋伏笔再兑现，不要一轮全部抖出。',
+    };
+  }
+  return {
+    role: '扮演武将',
+    detail: `武将名：${playerRoleProfile.generalName}`,
+    hook: '玩家以该武将身份参与剧情；称谓、立场、行事风格应与该武将历史形象及当前战局一致。',
+  };
+}
+
 /**
  * 构建单轮叙事 prompt：注入人设、关系、关键事件、滚动摘要、累计状态、意图与系统指令。
  */
@@ -338,8 +500,12 @@ export function buildPrompt(
   npcs: SessionNpcsContext,
   memory: PromptMemoryInput,
   intent: string,
-  scenarioId: string
+  scenarioId: string,
+  profileInput?: PromptProfile,
+  playerRoleProfile?: PlayerRoleProfile
 ): string {
+  const profile = profileInput ?? getPromptProfileFromEnv();
+  const budgets = getProfileBudgets(profile);
   const npc: CurrentNpc = npcs.current;
   const titlePart = npc.title ? `（${npc.title}）` : '';
   const equipBits: string[] = [];
@@ -364,12 +530,12 @@ export function buildPrompt(
   const keyLines = memory.keyEvents
     .map((e) => `R${e.round}: ${e.event} → ${e.impact}`)
     .join('\n');
-  const keyBlock = clip(keyLines.length > 0 ? keyLines : '（暂无）', BUDGET_KEY_EVENTS);
+  const keyBlock = clip(keyLines.length > 0 ? keyLines : '（暂无）', budgets.keyEvents);
 
   const recentJoined = memory.recentSummaryLines.join('；');
   const recentBlock = clip(
     recentJoined.length > 0 ? recentJoined : '（暂无）',
-    BUDGET_RECENT
+    budgets.recent
   );
 
   const cs = memory.cumulativeState;
@@ -380,7 +546,7 @@ export function buildPrompt(
         ? `；叙事参考：会话已进行约 ${cs.totalRounds} 轮，旁白可随剧情逐步推进昼夜与战况阶段，不必与轮次一一对应`
         : '') +
       (cs.totalRounds >= 25 ? `；长程：宜穿插休整、夜谈与军议` : ''),
-    BUDGET_CUMULATIVE
+    budgets.cumulative
   );
   const env = cs.environment;
   const environmentBlock = clip(
@@ -394,53 +560,103 @@ export function buildPrompt(
     .join('\n');
   const recentPhrasesBlock = clip(
     recentPhraseLines.length > 0 ? recentPhraseLines : '（暂无）',
-    BUDGET_RECENT_PHRASES
+    budgets.recentPhrases
   );
 
-  const intentBlock = clip(intent.trim(), BUDGET_INTENT);
+  const intentTrimmed = intent.trim();
+  const intentBlock = clip(
+    intentTrimmed,
+    isOpeningRoundIntent(intent) ? BUDGET_INTENT_OPENING : BUDGET_INTENT
+  );
+  const playerRoleBlocks = buildPlayerRoleBlocks(playerRoleProfile);
+  const openingNarrationHint =
+    isOpeningRoundIntent(intent) ? readScenarioOpeningNarration(scenarioId) : undefined;
+  const openingPlayerHint =
+    isOpeningRoundIntent(intent) ? readScenarioOpeningPlayerHint(scenarioId) : undefined;
 
-  const systemBlock = clip(PROMPT_DIRECTOR_MARKDOWN, BUDGET_SYSTEM + 400);
+  const ensembleRoster = getScenarioEnsembleHint(scenarioId);
+  const ensembleElastic = getEnsembleElasticPromptLine(cs.totalRounds, memory.recentSummaryLines);
+
+  const systemBlock = clip(PROMPT_DIRECTOR_MARKDOWN, budgets.system);
+  const directorBlocks = directorBlockFrame(scenarioId, profile, cs.totalRounds);
 
   const scenarioTypeLine = getScenarioNarrativeHint(scenarioId);
+  const historicalHint = buildHistoricalContextHint(scenarioId);
+  const relationshipHint = buildRelationshipHint(scenarioId, npcs.current.id);
+  const dramaticRelHint = buildDramaticRelationshipsHint(scenarioId, npcs.current.id);
+  const ensembleBeatsHint = buildEnsembleBeatsHint(
+    scenarioId,
+    cs.totalRounds,
+    memory.recentSummaryLines
+  );
+  const emotionalHint = buildScenarioEmotionalHint(
+    scenarioId,
+    cs.totalRounds,
+    memory.recentSummaryLines
+  );
 
   return [
     '【剧本类型】',
     scenarioTypeLine,
     '',
+    ...(isOpeningRoundIntent(intent)
+      ? [
+          '【开局旁白导演】',
+          OPENING_PROMPT_DIRECTOR,
+          '',
+          ...(openingNarrationHint
+            ? ['【剧本开场参考】', clip(openingNarrationHint, BUDGET_OPENING_REF), '']
+            : []),
+          ...(openingPlayerHint
+            ? [
+                '【首局情境提示】',
+                '以下为策划锚点，请融入旁白氛围，勿逐字照抄；勿替玩家做决定。',
+                clip(openingPlayerHint, BUDGET_OPENING_PLAYER_HINT),
+                '',
+              ]
+            : []),
+        ]
+      : []),
+    ...(historicalHint
+      ? ['【历史背景与约束】', clip(historicalHint, BUDGET_HISTORICAL), '']
+      : []),
+    ...(relationshipHint
+      ? ['【人物关系与称谓】', clip(relationshipHint, BUDGET_RELATIONSHIP_HINT), '']
+      : []),
+    ...(dramaticRelHint
+      ? ['【联军人物戏剧关系】', clip(dramaticRelHint, BUDGET_DRAMATIC_REL_HINT), '']
+      : []),
+    ...(ensembleBeatsHint
+      ? ['【群像节拍】', clip(ensembleBeatsHint, BUDGET_ENSEMBLE_BEATS_HINT), '']
+      : []),
+    ...(emotionalHint
+      ? ['【情感高潮引导】', clip(emotionalHint, BUDGET_EMOTIONAL_HINT), '']
+      : []),
     '【系统指令】',
     systemBlock,
     '',
-    LIFE_CONFLICT_DIRECTOR_BLOCK,
-    '',
-    NARRATIVE_DIVERSITY_DIRECTOR_BLOCK,
-    '',
-    RELATIONSHIP_DIRECTOR_BLOCK,
-    '',
-    TIME_CONSISTENCY_DIRECTOR_BLOCK,
-    '',
-    COMBAT_VARIETY_DIRECTOR_BLOCK,
-    '',
-    NPC_EMOTION_DIRECTOR_BLOCK,
-    '',
-    PLAYER_GROWTH_DIRECTOR_BLOCK,
-    '',
-    CAMPAIGN_PACING_DIRECTOR_BLOCK,
-    '',
-    NPC_DEPTH_DIRECTOR_BLOCK,
-    '',
-    PLAYER_ARC_DIRECTOR_BLOCK,
-    '',
-    SUSPENSE_THEME_DIRECTOR_BLOCK,
-    '',
-    EMOTION_DIRECTOR_BLOCK,
-    '',
-    PLOT_PROGRESS_DIRECTOR_BLOCK,
+    ...directorBlocks.flatMap((x) => [clip(x, budgets.directorBlock), '']),
     '',
     '【NPC 人设】',
     npcBlock,
     '',
+    ...(ensembleRoster
+      ? ['【卡司与点名】', clip(ensembleRoster, BUDGET_NPC * 2), '']
+      : []),
+    '【群像与轮次弹性】',
+    clip(ensembleElastic, BUDGET_NPC * 2),
+    '',
     '【关系状态】',
     relationBlock,
+    '',
+    '【玩家身份】',
+    clip(playerRoleBlocks.role, BUDGET_PLAYER_ROLE),
+    '',
+    '【玩家角色信息】',
+    clip(playerRoleBlocks.detail, BUDGET_PLAYER_ROLE),
+    '',
+    '【身份剧情钩子】',
+    clip(playerRoleBlocks.hook, BUDGET_PLAYER_ROLE),
     '',
     '【关键事件】',
     keyBlock,
@@ -462,14 +678,18 @@ export function buildPrompt(
     '',
     '【输出格式（严格遵守）】',
     '只输出一个 JSON 对象，不要用 Markdown 代码块包裹。字段含义：',
-    '- narration：非空字符串，完整的叙事文本，须旁白与对白交叉呈现；若本局因死亡等原因结束，须含「（游戏结束）」于末尾',
-    '  · 若玩家有开口，须用独立一行写出：你："..."（动作说明可接括号内）',
-    '  · 若玩家意图为纯动作、潜行、未开口，可用旁白描写玩家行为，不必硬造台词。',
-    '- dialogue：非空字符串，NPC 或场景对话汇总（玩家台词只在 narration 中体现，不向 dialogue 重复粘贴）；终局时可与 narration 中的 NPC 台词呼应或作简要汇总',
+    '- scenes：非空数组（3～6 幕为宜，最多 12 幕），每幕包含：',
+    '  · type：narration / action / dialogue',
+    '  · content：非空字符串，单幕文本（禁止标签式注释，直接写内容）；宜写足一幕信息量，避免整幕仅一两句带过（与导演稿「篇幅与信息密度」呼应，非硬性字数）。',
+    '  · speaker：仅 dialogue 必填，示例：你 / 吕布',
+    '  · 重要 dialogue 宜有情绪或立场层次（如先压后问、先冷后热），避免单句口号式带过。',
+    '  · durationMs：可选数字（前端可忽略）',
+    '  · 叙事顺序建议：narration -> action -> dialogue -> action -> dialogue（可按剧情调整）',
+    '  · 若本局因死亡等原因结束，最后一幕 content 末尾须含「（游戏结束）」',
     '- stateChanges：对象，且必须包含数字字段 hp、relationship（可为负整数或 0）',
     '  · hp、relationship 表示「相对当前状态的增量」，不是绝对值。',
     `  · 应用后玩家 HP 须在 0～${memory.cumulativeState.maxHp} 之间；与 ${npc.name} 的关系须在 -100～100 之间。`,
     '  · 可选 reason：简短说明本轮数值变化原因',
-    '示例：{"narration":"……","dialogue":"……","stateChanges":{"hp":0,"relationship":-5,"reason":"言语冒犯"}}',
+    '示例：{"scenes":[{"type":"narration","content":"……"},{"type":"dialogue","speaker":"吕布","content":"……"}],"stateChanges":{"hp":0,"relationship":-5,"reason":"言语冒犯"}}',
   ].join('\n');
 }

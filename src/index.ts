@@ -15,6 +15,13 @@ export {
   buildDemoSession,
   __resetMockSessionsForTest,
 } from './sessions/session-manager';
+export type { SessionStore } from './sessions/session-store-types';
+export {
+  FileSessionStore,
+  createFileSessionStore,
+  getDefaultFileSessionStore,
+} from './sessions/file-session-store';
+export { getScenariosRoot } from './sessions/scenario-paths';
 
 import { parseResponse, validateParse } from './engine/response-parser';
 import { updateMemory, isKeyEvent } from './engine/memory-manager';
@@ -28,15 +35,17 @@ import {
 } from './sessions/session-manager';
 
 /**
- * 本地自检：解析样例、记忆更新、mock 会话 CRUD；若配置了有效 LLM_API_KEY 则跑一轮 process。
+ * 本地自检：解析样例、记忆更新、mock 会话 CRUD；若配置了有效主路由 key 则跑一轮 process。
  * 运行：`npm run build && RUN_SMOKE=1 node dist/index.js` 或 `npm run demo`（Unix）。
  */
 export async function runSmokeTest(): Promise<void> {
   __resetMockSessionsForTest();
 
   const sample = `{
-  "narration": "风沙骤起，虎牢关前旌旗猎猎。",
-  "dialogue": "吕布：来者何人？",
+  "scenes": [
+    { "type": "narration", "content": "风沙骤起，虎牢关前旌旗猎猎。" },
+    { "type": "dialogue", "speaker": "吕布", "content": "来者何人？" }
+  ],
   "stateChanges": { "hp": 0, "relationship": 2, "reason": "寒暄" }
 }`;
   const parsed = parseResponse(sample);
@@ -67,14 +76,14 @@ export async function runSmokeTest(): Promise<void> {
   }
   await deleteSession('chief', 'hulaguan');
 
-  const key = process.env.LLM_API_KEY?.trim();
+  const key = process.env.PRIMARY_LLM_API_KEY?.trim() || process.env.LLM_API_KEY?.trim();
   const placeholder =
     !key ||
     key.includes('your_api_key') ||
     key === 'your_api_key_here';
   if (placeholder) {
     // eslint-disable-next-line no-console
-    console.log('[smoke] 已跳过真实 LLM（未配置有效 LLM_API_KEY）');
+    console.log('[smoke] 已跳过真实 LLM（未配置有效 PRIMARY_LLM_API_KEY）');
     return;
   }
 

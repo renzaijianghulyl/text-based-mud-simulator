@@ -1,4 +1,4 @@
-import type { ParseResult, StateChanges } from '../types';
+import type { ParseResult, StateChanges, StoryScene, StorySceneType } from '../types';
 import { ParseResponseError } from '../errors';
 
 function stripBomAndTrim(text: string): string {
@@ -158,6 +158,61 @@ function asNonEmptyString(value: unknown, field: string): string {
   return value.trim();
 }
 
+function asString(value: unknown, field: string): string {
+  if (typeof value !== 'string') {
+    throw new ParseResponseError(`字段 ${field} 必须为字符串`);
+  }
+  return value.trim();
+}
+
+function asStorySceneType(value: unknown, field: string): StorySceneType {
+  if (value === 'narration' || value === 'action' || value === 'dialogue') {
+    return value;
+  }
+  throw new ParseResponseError(`字段 ${field} 必须为 narration/action/dialogue 之一`);
+}
+
+function asStoryScenes(raw: unknown): StoryScene[] {
+  if (!Array.isArray(raw) || raw.length === 0) {
+    throw new ParseResponseError('scenes 必须为非空数组');
+  }
+  if (raw.length > 12) {
+    throw new ParseResponseError('scenes 数量超限（最多 12 幕）');
+  }
+  const out: StoryScene[] = [];
+  for (let i = 0; i < raw.length; i++) {
+    const item = raw[i];
+    if (typeof item !== 'object' || item === null || Array.isArray(item)) {
+      throw new ParseResponseError(`scenes[${i}] 必须为对象`);
+    }
+    const rec = item as Record<string, unknown>;
+    const type = asStorySceneType(rec.type, `scenes[${i}].type`);
+    const content = asNonEmptyString(rec.content, `scenes[${i}].content`);
+    const speakerRaw = rec.speaker;
+    const speaker =
+      typeof speakerRaw === 'string' && speakerRaw.trim().length > 0 ? speakerRaw.trim() : undefined;
+    if (type === 'dialogue' && !speaker) {
+      throw new ParseResponseError(`scenes[${i}].speaker 在 dialogue 幕中不能为空`);
+    }
+    const durationRaw = rec.durationMs;
+    const durationMs =
+      durationRaw === undefined ? undefined : asFiniteNumber(durationRaw, `scenes[${i}].durationMs`);
+    out.push({ type, content, speaker, durationMs });
+  }
+  return out;
+}
+
+function deriveNarrationFromScenes(scenes: StoryScene[]): string {
+  return scenes.map((scene) => scene.content).join('\n\n').trim();
+}
+
+function deriveDialogueFromScenes(scenes: StoryScene[]): string {
+  const lines = scenes
+    .filter((scene) => scene.type === 'dialogue' && scene.speaker && scene.speaker !== '你')
+    .map((scene) => `${scene.speaker}：${scene.content}`);
+  return lines.join('\n').trim();
+}
+
 /**
  * stateChanges 须为对象；若模型输出为 JSON 字符串，则再解析一层（仍要求键名为 hp / relationship）。
  */
@@ -198,9 +253,13 @@ function asStateChangesRecord(raw: unknown): Record<string, unknown> {
  */
 export function parseResponse(llmText: string): ParseResult {
   const root = parseRootObject(llmText);
-
-  const narration = asNonEmptyString(root.narration, 'narration');
-  const dialogue = asNonEmptyString(root.dialogue, 'dialogue');
+  const scenes = asStoryScenes(root.scenes);
+  const narration = deriveNarrationFromScenes(scenes);
+  const dialogue = deriveDialogueFromScenes(scenes);
+  if (!narration) {
+    throw new ParseResponseError('scenes 解析后 narration 不能为空');
+  }
+  /** 仅旁白/动作、或仅有玩家台词时派生 dialogue 为空；开局铺景等合法，不要求凑 NPC 对白 */
 
   const sc = asStateChangesRecord(root.stateChanges);
   const hp = asFiniteNumber(sc.hp, 'stateChanges.hp');
@@ -209,7 +268,7 @@ export function parseResponse(llmText: string): ParseResult {
     typeof sc.reason === 'string' && sc.reason.length > 0 ? sc.reason.trim() : undefined;
 
   const stateChanges: StateChanges = { hp, relationship, reason };
-  return { narration, dialogue, stateChanges };
+  return { narration, dialogue, stateChanges, scenes };
 }
 
 /**
@@ -218,7 +277,9 @@ export function parseResponse(llmText: string): ParseResult {
 export function validateParse(result: ParseResult): boolean {
   try {
     asNonEmptyString(result.narration, 'narration');
-    asNonEmptyString(result.dialogue, 'dialogue');
+    if (typeof result.dialogue !== 'string') {
+      return false;
+    }
     asFiniteNumber(result.stateChanges.hp, 'stateChanges.hp');
     asFiniteNumber(result.stateChanges.relationship, 'stateChanges.relationship');
     return true;

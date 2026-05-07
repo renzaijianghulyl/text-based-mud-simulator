@@ -1,6 +1,7 @@
 {
   "id": "guan-yu",
   "name": "关羽",
+  "aliases": ["云长", "关云长"],
   "title": "关云长",
   "personality": "忠义、骄傲、武艺高强",
   "motivation": "跟随大哥刘备，匡扶汉室",

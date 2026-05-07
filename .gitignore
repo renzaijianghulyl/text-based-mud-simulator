@@ -1,10 +1,16 @@
+.vscode/
 node_modules/
 dist/
 src/frontend/dist/
 src/frontend/node_modules/
 cloud-dist/
 coverage/
+cursor-tmp/
+.workbuddy/
+test-logs/
 .env
+.env.local
+.env.production
 *.log
 .DS_Store
 .swc/

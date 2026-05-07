@@ -1,7 +1,8 @@
 {
   "id": "liu-bei",
   "name": "刘备",
-  "title": "刘皇叔",
+  "aliases": ["玄德", "刘玄德"],
+  "title": "平原相",
   "personality": "仁德、宽厚、重义气",
   "motivation": "匡扶汉室，拯救百姓",
   "speakingStyle": "温和、自称\"备\"",

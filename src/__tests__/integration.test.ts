@@ -13,8 +13,10 @@ import { process as runProcess } from '../engine/engine';
 vi.mock('../engine/llm-adapter', () => ({
   callLLM: vi.fn(async () =>
     JSON.stringify({
-      narration: '你与吕布在营前对峙，气氛紧绷。',
-      dialogue: '吕布：若有胆，便来战！',
+      scenes: [
+        { type: 'narration', content: '你与吕布在营前对峙，气氛紧绷。' },
+        { type: 'dialogue', speaker: '吕布', content: '若有胆，便来战！' },
+      ],
       stateChanges: { hp: -10, relationship: -15, reason: '言语冲突升级' },
     })
   ),
@@ -64,6 +66,7 @@ describe('integration', () => {
     const result = await runProcess(loaded, '拔剑挑衅吕布');
     expect(result.narration.length).toBeGreaterThan(0);
     expect(result.dialogue.length).toBeGreaterThan(0);
+    expect(result.scenes?.length).toBeGreaterThan(0);
     expect(result.changes.hp).toBe(-10);
     expect(result.state.player.hp).toBe(90);
     expect(result.state.npcs.current.relationship).toBe(-15);

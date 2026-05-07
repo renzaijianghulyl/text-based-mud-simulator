@@ -8,10 +8,20 @@ export interface StateChanges {
   reason?: string;
 }
 
+export type StorySceneType = 'narration' | 'action' | 'dialogue';
+
+export interface StoryScene {
+  type: StorySceneType;
+  content: string;
+  speaker?: string;
+  durationMs?: number;
+}
+
 export interface ParseResult {
   narration: string;
   dialogue: string;
   stateChanges: StateChanges;
+  scenes?: StoryScene[];
 }
 
 export interface KeyEvent {
@@ -45,6 +55,21 @@ export interface SessionPlayer {
   maxHp: number;
   name?: string;
 }
+
+export type PlayerRoleMode = 'oc' | 'general';
+
+export interface OriginalCharacterProfile {
+  mode: 'oc';
+  name: string;
+  background: string;
+}
+
+export interface GeneralRoleProfile {
+  mode: 'general';
+  generalName: string;
+}
+
+export type PlayerRoleProfile = OriginalCharacterProfile | GeneralRoleProfile;
 
 export interface CurrentNpc {
   id: string;
@@ -81,6 +106,8 @@ export interface Session {
   npcs: SessionNpcsContext;
   relationships: Record<string, number>;
   player: SessionPlayer;
+  /** 玩家身份：原创角色（姓名+背景）或扮演武将（武将名） */
+  playerRoleProfile?: PlayerRoleProfile;
   /** 最近至多 3 条滚动摘要（每轮一条） */
   recentSummaryLines: string[];
   /** 最近表达窗口（用于提示词避重） */
@@ -90,6 +117,12 @@ export interface Session {
   history: HistoryEntry[];
   /** 当前轮次（写入摘要时使用，处理结束后递增） */
   currentRound: number;
+  /** 本会话允许的「玩家输入框发送」成功次数上限（初始 10 + 分享奖励） */
+  intentQuotaGranted: number;
+  /** 已成功消费的意图次数（不含新开剧本自动开局旁白） */
+  intentQuotaConsumed: number;
+  /** 本局已领取的分享加次数次数（用于上限） */
+  intentQuotaShareClaims: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -98,5 +131,6 @@ export interface ProcessResult {
   narration: string;
   dialogue: string;
   changes: StateChanges;
+  scenes?: StoryScene[];
   state: Session;
 }

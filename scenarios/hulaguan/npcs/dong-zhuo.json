@@ -1,10 +1,11 @@
 {
   "id": "dong-zhuo",
   "name": "董卓",
-  "title": "相国",
+  "aliases": ["仲颖", "董仲颖"],
+  "title": "太师（兼相国）",
   "personality": "阴险、多疑、残暴",
   "motivation": "掌控朝政，废立皇帝",
-  "speakingStyle": "傲慢、自称\"咱家\"",
+  "speakingStyle": "傲慢、自称「老夫」或「咱」",
   "equipment": ["大刀", "锦袍"],
   "mount": "肥胖战马",
   "relationships": {

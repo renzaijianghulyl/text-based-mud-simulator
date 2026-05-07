@@ -7,3 +7,10 @@ export { buildPrompt } from './prompt-builder';
 export type { PromptMemoryInput } from './prompt-builder';
 export { updateMemory, isKeyEvent } from './memory-manager';
 export { process } from './engine';
+export {
+  OPENING_ROUND_INTENT,
+  OPENING_ROUND_MARKER,
+  isOpeningRoundIntent,
+  readScenarioOpeningNarration,
+  readScenarioOpeningPlayerHint,
+} from './opening-intent';

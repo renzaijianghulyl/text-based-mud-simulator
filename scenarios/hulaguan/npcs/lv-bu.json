@@ -1,6 +1,7 @@
 {
   "id": "lv-bu",
   "name": "吕布",
+  "aliases": ["奉先", "吕奉先"],
   "title": "飞将",
   "personality": "高傲、易怒、但爱才",
   "motivation": "证明自己是天下第一猛将",

@@ -1,0 +1,150 @@
+{
+  "styleTone": "战争剧本情感基调：克制、沉着、带余波。可有短促情绪起伏，但避免抒情泛滥与现代心理术语。",
+  "ensembleBeats": [
+    {
+      "name": "军议",
+      "triggerRounds": [8, 12, 18, 24, 32, 40],
+      "participants": ["yuan-shao", "cao-cao", "sun-jian", "gongsun-zan", "kong-rong", "liu-bei"],
+      "directorNote": "盟主帐或联军大营：袁绍主位问策，曹操与诸侯接话；宜有 2+ 独立 dialogue 幕，轮换诸侯发声，避免二人转。",
+      "suppressKeywords": ["独处", "深夜独白", "战后静场"]
+    },
+    {
+      "name": "阵前叫阵与侧翼",
+      "triggerRounds": [6, 14, 22, 30, 38],
+      "participants": ["lv-bu", "hua-xiong", "guan-yu", "zhang-fei", "xiahou-dun", "dian-wei"],
+      "directorNote": "关隘与阵线：可穿插侧将请战、叫阵与盟军回应；须与卡司名单一致。"
+    },
+    {
+      "name": "庆功宴",
+      "triggerRounds": [10, 20, 30, 40],
+      "participants": ["yuan-shao", "cao-cao", "sun-jian", "liu-bei", "gongsun-zan", "yuan-shu"],
+      "directorNote": "宜在滚动摘要偏胜、破敌、小捷后出现；诸侯同席短宴，表面庆贺、暗藏袁术妒功、袁绍制衡曹操等张力。若摘要偏败退、伤亡惨重则弱化为一笔带过。",
+      "suppressKeywords": ["战败", "撤退", "伤亡惨重", "溃败"]
+    },
+    {
+      "name": "败退",
+      "triggerRounds": [15, 25, 35],
+      "participants": ["cao-cao", "xiahou-dun", "dian-wei", "cao-ren"],
+      "directorNote": "摘要偏失利、被冲阵或撤退时：写护主、断后、收拢残兵；典韦、夏侯惇、曹仁等嫡系可各有一句独立台词。若摘要偏庆功、大捷则弱化。",
+      "suppressKeywords": ["庆功", "胜利", "大捷", "破敌"]
+    },
+    {
+      "name": "单挑",
+      "triggerRounds": [12, 22, 32],
+      "participants": ["lv-bu", "guan-yu", "zhang-fei", "xiahou-dun", "dian-wei"],
+      "directorNote": "阵前武将对决：吕布与张飞/关羽试探性交手，或夏侯惇接战吕布等；须有动作与气势，勿冗长回合描写。若摘要纯军议无出战语义可弱化。",
+      "suppressKeywords": ["独处", "深夜独白"]
+    },
+    {
+      "name": "夜袭",
+      "triggerRounds": [18, 28, 38],
+      "participants": ["cao-cao", "dian-wei", "lv-bu", "xiahou-dun"],
+      "directorNote": "夜暗风紧：可写曹军试探夜袭、吕布反扑或虚惊；突出斥候、火把、甲叶声；须与因果一致。若摘要偏宴饮庆贺则弱化。",
+      "suppressKeywords": ["庆功", "军议纷纷"]
+    }
+  ],
+  "optionalRomanceBeats": [
+    {
+      "name": "温酒斩华雄",
+      "triggerRounds": [15, 20],
+      "triggerProbability": 0.8,
+      "layer": "romance_optional",
+      "historicalNote": "演义流传甚广；若写须区分演义与正史——正史中华雄为孙坚军所破，勿将关羽阵斩华雄写为史实拍板。"
+    },
+    {
+      "name": "三英战吕布",
+      "triggerRounds": [28, 35],
+      "triggerProbability": 0.75,
+      "layer": "romance_optional",
+      "historicalNote": "演义名场面；须保持刘备、关羽、张飞同阵与吕布交锋的演义套层，勿与史书逐条对号入座为定论。"
+    },
+    {
+      "name": "孙坚破华雄",
+      "triggerRounds": [16, 18],
+      "triggerProbability": 0.9,
+      "layer": "historical_canon",
+      "participants": ["sun-jian", "yuan-shao", "cao-cao", "hua-xiong"],
+      "historicalNote": "《三国志·孙破虏传》脉络：卓将华雄为孙坚军所破；若本轮写「史实口径」宜以孙坚系为主角。与「温酒斩华雄」演义传闻可二选一或并写「军中传闻 vs 史笔」对照，勿将关羽阵斩华雄写为史实拍板。"
+    },
+    {
+      "name": "典韦救主",
+      "triggerRounds": [25, 30],
+      "triggerProbability": 0.7,
+      "layer": "romance_optional",
+      "participants": ["cao-cao", "dian-wei", "lv-bu"],
+      "historicalNote": "演义向阵前护主高光：典韦死战护曹操脱险。勿与宛城典韦战死史实混写为已发生；参与倾向见 id 列表。"
+    },
+    {
+      "name": "袁术诘袁绍",
+      "triggerRounds": [20, 28],
+      "triggerProbability": 0.8,
+      "layer": "historical_canon",
+      "participants": ["yuan-shao", "yuan-shu", "cao-cao"],
+      "historicalNote": "联军内袁氏兄弟体面下的矛盾：袁术可诘调度、袁绍以盟主威压收束，曹操等劝解。宜短幕，勿写成日后兄弟称帝分裂的既成事。"
+    },
+    {
+      "name": "联军帐中·孔融论义",
+      "triggerRounds": [22, 26],
+      "triggerProbability": 0.75,
+      "layer": "romance_optional",
+      "participants": ["liu-bei", "kong-rong", "guan-yu", "zhang-fei"],
+      "historicalNote": "同在讨董联军大营语境：孔融持论、刘备关张圆场或共誓讨董之义，非北海被围求救之役；勿写孔融专使求救北海。"
+    }
+  ],
+  "beatTemplates": [
+    {
+      "name": "忆故人",
+      "triggerRounds": [10, 20, 30],
+      "context": "深夜、独处、战后短暂静场",
+      "example": "曹操望烛火忆及旧人旧事，语气克制，不长篇倾诉。",
+      "props": ["旧帛书", "残酒", "佩物"],
+      "emotion": ["愧疚", "孤独", "矛盾"]
+    },
+    {
+      "name": "深夜独白",
+      "triggerRounds": [15, 25],
+      "context": "子夜、烛火将尽、案前独处",
+      "example": "主将批阅军情后短句自语，显露疲惫与决心。",
+      "props": ["烛台", "军情竹简", "酒盏"],
+      "emotion": ["疲惫", "决心", "迷惘"]
+    },
+    {
+      "name": "战后清点",
+      "triggerRounds": [5, 12, 18],
+      "context": "战后、黄昏、营外渐静",
+      "example": "清点伤亡名册时短暂停顿，命令依旧但语调更沉。",
+      "props": ["伤亡名册", "军旗", "沉默"],
+      "emotion": ["悲痛", "坚毅", "无奈"]
+    }
+  ],
+  "triggerHints": [
+    "每 6~10 轮最多考虑一次情感高潮，不做轮轮触发。",
+    "当 recentSummary 出现 夜/独处/战后/静场 等语义，可优先考虑情感模板。",
+    "若命中 beatTemplates.triggerRounds，可优先使用对应模板。"
+  ],
+  "suppressionHints": [
+    "若最近 2 轮已出现情感戏，本轮优先抑制。",
+    "若本轮语义偏强冲突（军议/出战/围攻/斩），优先动作推进，情感戏可后置。",
+    "若本轮群像密集（多核心 NPC 并行发言），优先群像调度，不插入长独白。"
+  ],
+  "emotionalIntensity": {
+    "low": "轻微波动：停顿、叹息、短句自省，不改变叙事主轴。",
+    "medium": "中度流露：可有短回忆或道具触发，仍保持克制。",
+    "high": "高强爆发：沉默良久、强烈情绪或决断，仅在长会话后期偶发。"
+  },
+  "intensityRules": [
+    "第 1-10 轮：仅 low。",
+    "第 11-20 轮：low 或 medium。",
+    "第 21 轮后：low/medium/high 皆可，但 high 不宜连续出现。"
+  ],
+  "dos": [
+    "情感戏以 1~2 幕为宜（例如 narration + 一句 dialogue）。",
+    "情感戏仍需符合历史时间线和称谓规则。",
+    "优先通过动作、停顿、环境细节传情，而非长篇解释。"
+  ],
+  "donts": [
+    "不要每轮都触发情感戏。",
+    "不要使用现代心理咨询式表达或抽象说教。",
+    "不要以情感戏替代关键冲突推进。"
+  ]
+}

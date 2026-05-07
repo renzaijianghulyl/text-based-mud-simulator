@@ -16,8 +16,10 @@ describe('engine.process branches', () => {
         .mockResolvedValueOnce('bad-json')
         .mockResolvedValueOnce(
           JSON.stringify({
-            narration: '重试成功',
-            dialogue: '吕布：再来！',
+            scenes: [
+              { type: 'narration', content: '重试成功' },
+              { type: 'dialogue', speaker: '吕布', content: '再来！' },
+            ],
             stateChanges: { hp: -1, relationship: -1 },
           })
         ),
@@ -26,7 +28,8 @@ describe('engine.process branches', () => {
     const { process } = await import('../engine/engine');
     const session = buildDemoSession('u-retry', 'hulaguan');
     const res = await process(session, '试探');
-    expect(res.narration).toBe('重试成功');
+    expect(res.narration).toBe('重试成功\n\n再来！');
+    expect(res.dialogue).toBe('吕布：再来！');
     expect(res.state.history.length).toBe(1);
     vi.doUnmock('../engine/llm-adapter');
   });

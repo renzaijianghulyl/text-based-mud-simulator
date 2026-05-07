@@ -5,10 +5,12 @@
   "scripts": {
     "dev:weapp": "npm run dev:weapp --prefix src/frontend",
     "build:weapp": "npm run build:weapp --prefix src/frontend",
-    "build:cloud-interact": "node scripts/bundle-cloud-interact.mjs",
+    "codegen:hulaguan-npcs": "node scripts/codegen-hulaguan-npc-registry.mjs",
+    "build:cloud-interact": "npm run codegen:hulaguan-npcs && node scripts/bundle-cloud-interact.mjs",
     "build": "tsc",
     "demo": "npm run build && RUN_SMOKE=1 node dist/index.js",
     "play": "npm run build && node dist/cli/play.js",
+    "http:interact": "npm run build && node dist/http/interact-http-server.js",
     "test:boundary": "npm run build && node dist/tests/boundary-interactive.js",
     "test": "tsc --noEmit",
     "test:unit": "vitest run",
@@ -17,8 +19,9 @@
   },
   "dependencies": {
     "dotenv": "^16.0",
-    "react": "^18.0",
-    "typescript": "^5.0",
+    "typescript": "^5.0"
+  },
+  "optionalDependencies": {
     "wx-server-sdk": "~3.0.0"
   },
   "devDependencies": {

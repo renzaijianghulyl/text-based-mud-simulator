@@ -1,6 +1,18 @@
 import type { NarrativeEnvironment, ParseResult, RecentPhrase, Session, StateChanges } from '../types';
 
-const SPECIAL_KEYWORDS = ['投降', '逃跑', '刺杀', '结盟', '展示奇物'] as const;
+const SPECIAL_KEYWORDS = [
+  '投降',
+  '逃跑',
+  '刺杀',
+  '结盟',
+  '展示奇物',
+  '家世',
+  '身世',
+  '家族',
+  '旧怨',
+  '师门',
+  '归顺',
+] as const;
 const RECENT_WINDOW_SIZE = 3;
 const TRACKED_PHRASES = [
   '旌旗猎猎',

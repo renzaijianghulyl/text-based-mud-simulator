@@ -1,10 +1,11 @@
 {
   "id": "yuan-shao",
   "name": "袁绍",
+  "aliases": ["本初", "袁本初"],
   "title": "盟主",
   "personality": "优柔寡断、爱面子、出身名门",
   "motivation": "统领联军，讨伐董卓，成就霸业",
-  "speakingStyle": "傲慢、自称\"本初\"",
+  "speakingStyle": "傲慢、自称「绍」或「本盟主」",
   "equipment": ["长剑", "华丽铠甲"],
   "mount": "高头大马",
   "relationships": {

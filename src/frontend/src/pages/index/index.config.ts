@@ -1,3 +1,3 @@
 export default {
-  navigationBarTitleText: '世界模拟器',
+  navigationBarTitleText: '字间戏文',
 };

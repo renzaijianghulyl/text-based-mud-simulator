@@ -2,10 +2,12 @@
  * 微信云开发数据库版会话存储（仅云函数运行时加载 wx-server-sdk）。
  */
 import * as wxCloud from 'wx-server-sdk';
-import type { Session } from '../types';
-import { CloudDatabaseError, SessionNotFoundError } from '../errors';
-import { buildDemoSessionFromNpc, sessionKey } from './build-demo-session';
-import { getHulaguanNpcTemplate } from './hulaguan-npc-static';
+import type { PlayerRoleProfile, Session } from '../../types';
+import { CloudDatabaseError, SessionNotFoundError } from '../../errors';
+import { buildDemoSessionFromNpc, sessionKey } from '../../sessions/build-demo-session';
+import { ensureIntentQuotaFields } from '../../sessions/intent-quota';
+import { getHulaguanNpcTemplate } from '../../sessions/hulaguan-npc-static';
+import type { SessionStore } from '../../sessions/session-store-types';
 
 const COLLECTION = 'sessions';
 
@@ -32,12 +34,29 @@ function fromPlain(raw: Record<string, unknown>): Session {
 }
 
 /** MVP：仅 hulaguan；NPC 来自静态模板。 */
-export function buildDemoSession(userId: string, scenarioId: string, targetNpcId?: string): Session {
+export function buildDemoSession(
+  userId: string,
+  scenarioId: string,
+  targetNpcId?: string,
+  playerRoleProfile?: PlayerRoleProfile
+): Session {
   if (scenarioId !== 'hulaguan') {
     throw new Error('MVP 仅支持剧本 hulaguan');
   }
   const npc = getHulaguanNpcTemplate(targetNpcId);
-  return buildDemoSessionFromNpc(userId, scenarioId, npc);
+  return buildDemoSessionFromNpc(userId, scenarioId, npc, playerRoleProfile);
+}
+
+export async function sessionExists(userId: string, scenarioId: string): Promise<boolean> {
+  ensureInit();
+  const sid = sessionKey(userId, scenarioId);
+  const db = wxCloud.database();
+  try {
+    const res = await db.collection(COLLECTION).where({ sessionId: sid }).limit(1).get();
+    return (res.data?.length ?? 0) > 0;
+  } catch (e) {
+    throw new CloudDatabaseError('sessionExists failed', { cause: e });
+  }
 }
 
 export async function loadSession(userId: string, scenarioId: string): Promise<Session> {
@@ -49,7 +68,9 @@ export async function loadSession(userId: string, scenarioId: string): Promise<S
     if (!res.data || res.data.length === 0) {
       throw new SessionNotFoundError(sid);
     }
-    return fromPlain(res.data[0] as Record<string, unknown>);
+    const session = fromPlain(res.data[0] as Record<string, unknown>);
+    ensureIntentQuotaFields(session);
+    return session;
   } catch (e) {
     if (e instanceof SessionNotFoundError) throw e;
     throw new CloudDatabaseError('loadSession failed', { cause: e });
@@ -83,3 +104,12 @@ export async function deleteSession(userId: string, scenarioId: string): Promise
       .catch(() => undefined);
   }
 }
+
+/** 与 `SessionStore` 对齐的适配对象，便于类型化注入或测试替身 */
+export const wechatCloudSessionStore: SessionStore = {
+  loadSession,
+  saveSession,
+  deleteSession,
+  sessionExists,
+  buildDemoSession,
+};

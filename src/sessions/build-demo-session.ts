@@ -1,4 +1,5 @@
-import type { CurrentNpc, Session } from '../types';
+import type { CurrentNpc, PlayerRoleProfile, Session } from '../types';
+import { INITIAL_INTENT_QUOTA_GRANTED } from './intent-quota';
 
 export function sessionKey(userId: string, scenarioId: string): string {
   return `${userId}_${scenarioId}`;
@@ -10,7 +11,8 @@ export function sessionKey(userId: string, scenarioId: string): string {
 export function buildDemoSessionFromNpc(
   userId: string,
   scenarioId: string,
-  npc: CurrentNpc
+  npc: CurrentNpc,
+  playerRoleProfile?: PlayerRoleProfile
 ): Session {
   const sessionId = sessionKey(userId, scenarioId);
   const now = new Date();
@@ -23,7 +25,8 @@ export function buildDemoSessionFromNpc(
       current: { ...npc },
     },
     relationships: { [npc.id]: npc.relationship },
-    player: { hp: 100, maxHp: 100, name: '玩家' },
+    player: { hp: 100, maxHp: 100, name: playerRoleProfile?.mode === 'oc' ? playerRoleProfile.name : '玩家' },
+    ...(playerRoleProfile ? { playerRoleProfile } : {}),
     recentSummaryLines: [],
     recentPhrases: [],
     keyEvents: [],
@@ -40,6 +43,9 @@ export function buildDemoSessionFromNpc(
     },
     history: [],
     currentRound: 1,
+    intentQuotaGranted: INITIAL_INTENT_QUOTA_GRANTED,
+    intentQuotaConsumed: 0,
+    intentQuotaShareClaims: 0,
     createdAt: now,
     updatedAt: now,
   };
