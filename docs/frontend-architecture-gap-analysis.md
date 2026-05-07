@@ -329,7 +329,7 @@ export default function IndexPage() {
 
   return (
     <View className="idx">
-      <Text className="idx__title">世界模拟器</Text>
+      <Text className="idx__title">字间戏文</Text>
       <Text className="idx__sub">虎牢关之战（MVP）</Text>
       <Button onClick={() => goStage(true)}>新开剧本</Button>
       <Button onClick={() => goStage(false)}>继续体验</Button>

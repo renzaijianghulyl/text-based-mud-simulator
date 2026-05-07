@@ -22,6 +22,9 @@ const TYPING_MS_PER_CHAR = 44;
 const OPENING_GUIDE_ACTION =
   '【提示】请在输入框用中文描述行动；剧情会按「幕」逐段播放，点画面继续。';
 
+/** 顶栏分享按钮文案：与「本局还可写…条行动」及说明弹窗一致 */
+const SHARE_QUOTA_BTN_LABEL = '分享 +5 次行动';
+
 function narrationGuideStorageKey(scenarioId: string): string {
   return `mud_narration_guide_${scenarioId}`;
 }
@@ -124,7 +127,7 @@ export default function StagePage() {
           Taro.showToast({ title: String(r.message ?? '领取失败'), icon: 'none' });
           return;
         }
-        Taro.showToast({ title: '已增加 5 次意图', icon: 'success' });
+        Taro.showToast({ title: '已增加 5 次行动', icon: 'success' });
       } catch {
         Taro.showToast({ title: '网络异常', icon: 'none' });
       }
@@ -265,7 +268,12 @@ export default function StagePage() {
   const onSend = () => {
     if (!intent.trim() || inputLocked) return;
     if (intentQuotaRemaining <= 0) {
-      Taro.showToast({ title: '意图次数已用尽，请先分享获取', icon: 'none' });
+      Taro.showModal({
+        title: '行动次数已用尽',
+        content: `本局「发送」次数已用完。请点击右上角「${SHARE_QUOTA_BTN_LABEL}」通过微信分享；分享成功后由服务端为本局增加 5 次行动（具体以服务端结果为准）。`,
+        showCancel: false,
+        confirmText: '知道了',
+      });
       return;
     }
     void callInteract(intent.trim(), false, scenarioId);
@@ -274,8 +282,7 @@ export default function StagePage() {
   const onQuotaHelpTap = useCallback(() => {
     Taro.showModal({
       title: '行动次数说明',
-      content:
-        '“行动次数”是本局你可点击发送的次数，不等同于剧情回合。每次分享可增加 5 次；新开一局会重新计数。',
+      content: `「行动次数」是本局你在输入框写好意图后、可点击「发送」的次数，与剧情回合数不是同一概念。需要更多次数时，请点击右上角「${SHARE_QUOTA_BTN_LABEL}」发起微信分享；分享流程完成后，服务端通常会为本局增加 5 次（以实际返回为准）。新开一局会重新计数。`,
       showCancel: false,
       confirmText: '知道了',
     });
@@ -401,7 +408,7 @@ export default function StagePage() {
         </View>
         <Text className="st__barItem st__barItem--center">{playerRoleLabel || '未选择身份'}</Text>
         <Button className="st__shareBtn" size="mini" openType="share">
-          +5
+          {SHARE_QUOTA_BTN_LABEL}
         </Button>
       </View>
       <View className="st__sceneHost">

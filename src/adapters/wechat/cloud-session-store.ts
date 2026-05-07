@@ -7,6 +7,7 @@ import { CloudDatabaseError, SessionNotFoundError } from '../../errors';
 import { buildDemoSessionFromNpc, sessionKey } from '../../sessions/build-demo-session';
 import { ensureIntentQuotaFields } from '../../sessions/intent-quota';
 import { getHulaguanNpcTemplate } from '../../sessions/hulaguan-npc-static';
+import { resolveHulaguanInitialTargetNpcId } from '../../sessions/hulaguan-initial-target';
 import type { SessionStore } from '../../sessions/session-store-types';
 
 const COLLECTION = 'sessions';
@@ -43,7 +44,11 @@ export function buildDemoSession(
   if (scenarioId !== 'hulaguan') {
     throw new Error('MVP 仅支持剧本 hulaguan');
   }
-  const npc = getHulaguanNpcTemplate(targetNpcId);
+  const requested =
+    typeof targetNpcId === 'string' && targetNpcId.trim()
+      ? targetNpcId.trim()
+      : resolveHulaguanInitialTargetNpcId(playerRoleProfile);
+  const npc = getHulaguanNpcTemplate(requested);
   return buildDemoSessionFromNpc(userId, scenarioId, npc, playerRoleProfile);
 }
 

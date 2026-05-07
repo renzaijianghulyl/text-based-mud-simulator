@@ -7,8 +7,6 @@ import { OPENING_ROUND_INTENT } from '../../engine/opening-intent';
 import * as cloudSession from '../../adapters/wechat/cloud-session-store';
 import {
   CloudDatabaseError,
-  ContentCheckUnavailableError,
-  ContentRiskError,
   LLMConfigError,
   LLMTransportError,
   ParseResponseError,
@@ -21,7 +19,6 @@ import {
   INTENT_QUOTA_PER_SHARE,
   MAX_INTENT_SHARE_CLAIMS_PER_SESSION,
 } from '../../sessions/intent-quota';
-import { checkAiOutputText, checkText } from '../../adapters/wechat/wx-content-security';
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
@@ -125,15 +122,6 @@ function mapError(err: unknown): { success: false; code: string; message: string
   if (err instanceof CloudDatabaseError) {
     return { success: false, code: 'DB_ERROR', message: '网络异常，请稍后重试' };
   }
-  if (err instanceof ContentRiskError) {
-    if (err.kind === 'ai') {
-      return { success: false, code: 'CONTENT_RISK_AI', message: '本轮剧情未通过审核，请重新尝试' };
-    }
-    return { success: false, code: 'CONTENT_RISK_USER', message: '输入包含违规内容，请修改后重试' };
-  }
-  if (err instanceof ContentCheckUnavailableError) {
-    return { success: false, code: 'CONTENT_CHECK_UNAVAILABLE', message: '内容审核暂不可用，请稍后再试' };
-  }
   return { success: false, code: 'UNKNOWN', message: '生成失败，请重试' };
 }
 
@@ -194,24 +182,12 @@ export async function main(
 
     if (isNew) {
       // 新开剧本语义：无条件重置会话（删除旧档 -> 按当前参数新建），不复用旧状态。
-      // 1. 先审核 OC 玩家身份（姓名 + 背景）；命中违规直接拒绝，不创建会话。
-      if (playerRoleProfile?.mode === 'oc') {
-        await checkText(`${playerRoleProfile.name}\n${playerRoleProfile.background}`, OPENID, {
-          kind: 'user',
-        });
-      }
-
       await cloudSession.deleteSession(OPENID, scenarioId).catch(() => undefined);
       const session = cloudSession.buildDemoSession(OPENID, scenarioId, undefined, playerRoleProfile);
       await cloudSession.saveSession(session);
       try {
         const loaded = await cloudSession.loadSession(OPENID, scenarioId);
         const result = await process(loaded, OPENING_ROUND_INTENT);
-        // 2. 开局 LLM 输出审核：违规则不保存推进结果，会话保持空开局态。
-        await checkAiOutputText(
-          { narration: result.narration, dialogue: result.dialogue, scenes: result.scenes },
-          OPENID
-        );
         await cloudSession.saveSession(result.state);
         return {
           success: true,
@@ -246,9 +222,6 @@ export async function main(
       return mapError(new ParseResponseError('意图不能为空'));
     }
 
-    // 3. 普通轮：UGC（intent）前置审核，不通过不进 LLM、不消耗配额、不写库。
-    await checkText(intent, OPENID, { kind: 'user' });
-
     const session = await cloudSession.loadSession(OPENID, scenarioId);
     ensureIntentQuotaFields(session);
     if (intentQuotaRemaining(session) <= 0) {
@@ -259,41 +232,19 @@ export async function main(
         state: serializeStateForClient(session),
       };
     }
-    // 进 LLM 前先把当前状态快照保留，AI 违规时回退给前端，避免 UI 误显示已经发生但未持久化的变化。
-    const preProcessSnapshot = serializeStateForClient(session);
-    try {
-      const result = await process(session, intent);
-      // 4. 普通轮：LLM 输出后置审核；违规则不应用状态、不更新记忆、不写库、不消耗配额。
-      await checkAiOutputText(
-        { narration: result.narration, dialogue: result.dialogue, scenes: result.scenes },
-        OPENID
-      );
-      result.state.intentQuotaConsumed += 1;
-      await cloudSession.saveSession(result.state);
-      return {
-        success: true,
-        code: 'OK',
-        message: '',
-        narration: result.narration,
-        dialogue: result.dialogue,
-        scenes: result.scenes ?? [],
-        changes: result.changes,
-        state: serializeStateForClient(result.state),
-      };
-    } catch (e) {
-      if (e instanceof ContentRiskError || e instanceof ContentCheckUnavailableError) {
-        const err = mapError(e);
-        return {
-          ...err,
-          state: preProcessSnapshot,
-          narration: '',
-          dialogue: '',
-          scenes: [],
-          changes: { hp: 0, relationship: 0 },
-        };
-      }
-      throw e;
-    }
+    const result = await process(session, intent);
+    result.state.intentQuotaConsumed += 1;
+    await cloudSession.saveSession(result.state);
+    return {
+      success: true,
+      code: 'OK',
+      message: '',
+      narration: result.narration,
+      dialogue: result.dialogue,
+      scenes: result.scenes ?? [],
+      changes: result.changes,
+      state: serializeStateForClient(result.state),
+    };
   } catch (e) {
     return mapError(e);
   }

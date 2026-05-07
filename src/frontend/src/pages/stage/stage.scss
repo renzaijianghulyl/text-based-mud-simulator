@@ -61,14 +61,19 @@ $st-chip-bg: #ebe4d8;
 
 .st__shareBtn {
   flex-shrink: 0;
-  font-size: 20rpx !important;
-  line-height: 1.4 !important;
-  padding: 0 14rpx !important;
+  max-width: 220rpx;
+  font-size: 22rpx !important;
+  font-weight: 500;
+  line-height: 1.35 !important;
+  padding: 8rpx 14rpx !important;
   height: auto !important;
-  min-height: 48rpx;
-  color: $st-bar-fg !important;
-  background: rgba(255, 255, 255, 0.12) !important;
-  border: 1rpx solid rgba(255, 255, 255, 0.35) !important;
+  min-height: 52rpx;
+  white-space: normal;
+  text-align: center;
+  color: #3d2818 !important;
+  background: #f0e4ce !important;
+  border: 1rpx solid #c9a882 !important;
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.12);
 }
 
 .st__quotaHelpBtn {

@@ -2,7 +2,7 @@
   "miniprogramRoot": "src/frontend/dist/",
   "cloudfunctionRoot": "cloud-dist/",
   "projectname": "mud-weapp",
-  "description": "文字 RPG 模拟器",
+  "description": "字间戏文 — LLM 文字 RPG",
   "setting": {
     "es6": true,
     "postcss": true,

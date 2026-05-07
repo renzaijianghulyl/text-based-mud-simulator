@@ -3,6 +3,7 @@ import { SessionNotFoundError } from '../errors';
 import { buildDemoSessionFromNpc, sessionKey } from './build-demo-session';
 import { ensureIntentQuotaFields } from './intent-quota';
 import { getHulaguanNpcTemplate } from './hulaguan-npc-static';
+import { resolveHulaguanInitialTargetNpcId } from './hulaguan-initial-target';
 import { getScenariosRoot } from './scenario-paths';
 import type { SessionStore } from './session-store-types';
 import * as fs from 'fs';
@@ -138,7 +139,11 @@ export class FileSessionStore implements SessionStore {
     targetNpcId?: string,
     playerRoleProfile?: PlayerRoleProfile
   ): Session {
-    const npcTemplate = this.loadNpcTemplate(scenarioId, targetNpcId);
+    let effectiveNpcId = targetNpcId;
+    if (scenarioId === 'hulaguan' && (!effectiveNpcId || !String(effectiveNpcId).trim())) {
+      effectiveNpcId = resolveHulaguanInitialTargetNpcId(playerRoleProfile);
+    }
+    const npcTemplate = this.loadNpcTemplate(scenarioId, effectiveNpcId);
     return deepClone(buildDemoSessionFromNpc(userId, scenarioId, npcTemplate, playerRoleProfile));
   }
 
