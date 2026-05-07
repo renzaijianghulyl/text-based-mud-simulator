@@ -6,6 +6,43 @@
 
 **小程序已上线**（搜索「字间戏文」体验）— 微信侧构建步骤见 [README.weapp.md](./README.weapp.md)。
 
+截图文件位于仓库 [`docs/readme-screenshots/`](./docs/readme-screenshots/)，README 使用**相对路径**引用；推送到 GitHub 后会在仓库首页直接渲染。
+
+## 小程序预览（实际运行效果）
+
+以下截图为 **微信小程序在真机 / 开发者工具预览中的实际界面**，展示「创建原创角色 → 虎牢关舞台分镜 → 旁白与 NPC 对话 → 底部自然语言意图输入与发送」等**上线后的真实展示效果**。  
+具体剧情与台词由 LLM 按会话与玩家意图生成，**仅作 UI 与交互演示**，不同局内容可能不同。
+
+### 创建角色
+
+新开剧本前填写**原创角色**名称与背景，信息写入本局会话；点击「开始剧本」进入舞台。
+
+![创建角色页：原创身份与开始剧本](docs/readme-screenshots/01-create-character.png)
+
+### 虎牢关舞台 · 分镜叙事
+
+舞台顶栏展示**剧情进度、回合数、本局剩余意图次数**等；主区域为分幕旁白 / 描写，可点击画面推进当前幕；底部为中文意图输入框与「发送」。
+
+![虎牢关舞台：开局氛围与分幕提示](docs/readme-screenshots/02-stage-opening-narration.png)
+
+![虎牢关舞台：叙事描写与输入区](docs/readme-screenshots/03-stage-narration.png)
+
+### NPC 对话与战斗描写
+
+对话以气泡形式呈现；分幕计数（如「第 n/6 幕」）提示当前分镜进度。
+
+![虎牢关舞台：NPC 对话分镜](docs/readme-screenshots/04-dialogue-xiahou-dun.png)
+
+![虎牢关舞台：战斗过程描写](docs/readme-screenshots/05-battle-narration.png)
+
+![虎牢关舞台：NPC 回应](docs/readme-screenshots/06-dialogue-reaction.png)
+
+### 幕间收束与下一步
+
+一幕结束后可给出**下一步建议**，并继续在输入框中书写意图、点击「发送」进入下一轮。
+
+![虎牢关舞台：幕间说明、建议与发送](docs/readme-screenshots/07-stage-finale-hint.png)
+
 ---
 
 ## 快速开始（开源使用者）
