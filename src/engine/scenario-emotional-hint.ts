@@ -220,16 +220,26 @@ export function buildScenarioEmotionalHint(
 /**
  * 群像节拍 + 可选演义节拍（读 emotional-beats.json）；与情感 hint 分立，供 prompt 单独段落注入。
  */
+function filterBeatParticipants(
+  participants: string[] | undefined,
+  eliminated: ReadonlySet<string>
+): string[] {
+  if (!participants || participants.length === 0) return [];
+  return participants.filter((id) => id && !eliminated.has(id));
+}
+
 export function buildEnsembleBeatsHint(
   scenarioId: string,
   totalRounds: number,
-  recentSummaryLines: string[]
+  recentSummaryLines: string[],
+  eliminatedNpcIds?: readonly string[]
 ): string {
   const config = loadScenarioEmotionalBeats(scenarioId);
   const ens = config?.ensembleBeats;
   const rom = config?.optionalRomanceBeats;
   if ((!ens || ens.length === 0) && (!rom || rom.length === 0)) return '';
 
+  const eliminated = new Set((eliminatedNpcIds ?? []).filter(Boolean));
   const chunks: string[] = [];
   const recent = recentSummaryLines;
 
@@ -238,7 +248,13 @@ export function buildEnsembleBeatsHint(
       const rounds = b.triggerRounds ?? [];
       if (rounds.length === 0 || !rounds.includes(totalRounds)) continue;
       const suppressed = ensembleBeatSuppressed(recent, b.suppressKeywords);
-      const who = b.participants?.length ? `参与 id：${b.participants.join('、')}。` : '';
+      const filteredParts = filterBeatParticipants(b.participants, eliminated);
+      const hadParticipants = Boolean(b.participants && b.participants.length > 0);
+      const who = filteredParts.length
+        ? `参与 id：${filteredParts.join('、')}。`
+        : hadParticipants
+          ? '原配置含已退场 id，须改由其他活人卡司各一幕 dialogue（不得以生者复活已退场者）。'
+          : '';
       const note = b.directorNote?.trim() ?? '';
       if (suppressed) {
         chunks.push(
@@ -263,7 +279,13 @@ export function buildEnsembleBeatsHint(
       const roll = deterministicBeatRoll(scenarioId, totalRounds, r.name);
       const hist = r.historicalNote?.trim();
       const layerTag = optionalBeatLayerTag(r.layer);
-      const whoOpt = optionalBeatParticipantPrefix(r.participants);
+      const romFiltered = filterBeatParticipants(r.participants, eliminated);
+      const whoOpt =
+        romFiltered.length > 0
+          ? optionalBeatParticipantPrefix(romFiltered)
+          : r.participants && r.participants.length > 0
+            ? '（原建议出场 id 含已退场者，改由其他活人侧写或对白）'
+            : '';
       const histPart = hist ? `参考：${hist}` : '';
       const layerKind = r.layer;
 

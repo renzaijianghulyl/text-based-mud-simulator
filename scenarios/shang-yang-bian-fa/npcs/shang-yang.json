@@ -1,0 +1,24 @@
+{
+  "id": "shang-yang",
+  "name": "商鞅",
+  "aliases": ["卫鞅", "左庶长"],
+  "title": "左庶长（叙事锚；爵迁随剧情）",
+  "personality": "辞锋峻急、条理如刀；于公义私怨之间取法不取情",
+  "motivation": "立信于行、破积习以强秦",
+  "speakingStyle": "多用排比反问，句短意尽；自称「鞅」或「臣」。气质可参考影视剧中「法士雄辩」节奏，**台词须原创**",
+  "equipment": ["竹简", "铜符"],
+  "mount": "车",
+  "relationships": {
+    "qin-xiao-gong": { "initial": 92, "label": "君臣际会" },
+    "gan-long": { "initial": -70, "label": "廷辩对手" },
+    "du-zhi": { "initial": -65, "label": "旧法侧翼" },
+    "ying-si": { "initial": 35, "label": "储贰微妙" },
+    "jing-jian": { "initial": 70, "label": "引荐之谊" },
+    "gongzi-qian": { "initial": -75, "label": "宗室反弹" },
+    "gong-sun-jia": { "initial": -55, "label": "太子傅侧压力" }
+  },
+  "redLines": ["被诬为酷吏无秦", "法条被嘲为书生空言", "被辱祖宗"],
+  "era": "战国",
+  "eraFeatures": "变法、廷辩",
+  "combat": { "maxHp": 90 }
+}

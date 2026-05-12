@@ -1,0 +1,23 @@
+{
+  "id": "li-shi-min",
+  "name": "李世民",
+  "aliases": ["二郎", "秦王"],
+  "title": "秦王",
+  "personality": "沉毅多断、善驭将吏，危急时反更冷定",
+  "motivation": "保全麾下与身家，争储势成骑虎",
+  "speakingStyle": "密勿时自称「世民」或「某」，对僚属可称玄龄、克明",
+  "equipment": ["佩剑", "角弓"],
+  "mount": "骏马",
+  "relationships": {
+    "li-jian-cheng": { "initial": -75, "label": "储位相争" },
+    "li-yuan-ji": { "initial": -80, "label": "齐王相逼" },
+    "chang-sun-wu-ji": { "initial": 92, "label": "心腹舅兄" },
+    "yu-chi-jing-de": { "initial": 88, "label": "骁将腹心" },
+    "fang-xuan-ling": { "initial": 85, "label": "谋主" },
+    "du-ru-hui": { "initial": 85, "label": "谋主" }
+  },
+  "redLines": ["被辱为篡逆无辞", "玄甲旧部被无辜株连", "被诬弑父"],
+  "era": "唐初",
+  "eraFeatures": "宫省政争、禁军",
+  "combat": { "maxHp": 100 }
+}

@@ -9,7 +9,7 @@
   "equipment": ["倚天剑", "红袍"],
   "mount": "普通战马",
   "relationships": {
-    "lv-bu": { "initial": 0, "label": "陌生" },
+    "lv-bu": { "initial": -40, "label": "敌对" },
     "liu-bei": { "initial": 20, "label": "盟友" },
     "dong-zhuo": { "initial": -100, "label": "死敌" },
     "yuan-shao": { "initial": 10, "label": "盟主" },

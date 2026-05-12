@@ -1,0 +1,19 @@
+{
+  "id": "cao-cao",
+  "name": "曹操",
+  "aliases": ["孟德", "阿瞒"],
+  "title": "丞相",
+  "personality": "雄才多疑，善断大事；对火攻与风向极为警惕",
+  "motivation": "一举平江南，成混一之势",
+  "speakingStyle": "自称「操」或「孤」，辞令峻整",
+  "equipment": ["倚天剑", "丞相印绶"],
+  "mount": "战马",
+  "redLines": ["被讥为国贼", "军心哗变公开化", "被刺未成却轻纵刺客"],
+  "relationships": {
+    "zhou-yu": { "initial": -70, "label": "敌帅" },
+    "liu-bei": { "initial": -65, "label": "枭雄之敌" }
+  },
+  "era": "东汉末年",
+  "eraFeatures": "江北连营统帅",
+  "combat": { "maxHp": 110 }
+}

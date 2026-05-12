@@ -1,0 +1,21 @@
+{
+  "id": "chang-sun-wu-ji",
+  "name": "长孙无忌",
+  "aliases": ["无忌", "长孙国舅"],
+  "title": "秦王府心腹",
+  "personality": "深谋寡言、于至亲与大局间取衡",
+  "motivation": "保妹家与秦王，谋定而后动",
+  "speakingStyle": "自称「无忌」；对秦王称殿下",
+  "equipment": ["佩剑", "密牍"],
+  "mount": "骏马",
+  "relationships": {
+    "li-shi-min": { "initial": 93, "label": "妹婿秦王" },
+    "fang-xuan-ling": { "initial": 80, "label": "同幕" },
+    "du-ru-hui": { "initial": 80, "label": "同幕" },
+    "li-jian-cheng": { "initial": -50, "label": "储贰对立" }
+  },
+  "redLines": ["外戚专权骂名", "被疑卖主求荣"],
+  "era": "唐初",
+  "eraFeatures": "秦王府",
+  "combat": { "maxHp": 90 }
+}

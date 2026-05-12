@@ -36,11 +36,18 @@ function readJsonFile<T>(filePath: string): T | null {
 /**
  * 只读拼装「本局可出现台词的卡司」提示，供 buildPrompt 注入。
  * 读取失败时返回空串（不伪造名单）。
+ * @param eliminatedNpcIds 已退场卡司 id，从名单与强推语义中剔除（仍可在导演稿中禁止生者对白）。
  */
-export function getScenarioEnsembleHint(scenarioId: string): string {
+export function getScenarioEnsembleHint(
+  scenarioId: string,
+  eliminatedNpcIds?: readonly string[]
+): string {
   try {
     const config = readJsonFile<ScenarioConfigForEnsemble>(scenarioConfigPath(scenarioId));
-    const availableNpcs = config?.availableNpcs?.filter(Boolean) ?? [];
+    const eliminated = new Set((eliminatedNpcIds ?? []).filter(Boolean));
+    const availableNpcs =
+      config?.availableNpcs?.filter((id) => typeof id === 'string' && id.trim() && !eliminated.has(id)) ??
+      [];
     if (availableNpcs.length === 0) return '';
 
     const labelsOrdered: string[] = [];
@@ -90,8 +97,13 @@ export function getScenarioEnsembleHint(scenarioId: string): string {
       }
     }
 
+    const deadNote =
+      eliminated.size > 0
+        ? `【已退场（不得以生者 dialogue 再出场）】以下 id 已从本名单剔除：${[...eliminated].join('、')}。`
+        : '';
     const base = `【本剧本可出现台词的 NPC】${joined}。玩家点名（含名、字、号等称呼）时，对应 NPC 必须在本轮 scenes 中出场并有独立 dialogue 幕（speaker 须为该 NPC 正名）；禁止由当前主 NPC 一句带过代替其立场与台词（禁止「代答」）。`;
-    return roleLine ? `${base}\n${roleLine}` : base;
+    const body = roleLine ? `${base}\n${roleLine}` : base;
+    return deadNote ? `${deadNote}\n${body}` : body;
   } catch (e) {
     console.warn('[ensemble-hint] 读取失败', e);
     return '';
@@ -103,8 +115,10 @@ export function getScenarioEnsembleHint(scenarioId: string): string {
  */
 export function getEnsembleElasticPromptLine(
   totalRounds: number,
-  recentSummaryLines: string[]
+  recentSummaryLines: string[],
+  eliminatedNpcIds?: readonly string[]
 ): string {
+  const eliminatedCount = (eliminatedNpcIds ?? []).filter(Boolean).length;
   const lines = recentSummaryLines.filter((l) => l.trim().length > 0);
   const isSmallTalk =
     lines.length > 0 &&
@@ -114,8 +128,13 @@ export function getEnsembleElasticPromptLine(
     );
   const cycleSuggest = totalRounds > 0 && totalRounds % 4 === 0 && !isSmallTalk;
 
+  const deadElastic =
+    eliminatedCount > 0
+      ? '本局已有卡司退场：【卡司与点名】中「至少一人独立 dialogue」不得指向已退场 id；须改由名单内活人承担。'
+      : '';
   const chunks: string[] = [
     '【群像节奏（引擎提示，勿当硬性轮次 KPI）】若滚动摘要长期只有当前主 NPC 与玩家对答、缺少营帐外动静，宜在因果成立时插入斥候、传令、武将请战、谋士献策等；若本局 prompt 中已出现【卡司与点名】段落，则宜让该名单所列角色中至少一人以独立 dialogue 幕开口（可先一幕 action 再下一幕 dialogue）。纯休整语境不必每轮打断；但若多轮摘要仍完全静止，宜轻微写出远处人声、甲叶、马蹄等以保持战场感。',
+    ...(deadElastic ? [deadElastic] : []),
   ];
   if (isSmallTalk) {
     chunks.push(

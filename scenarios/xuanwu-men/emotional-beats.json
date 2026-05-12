@@ -1,0 +1,57 @@
+{
+  "styleTone": "玄武门剧本：禁中鼓角为幕，情感宜紧而内敛；忌现代心理学术语与滥情独白。",
+  "ensembleBeats": [
+    {
+      "name": "秦王府密议",
+      "triggerRounds": [4, 8, 14, 20, 26],
+      "participants": ["li-shi-min", "chang-sun-wu-ji", "fang-xuan-ling", "du-ru-hui"],
+      "directorNote": "灯下削牍、门禁回报与玄甲点兵侧写；宜短 dialogue 交织，勿一轮写尽政变全流程。",
+      "suppressKeywords": ["太极殿御审", "纯闲聊"]
+    },
+    {
+      "name": "东宫威压",
+      "triggerRounds": [5, 11, 17, 23],
+      "participants": ["li-jian-cheng", "li-yuan-ji", "li-shi-min"],
+      "directorNote": "兄弟名分与军令口气对冲；可写齐王挑衅、太子收束，勿写成公开市井骂战。",
+      "suppressKeywords": ["贞观", "太宗"]
+    },
+    {
+      "name": "玄武门阙下",
+      "triggerRounds": [6, 12, 18, 24],
+      "participants": ["yu-chi-jing-de", "zhang-gong-jin", "cheng-zhi-jie", "li-yuan-ji"],
+      "directorNote": "甲叶、门钥、箭垛与短促喝令；未至摊牌勿写结局已定。",
+      "suppressKeywords": ["已大局已定", "庆功大宴"]
+    }
+  ],
+  "beatTemplates": [
+    {
+      "name": "宫漏将尽",
+      "triggerRounds": [7, 15, 25],
+      "context": "更鼓、月色、禁垣阴影",
+      "example": "秦王或僚属望阙不语，短句收束。",
+      "props": ["宫漏", "铜符", "影壁"],
+      "emotion": ["沉毅", "隐忧", "决断"]
+    },
+    {
+      "name": "甲叶一声",
+      "triggerRounds": [9, 19, 29],
+      "context": "门阙下猝然一响后的静止",
+      "example": "众人呼吸一滞，命令未下，先写听觉与停顿。",
+      "props": ["门钉", "箭囊", "汗迹"],
+      "emotion": ["惊弦", "克制", "杀机未发"]
+    }
+  ],
+  "triggerHints": [
+    "每 5~9 轮最多一次情感高潮；强冲突时可抑制长独白。",
+    "recentSummary 含 玄武门 / 门禁 / 玄甲 等语义时，可优先玄武门阙下节拍。"
+  ],
+  "suppressionHints": ["已写御驾亲审则弱化东宫威压重复升压"],
+  "emotionalIntensity": {
+    "low": "以侧写、耳闻、影绰绰为主",
+    "medium": "对话短促、令行禁止感增强",
+    "high": "门阙下对峙或甲叶骤响，仍须留白勿写尽结局"
+  },
+  "intensityRules": ["未至事变高潮勿连续多轮顶格高强度"],
+  "dos": ["空间对位清晰：秦王府—玄武门—东宫动向可交替侧写"],
+  "donts": ["勿用现代刑侦口吻解构古人", "勿将兄弟政争写成单一脸谱恶人"]
+}

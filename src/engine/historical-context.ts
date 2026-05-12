@@ -40,7 +40,7 @@ export interface DramaticRelationshipFacet {
   note?: string;
 }
 
-/** 联军语境下「公开场合 / 私下」戏剧关系；JSON 键名为 public / private */
+/** 「公开场合 / 私下」戏剧关系；JSON 键名为 public / private */
 export interface DramaticRelationshipEntry {
   from: string;
   to: string;
@@ -82,7 +82,7 @@ export interface HistoricalContextFile {
   forbiddenEvents: HistoricalForbiddenEvent[];
   historicalNotes: string[];
   relationships?: HistoricalRelationship[];
-  /** 讨董联军等语境下的戏剧互动（与称谓向 relationships 并列，不替代） */
+  /** 戏剧张力边（与称谓向 relationships 并列，不替代） */
   dramaticRelationships?: DramaticRelationshipEntry[];
   addressRules?: HistoricalAddressRules;
 }
@@ -187,7 +187,7 @@ export function buildHistoricalContextHint(scenarioId: string): string {
 
   const parts = [
     `时间锚点：${ctx.period.eraName}（${ctx.period.year} 年）${ctx.period.season}；事件脉络：${ctx.period.event}。`,
-    `主场景：${ctx.location.current}。曹操叙事侧后方/根据地宜表述为：${ctx.location.caoCaoBase}。`,
+    `主场景：${ctx.location.current}。与主场景对位或侧翼的叙事锚点宜表述为：${ctx.location.caoCaoBase}。`,
     `禁止当作「此时已定型」的都城/中心地名（自动校验用）：${forbidLoc}。`,
     `在场角色参考：${presentLine}`,
     `缺席或不宜以前线对白正名出场：${absentLine}`,
@@ -240,7 +240,7 @@ function clipDramaticHint(text: string, max: number): string {
 }
 
 /**
- * 联军人物戏剧关系（当前主 NPC 为 from 或 to 的边）。
+ * 戏剧关系张力（当前主 NPC 为 from 或 to 的边；与称谓表分立）。
  */
 export function buildDramaticRelationshipsHint(scenarioId: string, currentNpcId: string): string {
   const ctx = loadHistoricalContext(scenarioId);
@@ -268,7 +268,7 @@ export function buildDramaticRelationshipsHint(scenarioId: string, currentNpcId:
 
   if (lines.length === 0) return '';
 
-  const body = [`当前视角：${currentNpcId}`, '【戏剧关系（联军语境，非称谓表）】', ...lines].join('\n');
+  const body = [`当前视角：${currentNpcId}`, '【戏剧关系（公开与私下张力，非称谓表）】', ...lines].join('\n');
   return clipDramaticHint(body, DRAMATIC_REL_HINT_MAX);
 }
 

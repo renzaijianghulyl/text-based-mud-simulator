@@ -1,4 +1,4 @@
-import type { ParseResult, StateChanges, StoryScene, StorySceneType } from '../types';
+import type { NpcHpDelta, ParseResult, StateChanges, StoryScene, StorySceneType } from '../types';
 import { ParseResponseError } from '../errors';
 
 function stripBomAndTrim(text: string): string {
@@ -246,6 +246,50 @@ function asStateChangesRecord(raw: unknown): Record<string, unknown> {
   return raw as Record<string, unknown>;
 }
 
+/** 可选：模型显式列出本局退场卡司 id；缺省或空数组不写入字段 */
+function asOptionalEliminatedNpcIds(
+  sc: Record<string, unknown>
+): Pick<StateChanges, 'eliminatedNpcs'> | Record<string, never> {
+  const v = sc.eliminatedNpcs;
+  if (v === undefined) return {};
+  if (!Array.isArray(v)) {
+    throw new ParseResponseError('stateChanges.eliminatedNpcs 必须为数组');
+  }
+  const out: string[] = [];
+  for (const item of v) {
+    if (typeof item !== 'string') {
+      throw new ParseResponseError('stateChanges.eliminatedNpcs 每项须为字符串');
+    }
+    const t = item.trim();
+    if (t.length > 0) out.push(t);
+  }
+  const uniq = [...new Set(out)];
+  return uniq.length > 0 ? { eliminatedNpcs: uniq } : {};
+}
+
+/** 可选：卡司 HP 相对增量；缺省或空数组不写入字段 */
+function asOptionalNpcHp(sc: Record<string, unknown>): Pick<StateChanges, 'npcHp'> | Record<string, never> {
+  const v = sc.npcHp;
+  if (v === undefined) return {};
+  if (!Array.isArray(v)) {
+    throw new ParseResponseError('stateChanges.npcHp 必须为数组');
+  }
+  const out: NpcHpDelta[] = [];
+  for (const item of v) {
+    if (typeof item !== 'object' || item === null || Array.isArray(item)) {
+      throw new ParseResponseError('stateChanges.npcHp 每项须为对象');
+    }
+    const o = item as Record<string, unknown>;
+    const id = typeof o.id === 'string' ? o.id.trim() : '';
+    if (!id) {
+      throw new ParseResponseError('stateChanges.npcHp 每项须含非空 id 字符串');
+    }
+    const delta = asFiniteNumber(o.delta, 'stateChanges.npcHp.delta');
+    out.push({ id, delta });
+  }
+  return out.length > 0 ? { npcHp: out } : {};
+}
+
 /**
  * 从 LLM 原始文本中解析 JSON，提取 narration、dialogue、stateChanges。
  * 结构容错：前后说明文字、代码围栏、首尾多余文本、尾随逗号、stateChanges 嵌套 JSON 字符串、数字以字符串形式给出。
@@ -266,8 +310,10 @@ export function parseResponse(llmText: string): ParseResult {
   const relationship = asFiniteNumber(sc.relationship, 'stateChanges.relationship');
   const reason =
     typeof sc.reason === 'string' && sc.reason.length > 0 ? sc.reason.trim() : undefined;
+  const eliminatedNpcs = asOptionalEliminatedNpcIds(sc);
+  const npcHp = asOptionalNpcHp(sc);
 
-  const stateChanges: StateChanges = { hp, relationship, reason };
+  const stateChanges: StateChanges = { hp, relationship, reason, ...eliminatedNpcs, ...npcHp };
   return { narration, dialogue, stateChanges, scenes };
 }
 

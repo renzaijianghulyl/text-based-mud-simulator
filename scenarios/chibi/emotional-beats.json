@@ -1,0 +1,96 @@
+{
+  "styleTone": "赤壁剧本：江雾与风浪为幕，情感宜克制而有余响；忌现代心理学术语与滥情独白。",
+  "ensembleBeats": [
+    {
+      "name": "水寨军议",
+      "triggerRounds": [6, 10, 14, 20, 26, 32],
+      "participants": ["zhou-yu", "lu-su", "zhu-ge-liang", "liu-bei", "sun-quan"],
+      "directorNote": "南岸中军或侧舫：周瑜问策，鲁肃调停，诸葛亮陈天时，刘备盟誓侧证；宜 2+ 独立 dialogue，避免二人转。",
+      "suppressKeywords": ["独处", "江北庆功", "纯闲聊"]
+    },
+    {
+      "name": "江北斥候",
+      "triggerRounds": [5, 11, 17, 23, 29],
+      "participants": ["cao-cao", "cheng-yu", "zhang-liao", "jiang-gan"],
+      "directorNote": "江北营：风向、江雾、连营间隙；可写斥候回报与程昱之疑，张辽整军；蒋干若出场宜带说客分寸。",
+      "suppressKeywords": ["南岸夜宴", "独处"]
+    },
+    {
+      "name": "舟师试锋",
+      "triggerRounds": [8, 16, 24, 30],
+      "participants": ["gan-ning", "huang-gai", "zhou-yu", "zhang-liao", "zhao-yun"],
+      "directorNote": "中小型水战交锋或佯动：动作与金铁声为主，勿一战定全局；若摘要偏军议无出战可弱化。",
+      "suppressKeywords": ["庆功大宴", "纯帐内寒暄"]
+    },
+    {
+      "name": "东南风兆",
+      "triggerRounds": [18, 28, 36],
+      "participants": ["zhu-ge-liang", "zhou-yu", "cao-cao", "cheng-yu"],
+      "directorNote": "风起未起之间的焦虑：旗角、浪涌、星象或军中流言；勿一轮写尽火攻结局。",
+      "suppressKeywords": ["已大火全胜", "庆功"]
+    },
+    {
+      "name": "苦肉与诈降（演义套层）",
+      "triggerRounds": [14, 22, 34],
+      "participants": ["huang-gai", "zhou-yu", "cheng-yu"],
+      "directorNote": "若写苦肉诈降须标为演义叙事或军中计策讨论，勿作史实拍板；程昱可持疑。",
+      "suppressKeywords": ["庆功", "纯闲聊"]
+    }
+  ],
+  "optionalRomanceBeats": [
+    {
+      "name": "草船借箭传闻",
+      "triggerRounds": [12, 20],
+      "triggerProbability": 0.65,
+      "layer": "romance_optional",
+      "participants": ["zhu-ge-liang", "lu-su"],
+      "historicalNote": "话本与演义流传极广；可写为军中传言或小说家言，勿写为史官定论。"
+    },
+    {
+      "name": "蒋干盗书（演义套层）",
+      "triggerRounds": [16, 26],
+      "triggerProbability": 0.55,
+      "layer": "romance_optional",
+      "participants": ["jiang-gan", "zhou-yu", "zhu-ge-liang"],
+      "historicalNote": "可作席间机锋与反间氛围；勿将话本细节写为确凿史实。"
+    }
+  ],
+  "beatTemplates": [
+    {
+      "name": "江夜听涛",
+      "triggerRounds": [9, 19, 29],
+      "context": "夜潮、远火、独倚舷侧",
+      "example": "周瑜或诸葛亮望江北星火，短句收束，不滥情。",
+      "props": ["江风", "更鼓", "残酒"],
+      "emotion": ["沉毅", "隐忧", "决断"]
+    },
+    {
+      "name": "战后浮尸与沉默",
+      "triggerRounds": [7, 15, 25],
+      "context": "小战之后、清点与沉默",
+      "example": "舟师报伤亡数字时的一瞬停顿，命令仍下，语调更冷。",
+      "props": ["名册", "江水", "血腥味"],
+      "emotion": ["悲悯", "冷硬", "无奈"]
+    }
+  ],
+  "triggerHints": [
+    "每 6~10 轮最多一次情感高潮；水战强冲突时可抑制长独白。",
+    "recentSummary 含 风向/火/雾/斥候 等语义时，可优先东南风兆或江北斥候节拍。"
+  ],
+  "suppressionHints": [
+    "最近 2 轮已有情感戏则抑制。",
+    "群像密集时以调度为先。"
+  ],
+  "emotionalIntensity": {
+    "low": "轻微：江声、旗影、短句停顿。",
+    "medium": "中度：道具触发、短回忆，仍克制。",
+    "high": "高强：仅在长会话后期偶发，忌连发。"
+  },
+  "intensityRules": [
+    "第 1-10 轮：仅 low。",
+    "第 11-20 轮：low 或 medium。",
+    "第 21 轮后：可 high 但不宜连续。"
+  ],
+  "dos": ["情感戏 1~2 幕为宜。", "称谓与空间须合赤壁语境。"],
+  "donts": ["不要每轮情感戏。", "不要用现代心理咨询腔。", "不要以情感戏替代军略推进。"]
+}

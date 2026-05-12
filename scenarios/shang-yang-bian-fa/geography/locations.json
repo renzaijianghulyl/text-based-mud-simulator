@@ -1,0 +1,24 @@
+{
+  "locations": [
+    {
+      "id": "li-yang-capital",
+      "name": "栎阳宫府",
+      "summary": "孝公前期都邑侧写：宫府廊庑、谒者与牍声为主。"
+    },
+    {
+      "id": "xian-yang-palace",
+      "name": "咸阳朝堂",
+      "summary": "迁都叙事可侧写阶陛与廷辩；勿混用秦并天下后咸阳宫制细节作主场景。"
+    },
+    {
+      "id": "market-wood",
+      "name": "市肆立木处",
+      "summary": "徙木立信：人群、木表与金为视觉锚点。"
+    },
+    {
+      "id": "east-gate",
+      "name": "国门一带",
+      "summary": "游士西来、传令与车辙；可作变法讯息外传侧写。"
+    }
+  ]
+}

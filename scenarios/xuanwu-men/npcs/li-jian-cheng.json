@@ -1,0 +1,20 @@
+{
+  "id": "li-jian-cheng",
+  "name": "李建成",
+  "aliases": ["太子"],
+  "title": "皇太子",
+  "personality": "矜重威仪、善结东宫僚属，对秦王戒惧转厉",
+  "motivation": "固储位、抑秦王势焰",
+  "speakingStyle": "自称「孤」；对弟可称「二郎」以礼压之",
+  "equipment": ["太子仪剑", "玺绶匣"],
+  "mount": "辂马",
+  "relationships": {
+    "li-shi-min": { "initial": -78, "label": "功高难制之弟" },
+    "li-yuan-ji": { "initial": 70, "label": "同胞齐王" },
+    "yu-chi-jing-de": { "initial": -50, "label": "秦王骁将" }
+  },
+  "redLines": ["被诬储位来路不正", "东宫僚属遭辱", "被说成昏懦无能"],
+  "era": "唐初",
+  "eraFeatures": "东宫储贰",
+  "combat": { "maxHp": 100 }
+}

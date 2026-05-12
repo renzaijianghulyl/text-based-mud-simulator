@@ -1,0 +1,51 @@
+{
+  "locations": [
+    {
+      "id": "chibi-river",
+      "name": "赤壁江面",
+      "type": "水道",
+      "description": "江雾时起时散，南北水寨遥相对峙；斥候小舟在明暗交界处穿梭，浪拍船舷声不绝。",
+      "connections": ["south-water-camp", "north-navy-pier"],
+      "rules": [
+        "江面交锋须有铺垫与退路，不宜无因写「必死」",
+        "可观察风向、火油气味、连营灯影",
+        "可请求友军舟船接应或撤退"
+      ],
+      "npcs": ["zhou-yu", "gan-ning", "huang-gai", "zhang-liao"]
+    },
+    {
+      "id": "south-water-camp",
+      "name": "南岸水寨",
+      "type": "水寨",
+      "description": "栅门、栈桥、系缆柱与弓弩台层层设防；中军舫上时闻军议与更鼓。",
+      "connections": ["chibi-river"],
+      "rules": [
+        "军议与盟誓宜在此处或中军舫展开",
+        "擅闯中军须有因果，不宜单句即处决玩家",
+        "可请见周瑜、鲁肃、诸葛亮等"
+      ],
+      "npcs": ["zhou-yu", "lu-su", "zhu-ge-liang", "sun-quan"]
+    },
+    {
+      "id": "north-navy-pier",
+      "name": "江北水寨栈桥",
+      "type": "营寨",
+      "description": "连营灯火映江，铁索连舟之议可作文中悬念；程昱、张辽等巡营声不绝于耳。",
+      "connections": ["chibi-river"],
+      "rules": [
+        "曹营侧写多疑与戒备，避免无铺垫的当场处决套路化每轮重演",
+        "可写斥候回报、风向变化、军心波动"
+      ],
+      "npcs": ["cao-cao", "cheng-yu", "zhang-liao", "jiang-gan"]
+    },
+    {
+      "id": "liu-bei-quarters",
+      "name": "刘备侧营舟群",
+      "type": "营寨",
+      "description": "关张赵随侍，舟队与南岸互为犄角；军议时可与诸葛同席。",
+      "connections": ["south-water-camp", "chibi-river"],
+      "rules": ["关张赵为刘备部曲，不宜写成周瑜直属", "可写护主、接应、侧翼出战"],
+      "npcs": ["liu-bei", "guan-yu", "zhang-fei", "zhao-yun"]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "gongzi-qian",
+  "name": "公子虔",
+  "aliases": ["公子"],
+  "title": "宗室公子",
+  "personality": "骄悍藏于礼；于法刀加身时最易起衅",
+  "motivation": "保宗室体面与权分",
+  "speakingStyle": "称「鞅」时多冷；对君前仍守臣礼。**勿剧透具体刑名结局，留戏剧压**",
+  "equipment": ["佩剑", "玉具"],
+  "mount": "骏马",
+  "relationships": {
+    "shang-yang": { "initial": -80, "label": "法与宗室之仇隙" },
+    "gan-long": { "initial": 62, "label": "同声" },
+    "qin-xiao-gong": { "initial": 55, "label": "君臣" },
+    "ying-si": { "initial": 48, "label": "太子侧" }
+  },
+  "redLines": ["被嘲宗室纨绔", "被说成谋反已定"],
+  "era": "战国",
+  "eraFeatures": "宗室",
+  "combat": { "maxHp": 92 }
+}

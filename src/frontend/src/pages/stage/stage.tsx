@@ -243,6 +243,22 @@ export default function StagePage() {
       return;
     }
     void (async () => {
+      const backToIndex = () => {
+        void Taro.navigateBack().catch(() => {
+          void Taro.reLaunch({ url: '/pages/index/index' });
+        });
+      };
+      const promptRejoinFail = (title: string, content: string) => {
+        void Taro.showModal({
+          title,
+          content,
+          showCancel: false,
+          confirmText: '返回首页',
+          success: (m) => {
+            if (m.confirm) backToIndex();
+          },
+        });
+      };
       try {
         const res = await callCloudFunctionWithTimeout({
           name: 'interact',
@@ -255,10 +271,10 @@ export default function StagePage() {
           useGameStore.getState().applyCloudStateOnly(st);
         }
         if (r.success === false) {
-          Taro.showToast({ title: String(r.message ?? '读取进度失败'), icon: 'none' });
+          promptRejoinFail('无法继续', String(r.message ?? '读取进度失败，可能没有存档。'));
         }
       } catch {
-        Taro.showToast({ title: '同步进度失败', icon: 'none' });
+        promptRejoinFail('同步失败', '无法从云端读取进度，请检查网络后从首页重试。');
       } finally {
         setLoading(false);
       }

@@ -1,0 +1,20 @@
+{
+  "id": "li-yuan-ji",
+  "name": "李元吉",
+  "aliases": ["齐王", "四郎"],
+  "title": "齐王",
+  "personality": "悍戾敢为、好先声夺人，常主威逼",
+  "motivation": "附太子以自固，并力抑秦王",
+  "speakingStyle": "自称「某」或「元吉」；对秦王多带刺",
+  "equipment": ["长槊", "劲弓"],
+  "mount": "骏马",
+  "relationships": {
+    "li-shi-min": { "initial": -82, "label": "宿怨" },
+    "li-jian-cheng": { "initial": 72, "label": "太子兄" },
+    "yu-chi-jing-de": { "initial": -45, "label": "敌将" }
+  },
+  "redLines": ["被嘲只有匹夫之勇", "被说反复无常", "齐王府眷被辱"],
+  "era": "唐初",
+  "eraFeatures": "齐王府",
+  "combat": { "maxHp": 100 }
+}

@@ -1,0 +1,31 @@
+{
+  "locations": [
+    {
+      "id": "xuanwu-gate",
+      "name": "玄武门阙下",
+      "type": "宫门",
+      "description": "北阙门禁森严，箭垛与门道形成狭长视野；晨鼓未彻时，甲叶声易被风吞没。",
+      "connections": ["jin-yuan-path", "qin-prince-house"],
+      "rules": ["伏击与喝阻须有铺垫", "不宜无因写当场处决玩家", "可写门钥、符节、斥候往返"],
+      "npcs": ["yu-chi-jing-de", "zhang-gong-jin", "cheng-zhi-jie", "li-yuan-ji"]
+    },
+    {
+      "id": "qin-prince-house",
+      "name": "秦王府一带",
+      "type": "府邸",
+      "description": "密牍、甲仗与僚属往来；玄甲旧部可在侧院点兵而不宣。",
+      "connections": ["xuanwu-gate"],
+      "rules": ["军议密勿宜有门禁因果", "可请见房杜、长孙等"],
+      "npcs": ["li-shi-min", "fang-xuan-ling", "du-ru-hui", "chang-sun-wu-ji"]
+    },
+    {
+      "id": "jin-yuan-path",
+      "name": "东宫来路",
+      "type": "宫道",
+      "description": "太子卫率与齐王扈从可能出现的夹道；辇声、靴声交错。",
+      "connections": ["xuanwu-gate"],
+      "rules": ["与东宫对位叙事宜留余地", "勿一轮写尽兄弟结局"],
+      "npcs": ["li-jian-cheng", "li-yuan-ji"]
+    }
+  ]
+}

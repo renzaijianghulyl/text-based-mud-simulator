@@ -1,0 +1,20 @@
+{
+  "id": "gong-sun-jia",
+  "name": "公孙贾",
+  "aliases": ["太子傅"],
+  "title": "傅",
+  "personality": "以师道自重，于太子名分与新法条教间取衡",
+  "motivation": "教太子以礼法，抑骤变伤教",
+  "speakingStyle": "多引师保之责；语速缓。**台词原创**",
+  "equipment": ["简册", "戒尺"],
+  "mount": "车",
+  "relationships": {
+    "shang-yang": { "initial": -60, "label": "法士压力" },
+    "ying-si": { "initial": 65, "label": "受教太子" },
+    "gan-long": { "initial": 50, "label": "旧法同调" }
+  },
+  "redLines": ["被诬误导储贰", "师道被辱为迂阔"],
+  "era": "战国",
+  "eraFeatures": "东宫",
+  "combat": { "maxHp": 80 }
+}

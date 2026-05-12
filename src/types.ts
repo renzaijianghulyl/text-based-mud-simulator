@@ -2,10 +2,20 @@
  * 跨模块共享类型（会话、解析结果、状态增量等）
  */
 
+/** 单卡司 HP 增量（相对本会话副本当前值）；仅模型显式输出时合并 */
+export interface NpcHpDelta {
+  id: string;
+  delta: number;
+}
+
 export interface StateChanges {
   hp: number;
   relationship: number;
   reason?: string;
+  /** 本局已退场卡司 id（剧本 npc id），仅当模型显式输出时合并；解析侧不捏造 */
+  eliminatedNpcs?: string[];
+  /** 卡司 HP 增量；id 为剧本 npc id；仅模型显式输出时合并 */
+  npcHp?: NpcHpDelta[];
 }
 
 export type StorySceneType = 'narration' | 'action' | 'dialogue';
@@ -89,6 +99,12 @@ export interface SessionNpcsContext {
   current: CurrentNpc;
 }
 
+/** 本会话卡司战斗状态副本（不入只读剧本包；由引擎按剧本初始化并可被 stateChanges.npcHp 更新） */
+export interface NpcCombatState {
+  hp: number;
+  maxHp: number;
+}
+
 export interface HistoryEntry {
   round: number;
   intent: string;
@@ -123,6 +139,10 @@ export interface Session {
   intentQuotaConsumed: number;
   /** 本局已领取的分享加次数次数（用于上限） */
   intentQuotaShareClaims: number;
+  /** 本局叙事中已退场/阵亡的卡司 id（剧本 npc id），用于 prompt 与群像过滤 */
+  eliminatedNpcIds?: string[];
+  /** 卡司 HP 本会话副本：key 为剧本 npc id */
+  npcCombatById?: Record<string, NpcCombatState>;
   createdAt: Date;
   updatedAt: Date;
 }

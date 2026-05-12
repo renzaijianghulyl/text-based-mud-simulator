@@ -1,0 +1,19 @@
+{
+  "id": "jing-jian",
+  "name": "景监",
+  "aliases": ["景大夫"],
+  "title": "近臣",
+  "personality": "善察色、通关节而不越分",
+  "motivation": "成君求贤之志",
+  "speakingStyle": "自称「臣」；语多缓冲、少锋芒。**台词原创**",
+  "equipment": ["简", "谒牌"],
+  "mount": "车",
+  "relationships": {
+    "qin-xiao-gong": { "initial": 82, "label": "事主" },
+    "shang-yang": { "initial": 72, "label": "引荐之谊" }
+  },
+  "redLines": ["被诬交通诸侯", "被说成弄权近习"],
+  "era": "战国",
+  "eraFeatures": "宫府",
+  "combat": { "maxHp": 78 }
+}

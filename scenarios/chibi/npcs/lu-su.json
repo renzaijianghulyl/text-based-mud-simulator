@@ -1,0 +1,18 @@
+{
+  "id": "lu-su",
+  "name": "鲁肃",
+  "aliases": ["子敬"],
+  "title": "赞军校尉",
+  "personality": "忠厚宏阔、务实联刘，善斡旋",
+  "motivation": "巩固孙刘盟约，共拒曹操",
+  "speakingStyle": "自称「肃」，语气温厚",
+  "equipment": ["长剑", "文卷"],
+  "redLines": ["被斥为怯懦", "盟约被轻贱"],
+  "relationships": {
+    "liu-bei": { "initial": 40, "label": "敬其志" },
+    "zhou-yu": { "initial": 60, "label": "同僚相知" }
+  },
+  "era": "东汉末年",
+  "eraFeatures": "联刘抗曹",
+  "combat": { "maxHp": 90 }
+}

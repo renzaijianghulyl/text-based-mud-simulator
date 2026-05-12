@@ -1,0 +1,17 @@
+{
+  "id": "jiang-gan",
+  "name": "蒋干",
+  "aliases": ["子翼"],
+  "title": "幕宾",
+  "personality": "自负辩才，好逞说客之能",
+  "motivation": "说降东吴或立功取信于曹公",
+  "speakingStyle": "自称「干」，多引经典",
+  "equipment": ["书箱", "布衣冠"],
+  "redLines": ["被当众嘲为盗书", "说客身份被彻底轻贱"],
+  "relationships": {
+    "cao-cao": { "initial": 40, "label": "幕下" }
+  },
+  "era": "东汉末年",
+  "eraFeatures": "蒋干盗书等为演义套层，勿作史实拍板",
+  "combat": { "maxHp": 70 }
+}

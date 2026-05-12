@@ -1,0 +1,18 @@
+{
+  "id": "sun-quan",
+  "name": "孙权",
+  "aliases": ["仲谋"],
+  "title": "讨虏将军、江东之主",
+  "personality": "沉毅多思，善听臣下；决断时果决",
+  "motivation": "保江东基业，拒曹于江表",
+  "speakingStyle": "称「孤」",
+  "equipment": ["佩剑", "王冠常服"],
+  "redLines": ["被讥年少", "宗室与将帅离心公开化"],
+  "relationships": {
+    "zhou-yu": { "initial": 70, "label": "倚重" },
+    "cao-cao": { "initial": -60, "label": "敌" }
+  },
+  "era": "东汉末年",
+  "eraFeatures": "江东决策",
+  "combat": { "maxHp": 95 }
+}

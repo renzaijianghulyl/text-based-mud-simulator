@@ -3,11 +3,18 @@
  */
 import * as wxCloud from 'wx-server-sdk';
 import type { PlayerRoleProfile, Session } from '../../types';
-import { CloudDatabaseError, SessionNotFoundError } from '../../errors';
+import { CloudDatabaseError, ScenarioUnsupportedError, SessionNotFoundError } from '../../errors';
 import { buildDemoSessionFromNpc, sessionKey } from '../../sessions/build-demo-session';
-import { ensureIntentQuotaFields } from '../../sessions/intent-quota';
+import { ensureNpcCombatFields } from '../../engine/npc-combat';
+import { ensureEliminatedNpcFields, ensureIntentQuotaFields } from '../../sessions/intent-quota';
+import { getChibiNpcTemplate } from '../../sessions/chibi-npc-static';
 import { getHulaguanNpcTemplate } from '../../sessions/hulaguan-npc-static';
+import { getXuanwuMenNpcTemplate } from '../../sessions/xuanwu-men-npc-static';
+import { getShangYangBianFaNpcTemplate } from '../../sessions/shang-yang-bian-fa-npc-static';
+import { resolveChibiInitialTargetNpcId } from '../../sessions/chibi-initial-target';
 import { resolveHulaguanInitialTargetNpcId } from '../../sessions/hulaguan-initial-target';
+import { resolveXuanwuMenInitialTargetNpcId } from '../../sessions/xuanwu-men-initial-target';
+import { resolveShangYangBianFaInitialTargetNpcId } from '../../sessions/shang-yang-bian-fa-initial-target';
 import type { SessionStore } from '../../sessions/session-store-types';
 
 const COLLECTION = 'sessions';
@@ -34,22 +41,35 @@ function fromPlain(raw: Record<string, unknown>): Session {
   return s;
 }
 
-/** MVP：仅 hulaguan；NPC 来自静态模板。 */
+/** 云函数新开局：支持 hulaguan、chibi、xuanwu-men、shang-yang-bian-fa；NPC 来自打包进云函数的静态注册表。 */
 export function buildDemoSession(
   userId: string,
   scenarioId: string,
   targetNpcId?: string,
   playerRoleProfile?: PlayerRoleProfile
 ): Session {
-  if (scenarioId !== 'hulaguan') {
-    throw new Error('MVP 仅支持剧本 hulaguan');
+  const trimmed = typeof targetNpcId === 'string' && targetNpcId.trim() ? targetNpcId.trim() : '';
+  if (scenarioId === 'hulaguan') {
+    const requested = trimmed || resolveHulaguanInitialTargetNpcId(playerRoleProfile);
+    const npc = getHulaguanNpcTemplate(requested);
+    return buildDemoSessionFromNpc(userId, scenarioId, npc, playerRoleProfile);
   }
-  const requested =
-    typeof targetNpcId === 'string' && targetNpcId.trim()
-      ? targetNpcId.trim()
-      : resolveHulaguanInitialTargetNpcId(playerRoleProfile);
-  const npc = getHulaguanNpcTemplate(requested);
-  return buildDemoSessionFromNpc(userId, scenarioId, npc, playerRoleProfile);
+  if (scenarioId === 'chibi') {
+    const requested = trimmed || resolveChibiInitialTargetNpcId(playerRoleProfile);
+    const npc = getChibiNpcTemplate(requested);
+    return buildDemoSessionFromNpc(userId, scenarioId, npc, playerRoleProfile);
+  }
+  if (scenarioId === 'xuanwu-men') {
+    const requested = trimmed || resolveXuanwuMenInitialTargetNpcId(playerRoleProfile);
+    const npc = getXuanwuMenNpcTemplate(requested);
+    return buildDemoSessionFromNpc(userId, scenarioId, npc, playerRoleProfile);
+  }
+  if (scenarioId === 'shang-yang-bian-fa') {
+    const requested = trimmed || resolveShangYangBianFaInitialTargetNpcId(playerRoleProfile);
+    const npc = getShangYangBianFaNpcTemplate(requested);
+    return buildDemoSessionFromNpc(userId, scenarioId, npc, playerRoleProfile);
+  }
+  throw new ScenarioUnsupportedError(scenarioId);
 }
 
 export async function sessionExists(userId: string, scenarioId: string): Promise<boolean> {
@@ -75,6 +95,8 @@ export async function loadSession(userId: string, scenarioId: string): Promise<S
     }
     const session = fromPlain(res.data[0] as Record<string, unknown>);
     ensureIntentQuotaFields(session);
+    ensureEliminatedNpcFields(session);
+    ensureNpcCombatFields(session);
     return session;
   } catch (e) {
     if (e instanceof SessionNotFoundError) throw e;

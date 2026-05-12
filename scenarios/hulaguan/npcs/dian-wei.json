@@ -9,7 +9,7 @@
   "mount": "普通战马",
   "relationships": {
     "cao-cao": { "initial": 100, "label": "主公" },
-    "lv-bu": { "initial": 0, "label": "陌生" }
+    "lv-bu": { "initial": -30, "label": "敌对" }
   },
   "redLines": ["曹操被伤害", "被侮辱"]
 }

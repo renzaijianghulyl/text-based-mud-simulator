@@ -21,3 +21,10 @@ export function intentQuotaRemaining(session: Session): number {
   ensureIntentQuotaFields(session);
   return Math.max(0, session.intentQuotaGranted - session.intentQuotaConsumed);
 }
+
+/** 旧会话缺省迁移：与 ensureIntentQuotaFields 同类调用点（云/文件加载、云函数入口） */
+export function ensureEliminatedNpcFields(session: Session): void {
+  if (!Array.isArray(session.eliminatedNpcIds)) {
+    session.eliminatedNpcIds = [];
+  }
+}

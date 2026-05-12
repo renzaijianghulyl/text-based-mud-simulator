@@ -1,6 +1,13 @@
 import type { ParseResult, Session, StateChanges, ProcessResult } from '../types';
+import { ensureEliminatedNpcFields } from '../sessions/intent-quota';
 import { callLLM } from './llm-adapter';
 import { buildPrompt, type PromptProfile } from './prompt-builder';
+import { mergeEliminatedNpcIds } from './eliminated-npcs';
+import {
+  applyNpcHpDeltas,
+  assertNpcHpDeltasApplicable,
+  ensureNpcCombatFields,
+} from './npc-combat';
 import { updateMemory } from './memory-manager';
 import { collectAddressWarnings, collectHistoricalWarnings } from './historical-context';
 import { parseResponse, validateParse } from './response-parser';
@@ -13,18 +20,26 @@ const PARSE_RETRY_HINT =
   '\n\n【结构修复要求】请只修复输出结构，不要重写剧情风格。' +
   '仅输出一个 JSON 对象（不要 Markdown 代码块）。' +
   'scenes 必须是非空数组（每项含 type/content，dialogue 幕必须带 speaker）；' +
-  'stateChanges 必须是对象（不要数组），hp、relationship 必须是增量；字段为 scenes、stateChanges。';
+  'stateChanges 必须是对象（不要数组），hp、relationship 必须是增量；字段为 scenes、stateChanges；' +
+  '可选 eliminatedNpcs：字符串数组，每项为剧本 npc id（如 hua-xiong），仅当本局确有卡司退场时填写。' +
+  '可选 npcHp：对象数组，每项 { id, delta }，id 为剧本 npc id，delta 为相对本会话副本的 HP 增量；仅当本轮叙事确有卡司伤血/治疗等时填写。';
 
 function buildMemorySlice(session: Session) {
+  ensureEliminatedNpcFields(session);
+  ensureNpcCombatFields(session);
   return {
     recentSummaryLines: session.recentSummaryLines,
     recentPhrases: Array.isArray(session.recentPhrases) ? session.recentPhrases : [],
     keyEvents: session.keyEvents,
     cumulativeState: session.cumulativeState,
+    eliminatedNpcIds: session.eliminatedNpcIds!,
+    npcCombatById: session.npcCombatById!,
   };
 }
 
 function assertApplicableState(session: Session, changes: StateChanges): void {
+  ensureNpcCombatFields(session);
+  assertNpcHpDeltasApplicable(session, changes);
   const nextHp = session.player.hp + changes.hp;
   if (!Number.isFinite(nextHp) || nextHp < 0 || nextHp > session.player.maxHp) {
     throw new ParseResponseError('状态变化导致 HP 越界，请重试或调整叙事');
@@ -36,9 +51,13 @@ function assertApplicableState(session: Session, changes: StateChanges): void {
 }
 
 function applyStateChanges(session: Session, changes: StateChanges): void {
+  ensureEliminatedNpcFields(session);
+  ensureNpcCombatFields(session);
   session.player.hp += changes.hp;
   session.npcs.current.relationship += changes.relationship;
   session.relationships[session.npcs.current.id] = session.npcs.current.relationship;
+  mergeEliminatedNpcIds(session, changes.eliminatedNpcs);
+  applyNpcHpDeltas(session, changes);
 }
 
 function resolvePromptProfileByEnv(intent: string, context: PromptProfileContext): Exclude<PromptProfile, 'auto'> {

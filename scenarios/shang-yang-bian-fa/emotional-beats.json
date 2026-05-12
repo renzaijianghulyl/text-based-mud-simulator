@@ -1,0 +1,57 @@
+{
+  "styleTone": "商鞅变法剧本：廷辩如刀、条教如丝；情感宜收在君臣互信与宗法反弹的张力里，忌滥情独白与现代法理课口吻。",
+  "ensembleBeats": [
+    {
+      "name": "朝堂廷辩",
+      "triggerRounds": [3, 7, 13, 19, 25],
+      "participants": ["shang-yang", "gan-long", "du-zhi", "qin-xiao-gong"],
+      "directorNote": "甘杜与卫鞅往复数合即可，勿一轮写尽「变法成败」；孝公可作收束或留问。",
+      "suppressKeywords": ["已一统天下", "焚书"]
+    },
+    {
+      "name": "市肆立木",
+      "triggerRounds": [4, 10, 16, 22],
+      "participants": ["shang-yang", "jing-jian"],
+      "directorNote": "徙木立信以人群窃议、木表与金为道具；未至结局勿写「天下皆服」式定评。",
+      "suppressKeywords": ["车裂", "商君已死"]
+    },
+    {
+      "name": "宫府密勿",
+      "triggerRounds": [5, 11, 17, 23],
+      "participants": ["qin-xiao-gong", "shang-yang", "jing-jian"],
+      "directorNote": "灯下削牍、短 dialogue 交织；可写君臣互试，勿替玩家抉择。",
+      "suppressKeywords": ["阿房宫"]
+    }
+  ],
+  "beatTemplates": [
+    {
+      "name": "牍重于鼎",
+      "triggerRounds": [6, 14, 24],
+      "context": "宫府牍积、谒者唱名",
+      "example": "卫鞅或同僚一言收束于「法行自上」之忌，留白。",
+      "props": ["竹简", "铜符", "木表"],
+      "emotion": ["沉毅", "戒惧", "决断未发"]
+    },
+    {
+      "name": "宗室一揖",
+      "triggerRounds": [8, 18, 28],
+      "context": "廊下相遇，礼数未失而目如霜",
+      "example": "甘龙一揖而去，旁白只写袍角与脚步声。",
+      "props": ["深衣", "玉佩", "廊影"],
+      "emotion": ["克制", "敌意", "体面"]
+    }
+  ],
+  "triggerHints": [
+    "每 6～10 轮最多一次情感高潮；廷辩强冲突时可抑制长独白。",
+    "recentSummary 含 徙木 / 什伍 / 太子 等语义时，可优先市肆或东宫侧线节拍。"
+  ],
+  "suppressionHints": ["已写车裂收束则弱化立木重复升压"],
+  "emotionalIntensity": {
+    "low": "以侧写、耳闻、牍影为主",
+    "medium": "廷辩短句往复、君臣对视增锋",
+    "high": "刑上大夫或太子傅一类冲突将发未发，仍须留白勿写尽结局"
+  },
+  "intensityRules": ["未至史线收束勿连续多轮顶格高强度"],
+  "dos": ["空间对位清晰：朝堂—市肆—宫府密勿可交替侧写"],
+  "donts": ["勿用现代法庭剧解构古人", "勿将法家写成单一冷血脸谱"]
+}

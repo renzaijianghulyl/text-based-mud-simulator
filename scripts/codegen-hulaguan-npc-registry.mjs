@@ -19,6 +19,9 @@ const defaultTarget = typeof config.defaultTarget === 'string' && config.default
 /** @type {Record<string, unknown>} */
 const templates = {};
 
+/** @type {Record<string, Record<string, number>>} */
+const relInitial = {};
+
 for (const id of availableNpcs) {
   const p = join(scenarioDir, 'npcs', `${id}.json`);
   if (!existsSync(p)) {
@@ -39,6 +42,22 @@ for (const id of availableNpcs) {
     redLines: Array.isArray(raw.redLines) ? raw.redLines.map(String) : [],
     relationship: 0,
   };
+
+  const rels = raw.relationships;
+  if (rels && typeof rels === 'object' && !Array.isArray(rels)) {
+    /** @type {Record<string, number>} */
+    const out = {};
+    for (const [toId, edge] of Object.entries(rels)) {
+      if (!edge || typeof edge !== 'object' || Array.isArray(edge)) continue;
+      const ini = /** @type {{ initial?: unknown }} */ (edge).initial;
+      if (typeof ini === 'number' && Number.isFinite(ini)) {
+        out[toId] = ini;
+      }
+    }
+    if (Object.keys(out).length > 0) {
+      relInitial[id] = out;
+    }
+  }
 }
 
 const ids = Object.keys(templates);
@@ -47,6 +66,7 @@ if (ids.length === 0) {
 }
 
 const jsonLiteral = JSON.stringify(templates, null, 2);
+const relLiteral = JSON.stringify(relInitial, null, 2);
 const header = `/* eslint-disable */\n/**\n * 由 scripts/codegen-hulaguan-npc-registry.mjs 生成，请勿手改。运行：npm run codegen:hulaguan-npcs\n */\nimport type { CurrentNpc } from '../types';\n\n`;
 
 const body = `
@@ -57,6 +77,16 @@ export const HULAGUAN_AVAILABLE_NPC_IDS = ${JSON.stringify(ids)} as const;
 type HulaguanNpcId = (typeof HULAGUAN_AVAILABLE_NPC_IDS)[number];
 
 const RAW_TEMPLATES = ${jsonLiteral} as Record<string, CurrentNpc>;
+
+/** 扮演方 npcId → 对其它 npc 的剧本 initial 关系值（来自各 npc JSON relationships.initial） */
+export const HULAGUAN_REL_INITIAL = ${relLiteral} as Readonly<Record<string, Readonly<Record<string, number>>>>;
+
+export function getHulaguanInitialRel(fromNpcId: string, toNpcId: string): number | undefined {
+  const row = HULAGUAN_REL_INITIAL[fromNpcId];
+  if (!row) return undefined;
+  const v = row[toNpcId];
+  return typeof v === 'number' && Number.isFinite(v) ? v : undefined;
+}
 
 export function getHulaguanNpcTemplateById(npcId: string): CurrentNpc | null {
   const row = RAW_TEMPLATES[npcId];

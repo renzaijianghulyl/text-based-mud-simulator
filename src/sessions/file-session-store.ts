@@ -1,9 +1,16 @@
 import type { PlayerRoleProfile, Session } from '../types';
 import { SessionNotFoundError } from '../errors';
 import { buildDemoSessionFromNpc, sessionKey } from './build-demo-session';
-import { ensureIntentQuotaFields } from './intent-quota';
+import { ensureNpcCombatFields } from '../engine/npc-combat';
+import { ensureEliminatedNpcFields, ensureIntentQuotaFields } from './intent-quota';
+import { getChibiNpcTemplate } from './chibi-npc-static';
 import { getHulaguanNpcTemplate } from './hulaguan-npc-static';
+import { getXuanwuMenNpcTemplate } from './xuanwu-men-npc-static';
+import { getShangYangBianFaNpcTemplate } from './shang-yang-bian-fa-npc-static';
+import { resolveChibiInitialTargetNpcId } from './chibi-initial-target';
 import { resolveHulaguanInitialTargetNpcId } from './hulaguan-initial-target';
+import { resolveXuanwuMenInitialTargetNpcId } from './xuanwu-men-initial-target';
+import { resolveShangYangBianFaInitialTargetNpcId } from './shang-yang-bian-fa-initial-target';
 import { getScenariosRoot } from './scenario-paths';
 import type { SessionStore } from './session-store-types';
 import * as fs from 'fs';
@@ -94,12 +101,26 @@ export class FileSessionStore implements SessionStore {
     if (config?.defaultTarget && fs.existsSync(this.scenarioNpcPath(scenarioId, config.defaultTarget))) {
       return config.defaultTarget;
     }
+    const first = config?.availableNpcs?.find((id) => fs.existsSync(this.scenarioNpcPath(scenarioId, id)));
+    if (first) return first;
     return 'lv-bu';
   }
 
   private loadNpcTemplate(scenarioId: string, requestedNpcId?: string) {
     if (scenarioId === 'hulaguan') {
       return getHulaguanNpcTemplate(requestedNpcId);
+    }
+    if (scenarioId === 'chibi') {
+      const npcId = this.resolveNpcId(scenarioId, requestedNpcId);
+      return getChibiNpcTemplate(npcId);
+    }
+    if (scenarioId === 'xuanwu-men') {
+      const npcId = this.resolveNpcId(scenarioId, requestedNpcId);
+      return getXuanwuMenNpcTemplate(npcId);
+    }
+    if (scenarioId === 'shang-yang-bian-fa') {
+      const npcId = this.resolveNpcId(scenarioId, requestedNpcId);
+      return getShangYangBianFaNpcTemplate(npcId);
     }
     const npcId = this.resolveNpcId(scenarioId, requestedNpcId);
     const filePath = this.scenarioNpcPath(scenarioId, npcId);
@@ -143,6 +164,15 @@ export class FileSessionStore implements SessionStore {
     if (scenarioId === 'hulaguan' && (!effectiveNpcId || !String(effectiveNpcId).trim())) {
       effectiveNpcId = resolveHulaguanInitialTargetNpcId(playerRoleProfile);
     }
+    if (scenarioId === 'chibi' && (!effectiveNpcId || !String(effectiveNpcId).trim())) {
+      effectiveNpcId = resolveChibiInitialTargetNpcId(playerRoleProfile);
+    }
+    if (scenarioId === 'xuanwu-men' && (!effectiveNpcId || !String(effectiveNpcId).trim())) {
+      effectiveNpcId = resolveXuanwuMenInitialTargetNpcId(playerRoleProfile);
+    }
+    if (scenarioId === 'shang-yang-bian-fa' && (!effectiveNpcId || !String(effectiveNpcId).trim())) {
+      effectiveNpcId = resolveShangYangBianFaInitialTargetNpcId(playerRoleProfile);
+    }
     const npcTemplate = this.loadNpcTemplate(scenarioId, effectiveNpcId);
     return deepClone(buildDemoSessionFromNpc(userId, scenarioId, npcTemplate, playerRoleProfile));
   }
@@ -161,6 +191,8 @@ export class FileSessionStore implements SessionStore {
     const json = fs.readFileSync(filePath, 'utf-8');
     const session: Session = JSON.parse(json);
     ensureIntentQuotaFields(session);
+    ensureEliminatedNpcFields(session);
+    ensureNpcCombatFields(session);
     return deepClone(session);
   }
 

@@ -45,3 +45,35 @@ export class CloudDatabaseError extends Error {
     }
   }
 }
+
+/** 云函数新开局尚未支持该 scenarioId（如线上包未更新）。 */
+export class ScenarioUnsupportedError extends Error {
+  constructor(public readonly scenarioId: string) {
+    super(`云函数新开局暂不支持剧本：${scenarioId}`);
+    this.name = 'ScenarioUnsupportedError';
+  }
+}
+
+/** 赤壁 NPC 静态注册表缺失或损坏（需重新 codegen 并打包）。 */
+export class ChibiNpcRegistryError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ChibiNpcRegistryError';
+  }
+}
+
+/** 玄武门剧本 NPC 静态注册表缺失或损坏（需重新 codegen 并打包）。 */
+export class XuanwuMenNpcRegistryError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'XuanwuMenNpcRegistryError';
+  }
+}
+
+/** 商鞅变法剧本 NPC 静态注册表缺失或损坏（需重新 codegen 并打包）。 */
+export class ShangYangBianFaNpcRegistryError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ShangYangBianFaNpcRegistryError';
+  }
+}

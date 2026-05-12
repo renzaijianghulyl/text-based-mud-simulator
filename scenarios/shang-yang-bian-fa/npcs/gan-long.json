@@ -1,0 +1,21 @@
+{
+  "id": "gan-long",
+  "name": "甘龙",
+  "aliases": ["甘大夫"],
+  "title": "宗室老臣",
+  "personality": "持重、以祖宗之法为甲；面折廷争而不失体",
+  "motivation": "阻骤变以安宗室与民心",
+  "speakingStyle": "引古礼、重「因民而教」；语速沉，句少而刺。**台词原创，气质可比老臣廷辩戏**",
+  "equipment": ["笏", "深衣"],
+  "mount": "车",
+  "relationships": {
+    "shang-yang": { "initial": -72, "label": "变法对手" },
+    "du-zhi": { "initial": 78, "label": "同声相应" },
+    "qin-xiao-gong": { "initial": 50, "label": "君臣名分" },
+    "gongzi-qian": { "initial": 55, "label": "宗室同气" }
+  },
+  "redLines": ["被诬老朽误国", "宗室遭辱为笑柄"],
+  "era": "战国",
+  "eraFeatures": "宗法",
+  "combat": { "maxHp": 85 }
+}

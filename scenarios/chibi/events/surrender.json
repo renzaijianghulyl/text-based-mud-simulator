@@ -1,0 +1,17 @@
+{
+  "id": "surrender",
+  "name": "投降事件",
+  "type": "conditional",
+  "triggers": ["投降", "归顺", "请降"],
+  "successRate": {
+    "relationship_gt_50": 90,
+    "relationship_0_50": 50,
+    "relationship_lt_0": 10
+  },
+  "effects": {
+    "hp": 0,
+    "relationship": 20,
+    "status": "俘降待定"
+  },
+  "description": "玩家向对方阵营请降，成败视关系与局势"
+}

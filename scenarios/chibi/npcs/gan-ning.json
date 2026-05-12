@@ -1,0 +1,17 @@
+{
+  "id": "gan-ning",
+  "name": "甘宁",
+  "aliases": ["兴霸"],
+  "title": "建昌都尉",
+  "personality": "剽悍机敏，好立奇功",
+  "motivation": "以战功立名江东",
+  "speakingStyle": "自称「宁」，带江湖气",
+  "equipment": ["铁链", "短戟"],
+  "redLines": ["被轻为锦帆贼", "功劳被夺"],
+  "relationships": {
+    "zhou-yu": { "initial": 55, "label": "敬重" }
+  },
+  "era": "东汉末年",
+  "eraFeatures": "水战夜袭",
+  "combat": { "maxHp": 102 }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "du-zhi",
+  "name": "杜挚",
+  "aliases": ["杜大夫"],
+  "title": "旧法辩士",
+  "personality": "善附甘龙之论、辞锋绵里藏针",
+  "motivation": "守世禄与旧章",
+  "speakingStyle": "多反问、喜「利不百不变法」一类句式；**勿抄剧，仅保持辩难节奏**",
+  "equipment": ["笏", "简册"],
+  "mount": "车",
+  "relationships": {
+    "shang-yang": { "initial": -68, "label": "政争对垒" },
+    "gan-long": { "initial": 75, "label": "同幕" },
+    "qin-xiao-gong": { "initial": 48, "label": "君臣" }
+  },
+  "redLines": ["被斥为巧言令色", "被说成只保私利"],
+  "era": "战国",
+  "eraFeatures": "廷辩",
+  "combat": { "maxHp": 82 }
+}

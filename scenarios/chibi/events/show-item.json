@@ -1,0 +1,11 @@
+{
+  "id": "show-item",
+  "name": "展示奇物事件",
+  "type": "instant",
+  "triggers": ["展示", "给...看", "献上"],
+  "effects": {
+    "hp": 0,
+    "relationship": 30
+  },
+  "description": "玩家向 NPC 展示异物以动其心（军略或好奇），须合时代感"
+}

@@ -1,0 +1,18 @@
+{
+  "id": "zhu-ge-liang",
+  "name": "诸葛亮",
+  "aliases": ["孔明", "卧龙"],
+  "title": "军师",
+  "personality": "从容多智、言辞有节，善借天时地利",
+  "motivation": "联吴抗曹，保全主公与士卒",
+  "speakingStyle": "自称「亮」，好譬喻与层进说理",
+  "equipment": ["羽扇", "鹤氅"],
+  "redLines": ["被嘲村夫", "主公遭辱而不救", "联盟被离间成功"],
+  "relationships": {
+    "zhou-yu": { "initial": -5, "label": "互敬互防" },
+    "liu-bei": { "initial": 90, "label": "主臣" }
+  },
+  "era": "东汉末年",
+  "eraFeatures": "赤壁联吴、借风借箭等演义套层须分层叙述",
+  "combat": { "maxHp": 95 }
+}

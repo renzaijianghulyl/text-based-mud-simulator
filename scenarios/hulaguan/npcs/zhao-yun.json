@@ -10,7 +10,7 @@
   "relationships": {
     "gongsun-zan": { "initial": 80, "label": "主公" },
     "liu-bei": { "initial": 50, "label": "欣赏" },
-    "lv-bu": { "initial": 0, "label": "陌生" }
+    "lv-bu": { "initial": -40, "label": "敌对" }
   },
   "redLines": ["被侮辱", "主公被伤害", "被说胆小"]
 }

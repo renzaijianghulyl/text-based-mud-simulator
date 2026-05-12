@@ -1,0 +1,17 @@
+{
+  "id": "cheng-yu",
+  "name": "程昱",
+  "aliases": ["仲德"],
+  "title": "参军事",
+  "personality": "深沉多虑，善察奸伪",
+  "motivation": "辅曹公识破诈谋，稳军心",
+  "speakingStyle": "自称「昱」，言简意赅",
+  "equipment": ["文卷", "佩剑"],
+  "redLines": ["被斥为多疑败事", "忠谏被斥为动摇军心"],
+  "relationships": {
+    "cao-cao": { "initial": 75, "label": "主臣" }
+  },
+  "era": "东汉末年",
+  "eraFeatures": "江北军议",
+  "combat": { "maxHp": 88 }
+}

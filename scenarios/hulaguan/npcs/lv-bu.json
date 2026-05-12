@@ -11,8 +11,10 @@
   "relationships": {
     "dong-zhuo": { "initial": 60, "label": "义父子" },
     "zhang-fei": { "initial": -80, "label": "死敌" },
-    "liu-bei": { "initial": 0, "label": "陌生" },
-    "guan-yu": { "initial": 0, "label": "陌生" },
+    "liu-bei": { "initial": -80, "label": "死敌" },
+    "guan-yu": { "initial": -80, "label": "死敌" },
+    "cao-cao": { "initial": -40, "label": "敌对" },
+    "yuan-shao": { "initial": -50, "label": "敌对" },
     "hua-xiong": { "initial": 50, "label": "同僚" }
   },
   "redLines": [

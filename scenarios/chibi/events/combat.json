@@ -1,0 +1,14 @@
+{
+  "id": "combat",
+  "name": "战斗事件",
+  "type": "instant",
+  "triggers": ["攻击", "刺杀", "挑战", "放箭", "接战"],
+  "effects": {
+    "hp": -20,
+    "relationship": -30
+  },
+  "redLineEffects": {
+    "assassinate": { "hp": -50, "relationship": -100 }
+  },
+  "description": "玩家在水寨或江面主动与 NPC 交锋，触发战斗叙事"
+}

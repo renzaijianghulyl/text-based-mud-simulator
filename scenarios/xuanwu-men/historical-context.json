@@ -1,0 +1,134 @@
+{
+  "period": {
+    "year": 626,
+    "eraName": "武德九年",
+    "season": "夏",
+    "event": "玄武门事变前后，长安宫省与秦王府、东宫张力激化"
+  },
+  "location": {
+    "current": "长安宫城北阙玄武门一带与禁苑侧近处",
+    "caoCaoBase": "东宫、齐王府与太子卫率驻屯叙事锚点（与秦王府对位；勿混用天宝后典制地名作主场景）",
+    "forbiddenLocations": ["洛阳神都叙事作主场景", "安史乱后藩镇割据定型口吻", "北宋汴梁宫省"]
+  },
+  "characters": {
+    "present": [
+      { "npcId": "li-shi-min", "role": "秦王", "status": "active" },
+      { "npcId": "li-jian-cheng", "role": "皇太子", "status": "active" },
+      { "npcId": "li-yuan-ji", "role": "齐王", "status": "active" },
+      { "npcId": "yu-chi-jing-de", "role": "秦王府骁将", "status": "active" },
+      { "npcId": "chang-sun-wu-ji", "role": "秦王府心腹谋臣", "status": "active" }
+    ],
+    "absent": [
+      {
+        "npcId": "li-yuan",
+        "labels": ["李渊", "高祖"],
+        "reason": "事发时多在太极宫侧；可写内谒、敕意传闻或远处辇声，不宜每轮写成亲临玄武门阙下与诸子对质已定谳口吻。",
+        "location": "太极宫",
+        "forbidDialogueSpeaker": false
+      },
+      {
+        "npcId": "wei-zheng",
+        "labels": ["魏征", "玄成"],
+        "reason": "此时尚东宫洗马等东宫系脉络为主；若出场宜侧写东宫僚议，勿写成贞观名相口吻已定型。",
+        "forbiddenUntil": null,
+        "forbidDialogueSpeaker": false
+      }
+    ]
+  },
+  "forbiddenEvents": [
+    {
+      "label": "贞观之治细节当作已发生",
+      "keywords": ["贞观", "凌烟阁"],
+      "severity": "hard",
+      "actualYear": 627,
+      "reason": "玄武门后始有贞观年号与政风叙事，武德九年勿作已成定局的后见口吻。"
+    },
+    {
+      "label": "安史之乱",
+      "keywords": ["安史之乱", "安禄山", "史思明"],
+      "severity": "hard",
+      "actualYear": 755,
+      "reason": "百余年之后事"
+    },
+    {
+      "label": "武则天称帝叙事",
+      "keywords": ["武则天称帝", "周朝革命"],
+      "severity": "hard",
+      "actualYear": 690,
+      "reason": "远晚于武德九年"
+    },
+    {
+      "label": "将话本细节写作史实拍板",
+      "keywords": [],
+      "severity": "soft",
+      "actualYear": 626,
+      "reason": "民间演义层可写军中流言与小说家言；史笔口径宜与《旧唐书》《通鉴》等相容，勿将未定细节写为史官铁案。"
+    }
+  ],
+  "historicalNotes": [
+    "时间锚武德九年六月初四前后；勿混用天宝后官制、地名与礼制。",
+    "太子、秦王、齐王为兄弟政争核心；禁军、北门屯兵、内谒与敕书可侧写张力，未至摊牌勿写结局已定。",
+    "李渊多在宫省；叙事宜留空间，勿强行写成每轮御驾亲临阙下审讯。",
+    "尉迟敬德、程知节等为秦王府骁将；东宫率更宿卫等可侧写，勿写成后世演义脸谱复读。",
+    "玩家若混用后期典故，NPC 可温和纠偏，勿主动编造武德九年后大事件为已发生。"
+  ],
+  "dramaticRelationships": [
+    {
+      "from": "li-shi-min",
+      "to": "li-jian-cheng",
+      "public": { "tone": "兄弟礼数下已深忌，禁中对视宜短促克制", "note": "勿提前写成贞观君臣重构口吻。" },
+      "private": { "tone": "夺嫡与身家性命之压", "note": "可写秦王府密议，勿一轮写尽政变全流程。" }
+    },
+    {
+      "from": "li-jian-cheng",
+      "to": "li-shi-min",
+      "public": { "tone": "太子威仪与长兄名分，语带压制与戒备", "note": "东宫僚属可在侧，勿写成公开辱骂失体。" },
+      "private": { "tone": "惧其功高与将士归心", "note": "勿写成已下毒手为史既定。" }
+    },
+    {
+      "from": "li-yuan-ji",
+      "to": "li-shi-min",
+      "public": { "tone": "齐王对秦王，常带挑衅与威逼", "note": "勇悍可写，忌 caricature 过度。" },
+      "private": { "tone": "与太子并力以自保夺位之势", "note": "勿写死后追贬谥号等后见细节。" }
+    },
+    {
+      "from": "chang-sun-wu-ji",
+      "to": "li-jian-cheng",
+      "public": { "tone": "外戚谋臣对储贰，表面敬、内里防", "note": "军议密勿宜收在可播范围。" },
+      "private": { "tone": "以秦王安危为轴", "note": "勿写成已布死局无可转圜。" }
+    }
+  ],
+  "relationships": [
+    {
+      "from": "li-shi-min",
+      "to": "li-jian-cheng",
+      "relationship": "兄弟储位之争，表面礼数、内里势成水火",
+      "addressForm": "太子 / 大哥（私下密议慎用，公开场合以太子为敬）",
+      "knowledgeLevel": "知东宫与齐王并力相逼，语气宜克制而暗藏机锋",
+      "note": "勿称已为太宗；仍为秦王身份语境。"
+    },
+    {
+      "from": "li-shi-min",
+      "to": "yu-chi-jing-de",
+      "relationship": "心腹骁将，可托以急难",
+      "addressForm": "敬德 / 尉迟将军",
+      "knowledgeLevel": "可直呼其字表亲近与信任"
+    },
+    {
+      "from": "li-jian-cheng",
+      "to": "li-shi-min",
+      "relationship": "功高震主之弟，戒惧交加",
+      "addressForm": "二郎 / 秦王",
+      "knowledgeLevel": "公开场合维持兄弟称呼，语带储贰威压",
+      "note": "勿用后世纪功「天可汗」等称谓。"
+    }
+  ],
+  "addressRules": {
+    "description": "唐初宫省称谓：尊卑与公私场合分明，避免明清以后口语与后见年号",
+    "rules": [
+      "对皇帝称陛下；对太子称殿下；秦王自称宜「某」或「世民」于密勿，对兄宜敬称太子殿下。",
+      "表字可用于僚友之间；对尉迟敬德可称敬德，对房杜可称玄龄、克明。",
+      "勿提前使用「太宗」「贞观」等后见称谓作当场对话主体。"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "id": "xuanwu-men",
+  "name": "玄武门之变",
+  "description": "武德九年，秦王李世民与太子李建成、齐王李元吉在长安宫阙与秦王府之间的政争与兵变前夕。玩家可扮演原创人物或唐初人物，体验禁中鼓角与门阙下的生死一瞬。",
+  "version": "1.0",
+  "era": "唐初（武德九年）",
+  "eraFeatures": "宫省、禁军、兄弟政争、门阙伏击",
+  "openingNarration": "武德九年六月初四将晓未晓，长安禁苑的鼓声比往日更密。太极殿侧影沉沉，玄武门阙下甲叶轻响，秦王府与东宫各有人影来去——史书将记的这一页，尚未写尽。",
+  "openingPlayerHint": "此刻你可在宫城北阙与秦王府一带侧写：更鼓、门禁、玄甲与东宫卫卒的交错人影；远处太极殿方向或有内谒与辇声。玩家尚未行动，请留出「打听门禁、趋近玄武门、请见秦王府僚属或东宫属吏」等钩子，勿替玩家抉择。",
+  "availableNpcs": [
+    "li-shi-min",
+    "li-jian-cheng",
+    "li-yuan-ji",
+    "yu-chi-jing-de",
+    "chang-sun-wu-ji",
+    "fang-xuan-ling",
+    "du-ru-hui",
+    "gao-shi-lian",
+    "zhang-gong-jin",
+    "cheng-zhi-jie"
+  ],
+  "npcRoles": {
+    "li-shi-min": "秦王；天策府系与玄甲旧部核心，玄武门事变主导方之一。",
+    "li-jian-cheng": "皇太子；东宫储贰，与秦王政争已深。",
+    "li-yuan-ji": "齐王；与太子并力，常主冲锋与威逼。",
+    "yu-chi-jing-de": "秦王府骁将，尉迟敬德；刚猛敢战，门阙下可执锐。",
+    "chang-sun-wu-ji": "秦王妃兄、心腹谋主；军议与门禁策应。",
+    "fang-xuan-ling": "秦王府僚，房玄龄；筹策密勿。",
+    "du-ru-hui": "秦王府僚，杜如晦；断事明敏。",
+    "gao-shi-lian": "外戚重臣，高士廉；秦王府侧援。",
+    "zhang-gong-jin": "秦王府属，张公谨；可从行禁门。",
+    "cheng-zhi-jie": "秦王府骁将，程知节（程咬金）；勇悍护卫。"
+  },
+  "defaultTarget": "li-shi-min"
+}

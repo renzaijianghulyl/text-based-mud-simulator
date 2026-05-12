@@ -23,6 +23,7 @@ import { logEngine } from '../engine/logger';
 import { buildDemoSession } from '../sessions/session-manager';
 import { resolvePromptProfile } from '../engine/engine';
 import { OPENING_ROUND_INTENT, OPENING_ROUND_MARKER } from '../engine/opening-intent';
+import { getScenarioNarrativeHint } from '../engine/scenario-narrative-hint';
 
 describe('engine unit', () => {
   const envBackup = { ...process.env };
@@ -64,6 +65,10 @@ describe('engine unit', () => {
     );
 
     expect(prompt).toContain('【剧本类型】');
+    expect(prompt).toContain('【平台与内容安全（优先于戏剧发挥）】');
+    expect(prompt).toContain('全年龄');
+    expect(prompt).toContain('戏内');
+    expect(prompt).toContain('圆滑');
     expect(prompt).toContain('【历史背景与约束】');
     expect(prompt).toContain('【情感高潮引导】');
     expect(prompt).toContain('初平元年');
@@ -528,6 +533,170 @@ describe('engine unit', () => {
     expect(hint.length).toBeGreaterThan(0);
     expect(hint).toContain('初平元年');
     expect(hint).toContain('190');
+    expect(hint).toContain('对位或侧翼');
+  });
+
+  it('buildHistoricalContextHint 对 chibi 非空且含建安十三年与 208', () => {
+    const hint = buildHistoricalContextHint('chibi');
+    expect(hint.length).toBeGreaterThan(0);
+    expect(hint).toContain('建安十三年');
+    expect(hint).toContain('208');
+    expect(hint).toContain('江北');
+    expect(hint).toContain('对位或侧翼');
+  });
+
+  it('getScenarioNarrativeHint 对 chibi 为战争类赤壁表述', () => {
+    const t = getScenarioNarrativeHint('chibi');
+    expect(t).toContain('赤壁');
+    expect(t).toContain('水战');
+  });
+
+  it('buildHistoricalContextHint 对 xuanwu-men 非空且含武德九年与 626', () => {
+    const hint = buildHistoricalContextHint('xuanwu-men');
+    expect(hint.length).toBeGreaterThan(0);
+    expect(hint).toContain('武德九年');
+    expect(hint).toContain('626');
+    expect(hint).toContain('对位或侧翼');
+    expect(hint).not.toContain('曹操');
+  });
+
+  it('buildDramaticRelationshipsHint 对 xuanwu-men 不含联军套话', () => {
+    const hint = buildDramaticRelationshipsHint('xuanwu-men', 'li-shi-min');
+    expect(hint.length).toBeGreaterThan(0);
+    expect(hint).toContain('公开与私下张力');
+    expect(hint).not.toContain('联军');
+  });
+
+  it('getScenarioNarrativeHint 对 xuanwu-men 含玄武门与宫廷政变', () => {
+    const t = getScenarioNarrativeHint('xuanwu-men');
+    expect(t).toContain('玄武门');
+    expect(t).toContain('宫廷');
+  });
+
+  it('buildDemoSession 对 chibi 含 npcCombatById 卡司键', () => {
+    const s = buildDemoSession('u-chibi-demo', 'chibi');
+    expect(s.scenarioId).toBe('chibi');
+    expect(s.npcs.current.id).toBeTruthy();
+    expect(s.npcCombatById?.['zhou-yu']).toBeDefined();
+    expect(s.npcCombatById?.['cao-cao']).toBeDefined();
+  });
+
+  it('buildPrompt 对 chibi 非开局轮注入赤壁导演弹性块', () => {
+    const prompt = buildPrompt(
+      {
+        current: {
+          id: 'zhou-yu',
+          name: '周瑜',
+          personality: '儒雅而锐',
+          motivation: '破曹',
+          relationship: 0,
+        },
+      },
+      {
+        recentSummaryLines: ['R1: 试探'],
+        recentPhrases: [],
+        keyEvents: [],
+        cumulativeState: { totalRounds: 2, hp: 100, maxHp: 100 },
+      },
+      '我观望江北连营',
+      'chibi'
+    );
+    expect(prompt).toContain('赤壁江战');
+    expect(prompt).toContain('史演分层');
+  });
+
+  it('buildDemoSession 对 xuanwu-men 含 npcCombatById 卡司键', () => {
+    const s = buildDemoSession('u-xw-demo', 'xuanwu-men');
+    expect(s.scenarioId).toBe('xuanwu-men');
+    expect(s.npcs.current.id).toBeTruthy();
+    expect(s.npcCombatById?.['li-jian-cheng']).toBeDefined();
+    expect(s.npcCombatById?.['li-shi-min']).toBeDefined();
+  });
+
+  it('buildPrompt 对 xuanwu-men 非开局轮注入玄武门导演弹性块', () => {
+    const prompt = buildPrompt(
+      {
+        current: {
+          id: 'li-shi-min',
+          name: '李世民',
+          personality: '沉毅',
+          motivation: '争势',
+          relationship: 0,
+        },
+      },
+      {
+        recentSummaryLines: ['R1: 试探'],
+        recentPhrases: [],
+        keyEvents: [],
+        cumulativeState: { totalRounds: 2, hp: 100, maxHp: 100 },
+      },
+      '我趋近玄武门打听门禁',
+      'xuanwu-men'
+    );
+    expect(prompt).toContain('玄武门禁中');
+    expect(prompt).toContain('未定局');
+    expect(prompt).toContain('【储位与宫廷戏剧关系】');
+    expect(prompt).not.toContain('【联军人物戏剧关系】');
+  });
+
+  it('buildScenarioEmotionalHint 对 xuanwu-men 非空并包含强度建议', () => {
+    const hint = buildScenarioEmotionalHint('xuanwu-men', 10, ['R9: 禁中鼓角']);
+    expect(hint.length).toBeGreaterThan(0);
+    expect(hint).toContain('强度上限：');
+    expect(hint).toMatch(/low|medium|high/);
+  });
+
+  it('buildHistoricalContextHint 对 shang-yang-bian-fa 非空且含战国秦语境', () => {
+    const hint = buildHistoricalContextHint('shang-yang-bian-fa');
+    expect(hint.length).toBeGreaterThan(0);
+    expect(hint).toContain('战国');
+    expect(hint).toContain('对位或侧翼');
+    expect(hint).not.toContain('曹操');
+  });
+
+  it('getScenarioNarrativeHint 对 shang-yang-bian-fa 含变法表述', () => {
+    const t = getScenarioNarrativeHint('shang-yang-bian-fa');
+    expect(t).toContain('变法');
+    expect(t).toContain('商鞅');
+  });
+
+  it('buildDemoSession 对 shang-yang-bian-fa 含 npcCombatById 卡司键', () => {
+    const s = buildDemoSession('u-sy-demo', 'shang-yang-bian-fa');
+    expect(s.scenarioId).toBe('shang-yang-bian-fa');
+    expect(s.npcs.current.id).toBeTruthy();
+    expect(s.npcCombatById?.['gan-long']).toBeDefined();
+    expect(s.npcCombatById?.['shang-yang']).toBeDefined();
+  });
+
+  it('buildPrompt 对 shang-yang-bian-fa 非开局轮注入变法导演弹性块', () => {
+    const prompt = buildPrompt(
+      {
+        current: {
+          id: 'shang-yang',
+          name: '商鞅',
+          personality: '峻急',
+          motivation: '强秦',
+          relationship: 0,
+        },
+      },
+      {
+        recentSummaryLines: ['R1: 试探'],
+        recentPhrases: [],
+        keyEvents: [],
+        cumulativeState: { totalRounds: 2, hp: 100, maxHp: 100 },
+      },
+      '我在朝堂外打听廷辩',
+      'shang-yang-bian-fa'
+    );
+    expect(prompt).toContain('战国变法');
+    expect(prompt).toContain('史线开放');
+    expect(prompt).toContain('【朝堂与变法戏剧关系】');
+  });
+
+  it('buildScenarioEmotionalHint 对 shang-yang-bian-fa 非空并包含强度建议', () => {
+    const hint = buildScenarioEmotionalHint('shang-yang-bian-fa', 10, ['R9: 廷辩']);
+    expect(hint.length).toBeGreaterThan(0);
+    expect(hint).toContain('强度上限：');
   });
 
   it('buildHistoricalContextHint 对无配置剧本返回空串', () => {
@@ -540,6 +709,23 @@ describe('engine unit', () => {
     expect(hint).toContain('guo-jia');
     expect(hint).toContain('禁称');
     expect(hint).toContain('奉孝');
+  });
+
+  it('buildRelationshipHint 对 chibi 周瑜视角非空且含盟军中称谓', () => {
+    const hint = buildRelationshipHint('chibi', 'zhou-yu');
+    expect(hint.length).toBeGreaterThan(0);
+    expect(hint).toContain('【对人关系与称谓】');
+    expect(hint).toContain('左将军');
+  });
+
+  it('collectHistoricalWarnings 对 chibi 命中不宜正名出场的缺席人物 dialogue', () => {
+    const w = collectHistoricalWarnings('chibi', {
+      narration: '',
+      dialogue: '',
+      stateChanges: { hp: 0, relationship: 0 },
+      scenes: [{ type: 'dialogue', speaker: '郭嘉', content: '主公，臣有一计。' }],
+    });
+    expect(w.some((x) => x.includes('郭嘉'))).toBe(true);
   });
 
   it('buildPrompt 在曹操视角注入人物关系与称谓段', () => {
@@ -570,6 +756,13 @@ describe('engine unit', () => {
 
   it('buildScenarioEmotionalHint 对 hulaguan 非空并包含强度建议', () => {
     const hint = buildScenarioEmotionalHint('hulaguan', 12, ['R11: 战后营中沉寂']);
+    expect(hint.length).toBeGreaterThan(0);
+    expect(hint).toContain('强度上限');
+    expect(hint).toContain('候选模板');
+  });
+
+  it('buildScenarioEmotionalHint 对 chibi 非空并包含强度建议', () => {
+    const hint = buildScenarioEmotionalHint('chibi', 12, ['R11: 南岸军议']);
     expect(hint.length).toBeGreaterThan(0);
     expect(hint).toContain('强度上限');
     expect(hint).toContain('候选模板');

@@ -1,0 +1,11 @@
+{
+  "id": "dialogue",
+  "name": "对话事件",
+  "type": "instant",
+  "triggers": ["交谈", "询问", "劝说", "进言"],
+  "effects": {
+    "hp": 0,
+    "relationship": 10
+  },
+  "description": "玩家与 NPC 军议或私谈，增进了解或试探立场"
+}

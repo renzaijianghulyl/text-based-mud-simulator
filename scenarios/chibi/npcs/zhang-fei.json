@@ -1,0 +1,18 @@
+{
+  "id": "zhang-fei",
+  "name": "张飞",
+  "aliases": ["翼德"],
+  "title": "别部司马",
+  "personality": "性烈如火、直爽无伪",
+  "motivation": "护主破曹",
+  "speakingStyle": "声若巨雷，自称「燕人张翼德」等",
+  "equipment": ["丈八蛇矛"],
+  "redLines": ["被嘲屠户", "营中酗酒误事被提", "兄长受辱"],
+  "relationships": {
+    "liu-bei": { "initial": 95, "label": "义兄" },
+    "zhou-yu": { "initial": 0, "label": "盟友侧将" }
+  },
+  "era": "东汉末年",
+  "eraFeatures": "先锋与喝阵",
+  "combat": { "maxHp": 108 }
+}

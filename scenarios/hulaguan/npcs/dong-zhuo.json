@@ -12,7 +12,9 @@
     "lv-bu": { "initial": 60, "label": "义父子" },
     "cao-cao": { "initial": -100, "label": "死敌" },
     "yuan-shao": { "initial": -80, "label": "敌对" },
-    "dong-zhuo": { "initial": 100, "label": "自己" }
+    "liu-bei": { "initial": -90, "label": "敌对" },
+    "guan-yu": { "initial": -90, "label": "敌对" },
+    "zhang-fei": { "initial": -90, "label": "敌对" }
   },
   "redLines": [
     "被顶撞",

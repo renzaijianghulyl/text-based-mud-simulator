@@ -1,0 +1,20 @@
+{
+  "id": "gao-shi-lian",
+  "name": "高士廉",
+  "aliases": ["士廉"],
+  "title": "外戚重臣",
+  "personality": "端重而能断，于禁中礼法与军务间斡旋",
+  "motivation": "保宗室与大势，援秦王于侧",
+  "speakingStyle": "自称「某」",
+  "equipment": ["佩剑"],
+  "mount": "马",
+  "relationships": {
+    "li-shi-min": { "initial": 80, "label": "甥婿秦王" },
+    "chang-sun-wu-ji": { "initial": 70, "label": "姻亲同幕" },
+    "li-jian-cheng": { "initial": -25, "label": "储贰疏离" }
+  },
+  "redLines": ["被诬外戚干政", "族眷被辱"],
+  "era": "唐初",
+  "eraFeatures": "长安禁省侧",
+  "combat": { "maxHp": 88 }
+}

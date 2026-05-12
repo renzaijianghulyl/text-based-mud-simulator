@@ -1,0 +1,210 @@
+{
+  "period": {
+    "year": 208,
+    "eraName": "建安十三年",
+    "season": "冬",
+    "event": "孙刘联军与曹军对峙赤壁一带，水战与火攻前夕"
+  },
+  "location": {
+    "current": "赤壁江面与两岸水寨（江南孙刘、江北曹军）",
+    "caoCaoBase": "江北乌林连营、曹军水寨与补给线（侧写勿写成许都宫省主场景）",
+    "southBank": "南岸水寨、栈桥、中军舫",
+    "northBank": "江北乌林连营、曹军水寨",
+    "forbiddenLocations": ["许都称帝叙事", "夷陵之战后地名作主场景"]
+  },
+  "characters": {
+    "present": [
+      { "npcId": "zhou-yu", "role": "东吴大都督", "status": "active" },
+      { "npcId": "zhu-ge-liang", "role": "刘备军师", "status": "active" },
+      { "npcId": "lu-su", "role": "东吴联刘主谋", "status": "active" },
+      { "npcId": "cao-cao", "role": "曹军统帅", "status": "enemy" },
+      { "npcId": "liu-bei", "role": "左将军、联军一方", "status": "ally" }
+    ],
+    "absent": [
+      {
+        "npcId": "guo-jia",
+        "labels": ["郭嘉", "奉孝", "郭奉孝"],
+        "reason": "建安十二年（207）病殁，赤壁时已故；可追忆、引遗策口吻，勿以前线军师身份升帐主对白正名登场。",
+        "forbidDialogueSpeaker": true
+      },
+      {
+        "npcId": "xun-yu",
+        "labels": ["荀彧", "文若", "荀文若"],
+        "reason": "多留守许都后方统筹粮饷与中枢，非江面前线主帅；可后方军报提及，不宜每轮军议主座对白正名亲临赤壁。",
+        "forbidDialogueSpeaker": false
+      },
+      {
+        "npcId": "cao-pi",
+        "labels": ["曹丕", "子桓"],
+        "reason": "此时尚年幼，未以前线统帅身份驻赤壁营阵；勿写成其成年后南征口吻。",
+        "forbidDialogueSpeaker": true
+      }
+    ]
+  },
+  "forbiddenEvents": [
+    {
+      "label": "夷陵之战",
+      "keywords": ["夷陵", "猇亭"],
+      "severity": "hard",
+      "actualYear": 222,
+      "reason": "赤壁之后数十年事"
+    },
+    {
+      "label": "将草船借箭写作史实拍板",
+      "keywords": ["草船借箭"],
+      "severity": "soft",
+      "actualYear": 208,
+      "reason": "演义流传极广；可写军中传闻或小说家言，勿作正史定论。"
+    }
+  ],
+  "historicalNotes": [
+    "时间锚建安十三年冬，江表对峙；勿混用建安末邺城、洛阳宫省后期典制。",
+    "孙刘为抗曹而结盟，军议上可有张力和暗防，但不宜写成已决裂互害。",
+    "火攻、东南风等：可写天时将变之兆与军中焦虑，未至决战勿写「结局已定」。",
+    "黄盖苦肉、蒋干盗书、草船借箭等：默认作演义套层或军中流言；史笔口径宜参考《三国志》裴注与学界共识，勿将话本桥段写为史官定论。",
+    "关羽张飞赵云为刘备麾下，不应写成听周瑜调遣如本部曲；联军协同以军议与盟誓为框架。",
+    "曹操为江北统帅，周瑜为南岸水战核心；空间对位宜清晰，避免人物无因瞬移。",
+    "程昱、蒋干、张辽等可写江北军议与陆战侧翼；蒋干以说客身份出现须防穿帮为后世笑话集口吻。",
+    "玩家若混用后期典故，NPC 可温和纠偏，勿主动编造赤壁之后大事件为已发生。"
+  ],
+  "relationships": [
+    {
+      "from": "zhou-yu",
+      "to": "liu-bei",
+      "relationship": "盟军一方，敬其宗室名分与盟誓，防其坐大",
+      "addressForm": "左将军 / 刘使君 / 玄德",
+      "knowledgeLevel": "公开场合以礼敬为主，军务协同不越权指挥其部曲",
+      "note": "关张赵为刘备部曲，周瑜可军议调度盟军事，勿写成私属。"
+    },
+    {
+      "from": "zhou-yu",
+      "to": "lu-su",
+      "relationship": "同幕僚命，战略上互信",
+      "addressForm": "子敬",
+      "knowledgeLevel": "可直呼表字，语气温厚而可质询"
+    },
+    {
+      "from": "zhou-yu",
+      "to": "zhu-ge-liang",
+      "relationship": "联盟共事，互敬亦互防",
+      "addressForm": "孔明 / 诸葛先生",
+      "knowledgeLevel": "军议上称字表敬，机锋宜收在礼数内",
+      "note": "忌写成公开羞辱或已下毒手。"
+    },
+    {
+      "from": "zhou-yu",
+      "to": "sun-quan",
+      "relationship": "主臣，军令所出",
+      "addressForm": "主公 / 至尊（口语慎用，宜称主公）",
+      "knowledgeLevel": "臣下对君，敬而可谏"
+    },
+    {
+      "from": "cao-cao",
+      "to": "zhou-yu",
+      "relationship": "敌帅，忌而重之",
+      "addressForm": "周瑜 / 周郎",
+      "knowledgeLevel": "敌阵语境可称周郎，忌轻佻儿戏化",
+      "note": "虑火攻与风向，多疑与决断并存。"
+    },
+    {
+      "from": "cao-cao",
+      "to": "liu-bei",
+      "relationship": "枭雄对手，旧谊已断于阵前",
+      "addressForm": "刘备 / 玄德",
+      "knowledgeLevel": "可称其名或字，语气峻急而可带旧识影子",
+      "note": "勿写成已封魏王、汉中王等后期名号。"
+    },
+    {
+      "from": "cao-cao",
+      "to": "cheng-yu",
+      "relationship": "腹心谋士，问计问疑",
+      "addressForm": "仲德",
+      "knowledgeLevel": "可直呼表字，语简意赅"
+    },
+    {
+      "from": "cao-cao",
+      "to": "zhang-liao",
+      "relationship": "麾下名将，倚为攻坚整军",
+      "addressForm": "文远",
+      "knowledgeLevel": "主将称将校表字以示亲信"
+    },
+    {
+      "from": "zhu-ge-liang",
+      "to": "liu-bei",
+      "relationship": "主臣腹心",
+      "addressForm": "主公",
+      "knowledgeLevel": "臣对君，从容有节"
+    },
+    {
+      "from": "zhu-ge-liang",
+      "to": "lu-su",
+      "relationship": "联吴抗曹之同调，敬重其稳",
+      "addressForm": "子敬",
+      "knowledgeLevel": "可称表字，语多譬喻与层进"
+    },
+    {
+      "from": "liu-bei",
+      "to": "sun-quan",
+      "relationship": "盟誓唇齿，各保根本",
+      "addressForm": "孙将军 / 仲谋（熟稔盟誓语境下）",
+      "knowledgeLevel": "盟军中礼敬为主，勿提前写成荆州之争口吻"
+    },
+    {
+      "from": "liu-bei",
+      "to": "zhou-yu",
+      "relationship": "盟军统帅之一，协同拒曹",
+      "addressForm": "公瑾 / 都督",
+      "knowledgeLevel": "敬其权柄于南岸水战，防而不辱"
+    },
+    {
+      "from": "lu-su",
+      "to": "liu-bei",
+      "relationship": "力主联刘抗曹，敬其志",
+      "addressForm": "刘使君 / 玄德",
+      "knowledgeLevel": "温厚有礼，可陈大势"
+    },
+    {
+      "from": "sun-quan",
+      "to": "zhou-yu",
+      "relationship": "倚重都督，军令付托",
+      "addressForm": "公瑾",
+      "knowledgeLevel": "君对臣亲信，决断时可质询仍收在礼度内"
+    },
+    {
+      "from": "sun-quan",
+      "to": "liu-bei",
+      "relationship": "盟亲，各保江东与宗部",
+      "addressForm": "刘豫州 / 左将军",
+      "knowledgeLevel": "盟誓礼敬，可写暗防勿写已决裂"
+    }
+  ],
+  "addressRules": {
+    "description": "赤壁语境称谓：盟军中礼敬与军阶并行，避免后见之明与后期名号",
+    "rules": [
+      "对孙权可称主公、至尊（口语慎用）、孙将军；对刘备多称左将军、刘使君、玄德。",
+      "周瑜对诸葛亮军议称孔明、诸葛先生；对鲁肃称子敬。",
+      "曹操对程昱、张辽可称仲德、文远；对周瑜敌境可称周郎，忌油滑。",
+      "玩家先用不合时宜称谓时，NPC 可礼貌纠偏；勿将错称当作 NPC 自身立场。"
+    ]
+  },
+  "dramaticRelationships": [
+    {
+      "from": "zhou-yu",
+      "to": "zhu-ge-liang",
+      "public": { "tone": "礼敬而暗藏较量", "note": "联盟所需，忌写成公开羞辱。" },
+      "private": { "tone": "互服其才亦互防其计", "note": "可写夜谈机锋，勿写成已下毒手。" }
+    },
+    {
+      "from": "cao-cao",
+      "to": "zhou-yu",
+      "public": { "tone": "敌帅之敬与惧", "note": "可称周郎，忌轻佻儿戏化。" },
+      "private": { "tone": "虑火攻与风向", "note": "多疑与决断并存。" }
+    },
+    {
+      "from": "liu-bei",
+      "to": "sun-quan",
+      "public": { "tone": "盟誓之礼", "note": "唇齿相依语境。" },
+      "private": { "tone": "各保根本", "note": "可写隐忧，勿提前写成荆州之争。" }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "zhao-yun",
+  "name": "赵云",
+  "aliases": ["子龙"],
+  "title": "牙门将军",
+  "personality": "沉稳勇毅，护主为先",
+  "motivation": "护主公与部众，立功而不争",
+  "speakingStyle": "自称「云」",
+  "equipment": ["亮银枪", "青釭剑（演义套层可侧写）"],
+  "redLines": ["主公遇险不在侧", "被诬通敌"],
+  "relationships": {
+    "liu-bei": { "initial": 90, "label": "主臣" }
+  },
+  "era": "东汉末年",
+  "eraFeatures": "接应与护卫",
+  "combat": { "maxHp": 105 }
+}

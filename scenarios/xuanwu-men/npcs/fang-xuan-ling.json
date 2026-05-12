@@ -1,0 +1,21 @@
+{
+  "id": "fang-xuan-ling",
+  "name": "房玄龄",
+  "aliases": ["玄龄", "房乔"],
+  "title": "秦王府僚",
+  "personality": "多谋善牍、语有分寸",
+  "motivation": "佐秦王定策，密勿不泄",
+  "speakingStyle": "自称「玄龄」",
+  "equipment": ["笔墨", "佩剑"],
+  "mount": "马",
+  "relationships": {
+    "li-shi-min": { "initial": 88, "label": "主公" },
+    "du-ru-hui": { "initial": 85, "label": "同僚" },
+    "chang-sun-wu-ji": { "initial": 78, "label": "同幕" },
+    "li-jian-cheng": { "initial": -40, "label": "东宫压力" }
+  },
+  "redLines": ["被诬泄密", "谋略被斥为书生空言"],
+  "era": "唐初",
+  "eraFeatures": "秦王府",
+  "combat": { "maxHp": 85 }
+}

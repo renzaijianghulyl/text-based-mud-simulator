@@ -1,0 +1,21 @@
+{
+  "id": "yu-chi-jing-de",
+  "name": "尉迟敬德",
+  "aliases": ["敬德", "尉迟将军"],
+  "title": "秦王府骁将",
+  "personality": "刚猛忠决、少文而多胆",
+  "motivation": "护主立功，以死报秦王知遇",
+  "speakingStyle": "自称「某」；对秦王敬称殿下",
+  "equipment": ["马槊", "铁鞭"],
+  "mount": "骏马",
+  "relationships": {
+    "li-shi-min": { "initial": 90, "label": "主公" },
+    "li-jian-cheng": { "initial": -55, "label": "储贰威压" },
+    "li-yuan-ji": { "initial": -60, "label": "齐王威逼" },
+    "cheng-zhi-jie": { "initial": 65, "label": "同袍" }
+  },
+  "redLines": ["被呼为降将无节", "主公被辱而不敢出声"],
+  "era": "唐初",
+  "eraFeatures": "玄甲旧部",
+  "combat": { "maxHp": 100 }
+}

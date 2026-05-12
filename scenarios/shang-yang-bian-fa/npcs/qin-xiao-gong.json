@@ -1,0 +1,23 @@
+{
+  "id": "qin-xiao-gong",
+  "name": "嬴渠梁",
+  "aliases": ["秦孝公", "孝公"],
+  "title": "秦国君主",
+  "personality": "沉毅寡言、任贤而疑法之烈；雪耻之志压得住一时之躁",
+  "motivation": "国强兵壮以雪河西之耻",
+  "speakingStyle": "自称「寡人」；对臣称「子」或爵号。君臣剖白宜短促有重量，**勿照搬影视原句**",
+  "equipment": ["冕旒", "佩剑"],
+  "mount": "辂车",
+  "relationships": {
+    "shang-yang": { "initial": 90, "label": "变法柱石" },
+    "gan-long": { "initial": -25, "label": "宗室老臣" },
+    "du-zhi": { "initial": -20, "label": "旧法之声" },
+    "jing-jian": { "initial": 75, "label": "近臣" },
+    "ying-si": { "initial": 80, "label": "储贰" },
+    "gongzi-qian": { "initial": 40, "label": "宗室近支" }
+  },
+  "redLines": ["被说成昏聩无断", "被辱为国耻不报"],
+  "era": "战国",
+  "eraFeatures": "秦廷",
+  "combat": { "maxHp": 95 }
+}

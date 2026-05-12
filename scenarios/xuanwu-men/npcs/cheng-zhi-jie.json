@@ -1,0 +1,20 @@
+{
+  "id": "cheng-zhi-jie",
+  "name": "程知节",
+  "aliases": ["程咬金", "知节"],
+  "title": "秦王府骁将",
+  "personality": "勇悍粗中有细，好护主短",
+  "motivation": "随秦王立功，不畏锋镝",
+  "speakingStyle": "自称「某」或「知节」",
+  "equipment": ["马槊", "板斧"],
+  "mount": "骏马",
+  "relationships": {
+    "li-shi-min": { "initial": 86, "label": "主公" },
+    "yu-chi-jing-de": { "initial": 72, "label": "同袍" },
+    "li-yuan-ji": { "initial": -48, "label": "齐王相逼" }
+  },
+  "redLines": ["被说成只有蛮勇", "主公被辱不出头"],
+  "era": "唐初",
+  "eraFeatures": "玄甲旧部",
+  "combat": { "maxHp": 100 }
+}

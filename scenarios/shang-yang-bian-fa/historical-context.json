@@ -1,0 +1,112 @@
+{
+  "period": {
+    "year": 356,
+    "eraName": "战国秦孝公在位（变法高潮期叙事锚；约公元前4世纪中叶）",
+    "season": "秋",
+    "event": "卫鞅入秦、变法条教渐次颁行，宗室与山东士论反弹未息"
+  },
+  "location": {
+    "current": "栎阳/咸阳宫府、朝堂与市肆立木处一带（叙事可侧写国门徙木，勿混用秦并天下后咸阳宫制细节作主场景）",
+    "caoCaoBase": "旧宗室封邑、山东游士舆论与私议侧写（与「宫府条教」对位；勿写成六国已灭、郡县已定型的后见口吻）",
+    "forbiddenLocations": ["阿房宫主场景", "兵马俑叙事", "焚书坑儒口吻", "函谷关以东已尽入秦郡叙事作主场景"]
+  },
+  "characters": {
+    "present": [
+      { "npcId": "shang-yang", "role": "变法主持（卫鞅）", "status": "active" },
+      { "npcId": "qin-xiao-gong", "role": "秦国君主（孝公）", "status": "active" },
+      { "npcId": "gan-long", "role": "宗室老臣", "status": "active" },
+      { "npcId": "du-zhi", "role": "旧法辩士", "status": "active" },
+      { "npcId": "ying-si", "role": "太子", "status": "active" }
+    ],
+    "absent": [
+      {
+        "npcId": "ying-zheng",
+        "labels": ["嬴政", "秦始皇"],
+        "reason": "远晚于孝公变法；可作文史后见之误引被纠偏，勿以前线对白正名登场。",
+        "forbidDialogueSpeaker": true
+      },
+      {
+        "npcId": "qi-wei-wang",
+        "labels": ["齐威王", "田因齐"],
+        "reason": "六国君主宜作传闻、使节侧写；勿每轮写成与秦廷同殿主辩已定盟。",
+        "forbidDialogueSpeaker": false
+      }
+    ]
+  },
+  "forbiddenEvents": [
+    {
+      "label": "秦已并天下、称帝焚书",
+      "keywords": ["焚书坑儒", "始皇帝", "兵马俑", "阿房宫"],
+      "severity": "hard",
+      "actualYear": 221,
+      "reason": "秦帝制与统一叙事远晚于孝公变法，勿作当时已定事实。"
+    },
+    {
+      "label": "商鞅车裂结局当作本局已发生",
+      "keywords": ["车裂商君", "五马分尸", "商君已死"],
+      "severity": "soft",
+      "actualYear": 338,
+      "reason": "史线一端；未至收束勿写死结局，可留廷争与条教执行中段。"
+    }
+  ],
+  "historicalNotes": [
+    "括号中年份数字为叙事约数占位，须与「约公元前4世纪中叶」语境共读，勿与公元后纪年混淆。",
+    "《史记》《商君书》与民间话本层次不同：硬地名、爵号、条教名宜守战国秦语境；小说家言可作军中流言套层。",
+    "电视剧《大秦帝国》系列仅可作语气参考（雄辩、峻法、君臣剖白之节奏），对白须原创，勿复刻具体台词。",
+    "太子傅刑、公子虔等事史书系年与细节有异本；勿将未定争议写为史官铁案。"
+  ],
+  "dramaticRelationships": [
+    {
+      "from": "shang-yang",
+      "to": "gan-long",
+      "public": { "tone": "廷辩上辞锋相对、礼数未失", "note": "忌 caricature 成市井骂战。" },
+      "private": { "tone": "视其为变法首阻之一", "note": "勿一轮写尽族诛结局。" }
+    },
+    {
+      "from": "qin-xiao-gong",
+      "to": "shang-yang",
+      "public": { "tone": "君主礼贤、言重九鼎", "note": "可写「寡人」与「子」之对位。" },
+      "private": { "tone": "以雪耻图强为轴，容峻法但有底线试探", "note": "勿写成已无权柄的傀儡。" }
+    },
+    {
+      "from": "gan-long",
+      "to": "shang-yang",
+      "public": { "tone": "老臣持重、以祖宗之法压变", "note": "体面与宗法名分宜在。" },
+      "private": { "tone": "戒惧其夺宗室之利", "note": "勿写成单一脸谱恶人。" }
+    }
+  ],
+  "relationships": [
+    {
+      "from": "shang-yang",
+      "to": "qin-xiao-gong",
+      "relationship": "君臣际会，变法所托",
+      "addressForm": "君上 / 公（廷上敬称）；密勿时可称「君」而不直呼谥号",
+      "knowledgeLevel": "知孝公求贤若渴，语气宜峻切中存敬",
+      "note": "勿称孝公为死后谥号组合作当场主体；勿用「秦始皇」式后见。"
+    },
+    {
+      "from": "qin-xiao-gong",
+      "to": "shang-yang",
+      "relationship": "客卿变法的柱石，功疑之际仍须君臣相试",
+      "addressForm": "卫鞅 / 商君（爵位已授之后）；未授爵前可称「子」",
+      "knowledgeLevel": "知其才而亦知其危宗室，问对宜短促有锋",
+      "note": "勿写成毫无摩擦的全然盲信。"
+    },
+    {
+      "from": "gan-long",
+      "to": "shang-yang",
+      "relationship": "政争对手，廷上体面、私下戒惧",
+      "addressForm": "左庶长 / 卫鞅（依当时所署爵称）",
+      "knowledgeLevel": "称其爵不称其私德，攻法不攻人身为宜",
+      "note": "禁称「酷吏」等明清以后标签套话。"
+    }
+  ],
+  "addressRules": {
+    "description": "战国秦廷：君臣、宾主与宗法名分并存，避免明清官制口语",
+    "rules": [
+      "君主可自称「寡人」；臣对君称「君」「公」或爵号，勿混用「陛下」（秦廷此期不宜作主称）。",
+      "太子侧称「殿下」或「太子」，勿用后世纪「皇太子」清宫口吻。",
+      "辩论宜短句往复，忌现代法条背诵体；可化用《商君书》意，勿大段照抄原文。"
+    ]
+  }
+}

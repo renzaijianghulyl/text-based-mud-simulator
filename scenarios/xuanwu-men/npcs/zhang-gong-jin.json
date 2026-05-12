@@ -1,0 +1,20 @@
+{
+  "id": "zhang-gong-jin",
+  "name": "张公谨",
+  "aliases": ["公谨"],
+  "title": "秦王府属",
+  "personality": "谨厚敢任，临机不避锋",
+  "motivation": "从秦王于急难",
+  "speakingStyle": "自称「某」",
+  "equipment": ["佩刀", "盾牌"],
+  "mount": "马",
+  "relationships": {
+    "li-shi-min": { "initial": 82, "label": "主公" },
+    "yu-chi-jing-de": { "initial": 68, "label": "同列行阵" },
+    "li-jian-cheng": { "initial": -35, "label": "东宫威势" }
+  },
+  "redLines": ["被斥为怯", "被诬通敌"],
+  "era": "唐初",
+  "eraFeatures": "秦王府",
+  "combat": { "maxHp": 95 }
+}

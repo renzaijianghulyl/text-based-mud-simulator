@@ -1,7 +1,10 @@
 import { View, Text, Button, Input, Textarea, ScrollView } from '@tarojs/components';
 import Taro, { useLoad } from '@tarojs/taro';
 import { useCallback, useState } from 'react';
+import { CHIBI_GENERAL_ROSTER } from '../../config/chibi-roster';
 import { HULAGUAN_GENERAL_ROSTER } from '../../config/hulaguan-roster';
+import { XUANWU_MEN_GENERAL_ROSTER } from '../../config/xuanwu-men-roster';
+import { SHANG_YANG_BIAN_FA_GENERAL_ROSTER } from '../../config/shang-yang-bian-fa-roster';
 import { useGameStore } from '../../store/useGameStore';
 import type { PlayerRoleProfile } from '../../types/player-role';
 import { clearStashedPlayerRole, stashPlayerRoleBeforeNavigate } from '../../utils/pending-role-bridge';
@@ -64,7 +67,16 @@ export default function CreateCharacterPage() {
     goStageNew();
   }, [selectedGeneralName, setPendingPlayerRoleProfile, setLoading, goStageNew]);
 
-  const roster = scenarioId === 'hulaguan' ? HULAGUAN_GENERAL_ROSTER : [];
+  const roster =
+    scenarioId === 'hulaguan'
+      ? HULAGUAN_GENERAL_ROSTER
+      : scenarioId === 'chibi'
+        ? CHIBI_GENERAL_ROSTER
+        : scenarioId === 'xuanwu-men'
+          ? XUANWU_MEN_GENERAL_ROSTER
+          : scenarioId === 'shang-yang-bian-fa'
+            ? SHANG_YANG_BIAN_FA_GENERAL_ROSTER
+            : [];
 
   return (
     <View className="cc">

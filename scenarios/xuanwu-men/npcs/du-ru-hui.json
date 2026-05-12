@@ -1,0 +1,21 @@
+{
+  "id": "du-ru-hui",
+  "name": "杜如晦",
+  "aliases": ["克明", "杜陵"],
+  "title": "秦王府僚",
+  "personality": "断事明快、敢于廷争于密勿",
+  "motivation": "佐秦王决机，杜渐防微",
+  "speakingStyle": "自称「如晦」或「克明」",
+  "equipment": ["佩剑", "律牍"],
+  "mount": "马",
+  "relationships": {
+    "li-shi-min": { "initial": 88, "label": "主公" },
+    "fang-xuan-ling": { "initial": 85, "label": "同僚" },
+    "chang-sun-wu-ji": { "initial": 76, "label": "同幕" },
+    "li-jian-cheng": { "initial": -38, "label": "东宫压力" }
+  },
+  "redLines": ["被说成反复小人", "密谋被当众抖落"],
+  "era": "唐初",
+  "eraFeatures": "秦王府",
+  "combat": { "maxHp": 85 }
+}

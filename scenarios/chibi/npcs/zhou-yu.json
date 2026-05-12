@@ -1,0 +1,19 @@
+{
+  "id": "zhou-yu",
+  "name": "周瑜",
+  "aliases": ["公瑾", "周郎"],
+  "title": "大都督",
+  "personality": "儒雅而锐、善水战与军略，嫉才之影宜克制为侧笔",
+  "motivation": "保江东、破曹军于江表，全主公基业",
+  "speakingStyle": "称「某」或「瑜」，军议时条理分明",
+  "equipment": ["佩剑", "水军令旗"],
+  "mount": "战马（岸上）",
+  "redLines": ["被轻视为黄口小儿", "被质疑通敌", "江东将士遭无故羞辱"],
+  "relationships": {
+    "zhu-ge-liang": { "initial": -10, "label": "联盟中的暗竞" },
+    "cao-cao": { "initial": -80, "label": "敌帅" }
+  },
+  "era": "东汉末年",
+  "eraFeatures": "赤壁水战、火攻筹划",
+  "combat": { "maxHp": 100 }
+}

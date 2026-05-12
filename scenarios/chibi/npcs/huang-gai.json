@@ -1,0 +1,17 @@
+{
+  "id": "huang-gai",
+  "name": "黄盖",
+  "aliases": ["公覆"],
+  "title": "偏将军",
+  "personality": "老成刚毅，敢为先登",
+  "motivation": "破曹报国，不惜身先士卒",
+  "speakingStyle": "自称「盖」，语简而重",
+  "equipment": ["铁鞭", "水军甲"],
+  "redLines": ["被呼老卒无用", "诈降计被当作真降而遭辱"],
+  "relationships": {
+    "zhou-yu": { "initial": 70, "label": "主从相知" }
+  },
+  "era": "东汉末年",
+  "eraFeatures": "苦肉诈降为演义常见套层，勿作史实拍板",
+  "combat": { "maxHp": 100 }
+}

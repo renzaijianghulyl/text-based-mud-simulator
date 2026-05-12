@@ -368,6 +368,131 @@ const RAW_TEMPLATES = {
   }
 } as Record<string, CurrentNpc>;
 
+/** 扮演方 npcId → 对其它 npc 的剧本 initial 关系值（来自各 npc JSON relationships.initial） */
+export const HULAGUAN_REL_INITIAL = {
+  "lv-bu": {
+    "dong-zhuo": 60,
+    "zhang-fei": -80,
+    "liu-bei": -80,
+    "guan-yu": -80,
+    "cao-cao": -40,
+    "yuan-shao": -50,
+    "hua-xiong": 50
+  },
+  "dong-zhuo": {
+    "lv-bu": 60,
+    "cao-cao": -100,
+    "yuan-shao": -80,
+    "liu-bei": -90,
+    "guan-yu": -90,
+    "zhang-fei": -90
+  },
+  "liu-bei": {
+    "lv-bu": -80,
+    "dong-zhuo": -100,
+    "zhang-fei": 100,
+    "guan-yu": 100,
+    "cao-cao": 20,
+    "yuan-shao": 10
+  },
+  "guan-yu": {
+    "lv-bu": -80,
+    "dong-zhuo": -100,
+    "liu-bei": 100,
+    "zhang-fei": 100,
+    "hua-xiong": -100
+  },
+  "zhang-fei": {
+    "lv-bu": -80,
+    "liu-bei": 100,
+    "guan-yu": 100,
+    "dong-zhuo": -100
+  },
+  "cao-cao": {
+    "lv-bu": -40,
+    "liu-bei": 20,
+    "dong-zhuo": -100,
+    "yuan-shao": 10,
+    "guan-yu": 50,
+    "zhang-fei": 30
+  },
+  "yuan-shao": {
+    "lv-bu": -50,
+    "cao-cao": 10,
+    "liu-bei": 10,
+    "dong-zhuo": -80,
+    "yuan-shu": -20
+  },
+  "sun-jian": {
+    "yuan-shu": 30,
+    "yuan-shao": 20,
+    "dong-zhuo": -100,
+    "lv-bu": -50
+  },
+  "gongsun-zan": {
+    "liu-bei": 60,
+    "zhao-yun": 80,
+    "yuan-shao": 10,
+    "dong-zhuo": -80
+  },
+  "kong-rong": {
+    "liu-bei": 30,
+    "cao-cao": 20,
+    "yuan-shao": 10,
+    "dong-zhuo": -100
+  },
+  "xiahou-dun": {
+    "cao-cao": 100,
+    "lv-bu": -30,
+    "liu-bei": 20
+  },
+  "dian-wei": {
+    "cao-cao": 100,
+    "lv-bu": -30
+  },
+  "cao-ren": {
+    "cao-cao": 100,
+    "lv-bu": -30
+  },
+  "hua-xiong": {
+    "dong-zhuo": 80,
+    "lv-bu": 50,
+    "guan-yu": -100
+  },
+  "zhao-yun": {
+    "gongsun-zan": 80,
+    "liu-bei": 50,
+    "lv-bu": -40
+  },
+  "ma-teng": {
+    "dong-zhuo": -60,
+    "yuan-shao": 10,
+    "cao-cao": 0
+  },
+  "yuan-shu": {
+    "yuan-shao": -20,
+    "sun-jian": 30,
+    "liu-bei": -10,
+    "dong-zhuo": -80
+  },
+  "xiahou-yuan": {
+    "cao-cao": 100,
+    "xiahou-dun": 80,
+    "lv-bu": -30
+  },
+  "cao-hong": {
+    "cao-cao": 100,
+    "lv-bu": -30
+  }
+} as Readonly<Record<string, Readonly<Record<string, number>>>>;
+
+export function getHulaguanInitialRel(fromNpcId: string, toNpcId: string): number | undefined {
+  const row = HULAGUAN_REL_INITIAL[fromNpcId];
+  if (!row) return undefined;
+  const v = row[toNpcId];
+  return typeof v === 'number' && Number.isFinite(v) ? v : undefined;
+}
+
 export function getHulaguanNpcTemplateById(npcId: string): CurrentNpc | null {
   const row = RAW_TEMPLATES[npcId];
   return row ? { ...row, relationship: 0 } : null;

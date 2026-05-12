@@ -2,12 +2,15 @@ import type {
   CumulativeState,
   CurrentNpc,
   KeyEvent,
+  NpcCombatState,
   PlayerRoleProfile,
   RecentPhrase,
   SessionNpcsContext,
 } from '../types';
 import { PROMPT_DIRECTOR_MARKDOWN } from './prompt-director-markdown';
 import { getScenarioNarrativeHint } from './scenario-narrative-hint';
+import { formatEliminatedNpcLabels } from './eliminated-npcs';
+import { formatNpcCombatPromptSection } from './npc-combat';
 import { getEnsembleElasticPromptLine, getScenarioEnsembleHint } from './scenario-ensemble-hint';
 import { buildEnsembleBeatsHint, buildScenarioEmotionalHint } from './scenario-emotional-hint';
 import {
@@ -21,12 +24,20 @@ import {
   readScenarioOpeningNarration,
   readScenarioOpeningPlayerHint,
 } from './opening-intent';
+import {
+  CONTENT_SAFETY_PROMPT_BODY,
+  CONTENT_SAFETY_PROMPT_TITLE,
+} from './content-safety-prompt';
 
 export interface PromptMemoryInput {
   recentSummaryLines: string[];
   recentPhrases: RecentPhrase[];
   keyEvents: KeyEvent[];
   cumulativeState: CumulativeState;
+  /** 本局已退场卡司 id；缺省视为 [] */
+  eliminatedNpcIds?: string[];
+  /** 卡司 HP 本会话副本；缺省由引擎在 buildMemorySlice 前补全 */
+  npcCombatById?: Record<string, NpcCombatState>;
 }
 
 export type PromptProfile = 'fast' | 'balanced' | 'rich' | 'auto';
@@ -52,13 +63,41 @@ const BUDGET_HISTORICAL = 800;
 const BUDGET_RELATIONSHIP_HINT = 600;
 /** 情感高潮引导（剧本 emotional-beats.json） */
 const BUDGET_EMOTIONAL_HINT = 500;
-/** 联军戏剧关系（historical-context dramaticRelationships） */
+/** 戏剧关系段（historical-context dramaticRelationships；小节标题按剧本区分） */
 const BUDGET_DRAMATIC_REL_HINT = 420;
 /** 群像节拍（emotional-beats ensemble / optional romance） */
 const BUDGET_ENSEMBLE_BEATS_HINT = 480;
+/** 已退场卡司导演禁令 + 名单 */
+const BUDGET_ELIMINATED_DIRECTOR = 420;
+/** 卡司 HP 副本表（全员 id 一行） */
+const BUDGET_NPC_COMBAT = 880;
+/** 虎牢关：收场弹性 + 地理锚软化（不修改剧本 JSON，引擎侧导演注） */
+const BUDGET_HULAGUAN_ESCALATION = 400;
+/** 赤壁：水战/火攻节奏与史演分层（引擎侧导演注） */
+const BUDGET_CHIBI_ESCALATION = 420;
+/** 玄武门：禁中政变节奏与未定局（引擎侧导演注） */
+const BUDGET_XUANWU_MEN_ESCALATION = 420;
+/** 商鞅变法：廷辩与条教节奏、未至史线收束勿写死（引擎侧导演注） */
+const BUDGET_SHANG_YANG_BIAN_FA_ESCALATION = 420;
+/** 当前主 NPC 为吕布时的单挑导演 */
+const BUDGET_LV_BU_DUEL = 420;
 /** narrative-prompt-guide-v3 建议的系统导演稿预算（+400 为 clip 上限；须覆盖「篇幅与信息密度」等中段导演约束） */
 const BUDGET_SYSTEM = 5000;
+/** 平台与内容安全段（置于【剧本类型】后）；宜完整注入避免裁断条文化约束 */
+const BUDGET_CONTENT_SAFETY = 1600;
 const DIRECTOR_CACHE = new Map<string, string[]>();
+
+const ELIMINATED_CAST_DIRECTOR = `【导演：已退场与群像】若旁白或关键事件已明确某卡司阵亡/离场，或下列【本局已退场角色】非空，则该角色不得以生者身份再独立出一幕 dialogue（speaker 为其正名）；可写军报、尸首侧写、传闻、回忆。若【群像节拍】【卡司与点名】要求多人台词，须改由其他活人卡司承担，不得与已写死亡矛盾、不得令已退场者亲口对白「复活」。`;
+
+const HULAGUAN_ESCALATION_FLEX = `【导演：收场与危机弹性（虎牢关）】对飞将级交锋允许多种收场：击退、双方退开、鸣金、挫其锐气式的非击杀战术结果、联军或亲兵介入将局面前推；不必以「玩家每轮濒死」为唯一压力手段。策划在 locations 等物料中的极简「必死」式提示须服从因果与铺垫：允许脱身、被拦、误会化解、转入军议或下一场景，避免无铺垫的「当场处决」每轮复读。`;
+
+const CHIBI_ESCALATION_FLEX = `【导演：赤壁江战与史演分层】南北对垒、风向与火攻为叙事高压线，但未至决战勿写结局已定。苦肉诈降、蒋干盗书、草船借箭等宜作演义套层或军中流言，勿作史实拍板。允许多种阶段性收场：佯退、夜袭虚惊、军议僵持、斥候互骗、舟师试探；玩家压力不必只靠濒死单一路径。【卡司战斗状态】与 stateChanges.npcHp 须与叙事一致。`;
+
+const XUANWU_MEN_ESCALATION_FLEX = `【导演：玄武门禁中与未定局】事变未至盖棺勿写死结局；伏兵、门阙、更鼓、敕意传闻、秦王府与东宫对位可层层加压。允许多种阶段性收场：门禁盘查、军议僵持、虚惊、斥候误报、内谒传话；勿把后世定评或贞观细节当作武德九年已发生事实。【卡司战斗状态】与 stateChanges.npcHp 须与叙事一致。`;
+
+const SHANG_YANG_BIAN_FA_ESCALATION_FLEX = `【导演：战国变法与史线开放】未至孝公薨逝、车裂等史线收束勿写死结局；廷辩可往复数合，条教执行宜与因果铺垫一致。允许多种阶段性收场：立木争议暂息、朝堂僵持、宗室私议、太子侧压力未爆。勿将焚书、称帝、兵马俑等后世事作本朝已定。【卡司战斗状态】与 stateChanges.npcHp 须与叙事一致。对白气质可参考影视「大秦帝国」式雄辩峻切之节奏，须原创勿复刻具体台词。`;
+
+const LV_BU_DUEL_DIRECTOR = `【导演：与吕布接战】普通过招宜偏中轻度玩家 HP 波动（见本条生命原则）；重度减血留给已叙事确认的踩红线或下杀手情境。卡司 HP 以【卡司战斗状态】为准：若吕布 id 在本副本中 hp 已明显偏低，须允许收束为撤退、昏厥被扶走、赤兔受惊拖离、鸣金等，并在 stateChanges.npcHp 中写清对其 id 的 delta，与旁白一致。`;
 
 /** 不经过 clip，每轮完整注入；与累计状态中的 HP 呼应，表述为导演倾向而非死规则 */
 const LIFE_CONFLICT_DIRECTOR_BLOCK = `【导演原则：生命、冲突与结局】
@@ -72,9 +111,9 @@ HP 与氛围（倾向，非硬性档位）：
 
 HP 增量幅度（仅供参考，须与 reason、因果一致）：
 - 友好互动或治疗向：hp 常不变，或约 +5～+10。
-- 轻度冲突：约 -5～-10。
-- 中度冲突：约 -10～-30。
-- 重度冲突或触碰人设/剧情红线：约 -50～-70。
+- 轻度冲突（口角、试探、尚未触碰人设红线）：约 -5～-10。
+- 中度冲突（明确动手、阵前数合、言语激怒但未踩侮辱性底线）：约 -10～-30。
+- 重度冲突（仅当叙事已写清触碰人设底线/剧情红线，或一方下杀手且另一方无退路）：约 -50～-70；勿把「普通骂战或未确认踩红线」直接等同重度。
 若本轮 stateChanges.hp 将导致应用后 HP≤0，必须在 narration 中写出死亡过程，再结束；勿在「已死亡」后再写饶恕或治疗。
 
 NPC 在玩家血量很低时（例如不足 20 左右，依情境判断）：可依人设与情节在「继续致命攻击」「停手警告或饶恕」「治疗或拉拢」间择一或多层转折；可呼应是否触碰红线、玩家是否求饶、玩家是否对 NPC 有价值等，不作单一套路。
@@ -391,7 +430,7 @@ function getProfileBudgets(profile: PromptProfile) {
       recent: 700,
       recentPhrases: 240,
       cumulative: 320,
-      system: 1700,
+      system: 1900,
       directorBlock: 900,
     };
   }
@@ -401,7 +440,7 @@ function getProfileBudgets(profile: PromptProfile) {
       recent: BUDGET_RECENT,
       recentPhrases: BUDGET_RECENT_PHRASES,
       cumulative: BUDGET_CUMULATIVE,
-      system: BUDGET_SYSTEM + 400,
+      system: BUDGET_SYSTEM + 700,
       directorBlock: 2600,
     };
   }
@@ -410,7 +449,7 @@ function getProfileBudgets(profile: PromptProfile) {
     recent: 900,
     recentPhrases: 300,
     cumulative: 360,
-    system: BUDGET_SYSTEM + 400,
+    system: BUDGET_SYSTEM + 700,
     directorBlock: 1300,
   };
 }
@@ -568,26 +607,47 @@ export function buildPrompt(
     intentTrimmed,
     isOpeningRoundIntent(intent) ? BUDGET_INTENT_OPENING : BUDGET_INTENT
   );
+  const eliminated = memory.eliminatedNpcIds ?? [];
+  const eliminatedDirectorBlock = clip(
+    eliminated.length > 0
+      ? `${ELIMINATED_CAST_DIRECTOR}\n【本局已退场角色（禁止再以生者对白出场）】${formatEliminatedNpcLabels(
+          scenarioId,
+          eliminated
+        )}`
+      : ELIMINATED_CAST_DIRECTOR,
+    BUDGET_ELIMINATED_DIRECTOR
+  );
   const playerRoleBlocks = buildPlayerRoleBlocks(playerRoleProfile);
   const openingNarrationHint =
     isOpeningRoundIntent(intent) ? readScenarioOpeningNarration(scenarioId) : undefined;
   const openingPlayerHint =
     isOpeningRoundIntent(intent) ? readScenarioOpeningPlayerHint(scenarioId) : undefined;
 
-  const ensembleRoster = getScenarioEnsembleHint(scenarioId);
-  const ensembleElastic = getEnsembleElasticPromptLine(cs.totalRounds, memory.recentSummaryLines);
+  const ensembleRoster = getScenarioEnsembleHint(scenarioId, eliminated);
+  const ensembleElastic = getEnsembleElasticPromptLine(cs.totalRounds, memory.recentSummaryLines, eliminated);
 
   const systemBlock = clip(PROMPT_DIRECTOR_MARKDOWN, budgets.system);
   const directorBlocks = directorBlockFrame(scenarioId, profile, cs.totalRounds);
 
   const scenarioTypeLine = getScenarioNarrativeHint(scenarioId);
+  const contentSafetyBlock = clip(
+    `${CONTENT_SAFETY_PROMPT_TITLE}\n${CONTENT_SAFETY_PROMPT_BODY}`,
+    BUDGET_CONTENT_SAFETY
+  );
   const historicalHint = buildHistoricalContextHint(scenarioId);
   const relationshipHint = buildRelationshipHint(scenarioId, npcs.current.id);
   const dramaticRelHint = buildDramaticRelationshipsHint(scenarioId, npcs.current.id);
+  const dramaticRelationshipsSectionTitle =
+    scenarioId === 'xuanwu-men'
+      ? '【储位与宫廷戏剧关系】'
+      : scenarioId === 'shang-yang-bian-fa'
+        ? '【朝堂与变法戏剧关系】'
+        : '【联军人物戏剧关系】';
   const ensembleBeatsHint = buildEnsembleBeatsHint(
     scenarioId,
     cs.totalRounds,
-    memory.recentSummaryLines
+    memory.recentSummaryLines,
+    eliminated
   );
   const emotionalHint = buildScenarioEmotionalHint(
     scenarioId,
@@ -595,9 +655,38 @@ export function buildPrompt(
     memory.recentSummaryLines
   );
 
+  const npcCombatRaw = formatNpcCombatPromptSection(
+    scenarioId,
+    memory.npcCombatById,
+    BUDGET_NPC_COMBAT - 80
+  );
+  const npcCombatBlock = clip(npcCombatRaw, BUDGET_NPC_COMBAT);
+  const hulaguanEscalationBlock =
+    scenarioId === 'hulaguan' && !isOpeningRoundIntent(intent)
+      ? clip(HULAGUAN_ESCALATION_FLEX, BUDGET_HULAGUAN_ESCALATION)
+      : '';
+  const chibiEscalationBlock =
+    scenarioId === 'chibi' && !isOpeningRoundIntent(intent)
+      ? clip(CHIBI_ESCALATION_FLEX, BUDGET_CHIBI_ESCALATION)
+      : '';
+  const xuanwuMenEscalationBlock =
+    scenarioId === 'xuanwu-men' && !isOpeningRoundIntent(intent)
+      ? clip(XUANWU_MEN_ESCALATION_FLEX, BUDGET_XUANWU_MEN_ESCALATION)
+      : '';
+  const shangYangBianFaEscalationBlock =
+    scenarioId === 'shang-yang-bian-fa' && !isOpeningRoundIntent(intent)
+      ? clip(SHANG_YANG_BIAN_FA_ESCALATION_FLEX, BUDGET_SHANG_YANG_BIAN_FA_ESCALATION)
+      : '';
+  const lvBuDuelBlock =
+    npc.id === 'lv-bu' && !isOpeningRoundIntent(intent)
+      ? clip(LV_BU_DUEL_DIRECTOR, BUDGET_LV_BU_DUEL)
+      : '';
+
   return [
     '【剧本类型】',
     scenarioTypeLine,
+    '',
+    contentSafetyBlock,
     '',
     ...(isOpeningRoundIntent(intent)
       ? [
@@ -620,11 +709,15 @@ export function buildPrompt(
     ...(historicalHint
       ? ['【历史背景与约束】', clip(historicalHint, BUDGET_HISTORICAL), '']
       : []),
+    ...(hulaguanEscalationBlock ? [hulaguanEscalationBlock, ''] : []),
+    ...(chibiEscalationBlock ? [chibiEscalationBlock, ''] : []),
+    ...(xuanwuMenEscalationBlock ? [xuanwuMenEscalationBlock, ''] : []),
+    ...(shangYangBianFaEscalationBlock ? [shangYangBianFaEscalationBlock, ''] : []),
     ...(relationshipHint
       ? ['【人物关系与称谓】', clip(relationshipHint, BUDGET_RELATIONSHIP_HINT), '']
       : []),
     ...(dramaticRelHint
-      ? ['【联军人物戏剧关系】', clip(dramaticRelHint, BUDGET_DRAMATIC_REL_HINT), '']
+      ? [dramaticRelationshipsSectionTitle, clip(dramaticRelHint, BUDGET_DRAMATIC_REL_HINT), '']
       : []),
     ...(ensembleBeatsHint
       ? ['【群像节拍】', clip(ensembleBeatsHint, BUDGET_ENSEMBLE_BEATS_HINT), '']
@@ -632,6 +725,8 @@ export function buildPrompt(
     ...(emotionalHint
       ? ['【情感高潮引导】', clip(emotionalHint, BUDGET_EMOTIONAL_HINT), '']
       : []),
+    eliminatedDirectorBlock,
+    '',
     '【系统指令】',
     systemBlock,
     '',
@@ -640,6 +735,7 @@ export function buildPrompt(
     '【NPC 人设】',
     npcBlock,
     '',
+    ...(lvBuDuelBlock ? [lvBuDuelBlock, ''] : []),
     ...(ensembleRoster
       ? ['【卡司与点名】', clip(ensembleRoster, BUDGET_NPC * 2), '']
       : []),
@@ -667,6 +763,9 @@ export function buildPrompt(
     '【累计状态】',
     cumulativeBlock,
     '',
+    '【卡司战斗状态（本会话副本）】',
+    npcCombatBlock,
+    '',
     '【环境记忆】',
     environmentBlock,
     '',
@@ -690,6 +789,8 @@ export function buildPrompt(
     '  · hp、relationship 表示「相对当前状态的增量」，不是绝对值。',
     `  · 应用后玩家 HP 须在 0～${memory.cumulativeState.maxHp} 之间；与 ${npc.name} 的关系须在 -100～100 之间。`,
     '  · 可选 reason：简短说明本轮数值变化原因',
-    '示例：{"scenes":[{"type":"narration","content":"……"},{"type":"dialogue","speaker":"吕布","content":"……"}],"stateChanges":{"hp":0,"relationship":-5,"reason":"言语冒犯"}}',
+    '  · 可选 eliminatedNpcs：字符串数组，每项须为剧本 npc id（如 hua-xiong）；仅当本局叙事确有卡司退场时填写，否则省略。',
+    '  · 可选 npcHp：对象数组，每项为 { id, delta }；id 为剧本 npc id，delta 为相对【卡司战斗状态】中该 id 当前 hp 的增量；有卡司受伤/治疗/休整时填写，须与旁白一致，否则省略。',
+    '示例：{"scenes":[{"type":"narration","content":"……"},{"type":"dialogue","speaker":"吕布","content":"……"}],"stateChanges":{"hp":0,"relationship":-5,"reason":"言语冒犯","npcHp":[{"id":"lv-bu","delta":-15}]}}',
   ].join('\n');
 }

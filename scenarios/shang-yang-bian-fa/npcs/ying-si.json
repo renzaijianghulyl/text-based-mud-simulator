@@ -1,0 +1,21 @@
+{
+  "id": "ying-si",
+  "name": "嬴驷",
+  "aliases": ["太子", "太子驷"],
+  "title": "秦国太子",
+  "personality": "少年老成、于国法与宗情间尚未定局",
+  "motivation": "习储贰之责，观变法于侧",
+  "speakingStyle": "自称「寡人」勿用（尚未即位）；可称「孤」或「驷」。**与商君张力为后史一端，本局宜中段开放**",
+  "equipment": ["太子剑", "玉佩"],
+  "mount": "骏马",
+  "relationships": {
+    "qin-xiao-gong": { "initial": 78, "label": "父子" },
+    "shang-yang": { "initial": 25, "label": "师傅与新法之间" },
+    "gong-sun-jia": { "initial": 60, "label": "太子傅" },
+    "gongzi-qian": { "initial": 50, "label": "宗室长辈侧" }
+  },
+  "redLines": ["被写成已即王位口吻", "被辱储位来路"],
+  "era": "战国",
+  "eraFeatures": "东宫",
+  "combat": { "maxHp": 88 }
+}

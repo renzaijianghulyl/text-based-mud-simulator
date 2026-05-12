@@ -1,0 +1,17 @@
+{
+  "id": "flee",
+  "name": "撤退事件",
+  "type": "conditional",
+  "triggers": ["撤退", "逃离", "乘船走"],
+  "successRate": {
+    "hp_gt_80": 70,
+    "hp_50_80": 50,
+    "hp_lt_50": 30,
+    "relationship_lt_minus_50": 20
+  },
+  "effects": {
+    "hp": -10,
+    "status": "撤退中"
+  },
+  "description": "玩家尝试脱离险境或江面交锋，有成败与代价"
+}

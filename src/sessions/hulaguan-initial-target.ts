@@ -79,10 +79,15 @@ function firstAvailablePreferred(playId: string | undefined, ordered: readonly s
   return HULAGUAN_DEFAULT_TARGET_NPC_ID;
 }
 
-function resolvePlayingNpcIdFromGeneral(profile: PlayerRoleProfile & { mode: 'general' }): string | undefined {
-  const name = profile.generalName?.trim();
+/** 与前端「扮演武将」展示名一致；用于开局写入玩家→当前 NPC 关系等 */
+export function resolveGeneralDisplayNameToHulaguanNpcId(generalName: string): string | undefined {
+  const name = generalName?.trim();
   if (!name) return undefined;
   return GENERAL_DISPLAY_NAME_TO_ID[name];
+}
+
+function resolvePlayingNpcIdFromGeneral(profile: PlayerRoleProfile & { mode: 'general' }): string | undefined {
+  return resolveGeneralDisplayNameToHulaguanNpcId(profile.generalName);
 }
 
 /**

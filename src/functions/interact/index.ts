@@ -6,14 +6,20 @@ import { process } from '../../engine/engine';
 import { OPENING_ROUND_INTENT } from '../../engine/opening-intent';
 import * as cloudSession from '../../adapters/wechat/cloud-session-store';
 import {
+  ChibiNpcRegistryError,
+  XuanwuMenNpcRegistryError,
+  ShangYangBianFaNpcRegistryError,
   CloudDatabaseError,
   LLMConfigError,
   LLMTransportError,
   ParseResponseError,
+  ScenarioUnsupportedError,
   SessionNotFoundError,
 } from '../../errors';
 import type { PlayerRoleProfile, Session } from '../../types';
+import { ensureNpcCombatFields } from '../../engine/npc-combat';
 import {
+  ensureEliminatedNpcFields,
   ensureIntentQuotaFields,
   intentQuotaRemaining,
   INTENT_QUOTA_PER_SHARE,
@@ -37,6 +43,8 @@ export interface InteractEvent {
 
 function serializeStateForClient(session: Session) {
   ensureIntentQuotaFields(session);
+  ensureEliminatedNpcFields(session);
+  ensureNpcCombatFields(session);
   return {
     player: session.player,
     playerRoleProfile: session.playerRoleProfile,
@@ -48,6 +56,8 @@ function serializeStateForClient(session: Session) {
     intentQuotaGranted: session.intentQuotaGranted,
     intentQuotaConsumed: session.intentQuotaConsumed,
     intentQuotaRemaining: intentQuotaRemaining(session),
+    eliminatedNpcIds: session.eliminatedNpcIds,
+    npcCombatById: session.npcCombatById,
   };
 }
 
@@ -122,6 +132,39 @@ function mapError(err: unknown): { success: false; code: string; message: string
   if (err instanceof CloudDatabaseError) {
     return { success: false, code: 'DB_ERROR', message: '网络异常，请稍后重试' };
   }
+  if (err instanceof ScenarioUnsupportedError) {
+    console.error('[interact] ScenarioUnsupportedError', err.scenarioId, err.message);
+    return {
+      success: false,
+      code: 'SCENARIO_UNSUPPORTED',
+      message: '该剧本暂时无法开局，请稍后再试或更新云端版本。',
+    };
+  }
+  if (err instanceof ChibiNpcRegistryError) {
+    console.error('[interact] ChibiNpcRegistryError', err.message);
+    return {
+      success: false,
+      code: 'CHIBI_REGISTRY_MISSING',
+      message: '赤壁剧本数据未就绪，请稍后再试或联系管理员。',
+    };
+  }
+  if (err instanceof XuanwuMenNpcRegistryError) {
+    console.error('[interact] XuanwuMenNpcRegistryError', err.message);
+    return {
+      success: false,
+      code: 'XUANWU_MEN_REGISTRY_MISSING',
+      message: '玄武门剧本数据未就绪，请稍后再试或联系管理员。',
+    };
+  }
+  if (err instanceof ShangYangBianFaNpcRegistryError) {
+    console.error('[interact] ShangYangBianFaNpcRegistryError', err.message);
+    return {
+      success: false,
+      code: 'SHANG_YANG_BIAN_FA_REGISTRY_MISSING',
+      message: '商鞅变法剧本数据未就绪，请稍后再试或联系管理员。',
+    };
+  }
+  console.error('[interact] unmapped error', err instanceof Error ? err.name : typeof err, flattenErrorMessages(err));
   return { success: false, code: 'UNKNOWN', message: '生成失败，请重试' };
 }
 
@@ -160,6 +203,8 @@ export async function main(
     if (event.action === 'intentShareBonus') {
       const session = await cloudSession.loadSession(OPENID, scenarioId);
       ensureIntentQuotaFields(session);
+      ensureEliminatedNpcFields(session);
+      ensureNpcCombatFields(session);
       if (session.intentQuotaShareClaims >= MAX_INTENT_SHARE_CLAIMS_PER_SESSION) {
         return {
           success: false,
@@ -224,6 +269,8 @@ export async function main(
 
     const session = await cloudSession.loadSession(OPENID, scenarioId);
     ensureIntentQuotaFields(session);
+    ensureEliminatedNpcFields(session);
+    ensureNpcCombatFields(session);
     if (intentQuotaRemaining(session) <= 0) {
       return {
         success: false,

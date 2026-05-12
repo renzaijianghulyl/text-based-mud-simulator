@@ -1,0 +1,18 @@
+{
+  "id": "guan-yu",
+  "name": "关羽",
+  "aliases": ["云长", "美髯公"],
+  "title": "偏将军",
+  "personality": "傲上而悯下，重义轻利",
+  "motivation": "护主公、全忠义名节",
+  "speakingStyle": "自称「某」或「羽」，寡言而重诺",
+  "equipment": ["青龙偃月刀"],
+  "redLines": ["被呼为降将", "忠义遭污", "东吴背盟（叙事未到时勿写为已定）"],
+  "relationships": {
+    "liu-bei": { "initial": 95, "label": "义兄" },
+    "cao-cao": { "initial": -30, "label": "旧识今敌" }
+  },
+  "era": "东汉末年",
+  "eraFeatures": "阵前威慑",
+  "combat": { "maxHp": 110 }
+}

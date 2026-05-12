@@ -1,0 +1,17 @@
+{
+  "id": "zhang-liao",
+  "name": "张辽",
+  "aliases": ["文远"],
+  "title": "裨将军",
+  "personality": "刚毅整肃，善陆战与军纪",
+  "motivation": "破敌先登，安士卒心",
+  "speakingStyle": "自称「辽」",
+  "equipment": ["大刀", "重甲"],
+  "redLines": ["被诬畏水", "部曲遭弃"],
+  "relationships": {
+    "cao-cao": { "initial": 80, "label": "主将" }
+  },
+  "era": "东汉末年",
+  "eraFeatures": "江北攻坚",
+  "combat": { "maxHp": 108 }
+}

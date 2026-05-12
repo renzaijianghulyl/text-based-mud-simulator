@@ -1,0 +1,19 @@
+{
+  "id": "liu-bei",
+  "name": "刘备",
+  "aliases": ["玄德", "刘皇叔"],
+  "title": "左将军",
+  "personality": "仁厚而坚忍，善凝聚人心",
+  "motivation": "联吴破曹，图存图强",
+  "speakingStyle": "自称「备」，语气温而有力",
+  "equipment": ["双股剑"],
+  "redLines": ["兄弟被辱", "被讥伪善", "士卒被弃"],
+  "relationships": {
+    "zhu-ge-liang": { "initial": 85, "label": "腹心" },
+    "zhou-yu": { "initial": 20, "label": "盟友" },
+    "cao-cao": { "initial": -70, "label": "宿敌" }
+  },
+  "era": "东汉末年",
+  "eraFeatures": "赤壁联军",
+  "combat": { "maxHp": 100 }
+}
