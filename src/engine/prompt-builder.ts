@@ -509,6 +509,10 @@ function getRelationshipLabel(score: number): string {
   return '死敌';
 }
 
+const OC_NONHUMAN_KEYWORD_RE = /马|坐骑|兽|天角|赤兔/;
+
+const PLAYER_OC_NONHUMAN_DIRECTOR = `【玩家：非人/坐骑侧】旁白与 NPC 反应宜体现坐骑、灵兽或异族体征与战场关系；与「你」对白须符合人与坐骑/盟友的边界。未列入【卡司与点名】的人物可经传闻、窃议、侧影写在 narration/action，勿用陌生正名作 dialogue 的 speaker。称谓须与【玩家角色信息】一致。`;
+
 function buildPlayerRoleBlocks(playerRoleProfile?: PlayerRoleProfile): { role: string; detail: string; hook: string } {
   if (!playerRoleProfile) {
     return {
@@ -518,11 +522,15 @@ function buildPlayerRoleBlocks(playerRoleProfile?: PlayerRoleProfile): { role: s
     };
   }
   if (playerRoleProfile.mode === 'oc') {
+    const baseHook =
+      '可从背景中自然抽取家世、旧怨、盟友、师承等线索推进剧情；先埋伏笔再兑现，不要一轮全部抖出。';
+    const hook = OC_NONHUMAN_KEYWORD_RE.test(playerRoleProfile.background)
+      ? `${PLAYER_OC_NONHUMAN_DIRECTOR}\n${baseHook}`
+      : baseHook;
     return {
       role: '原创角色',
       detail: `姓名：${playerRoleProfile.name}；背景：${playerRoleProfile.background}`,
-      hook:
-        '可从背景中自然抽取家世、旧怨、盟友、师承等线索推进剧情；先埋伏笔再兑现，不要一轮全部抖出。',
+      hook,
     };
   }
   return {
@@ -592,6 +600,11 @@ export function buildPrompt(
     env
       ? `时间：${env.time ?? '（未指定）'}；天气：${env.weather ?? '（未指定）'}；地点：${env.location ?? '（未指定）'}`
       : '（暂无）',
+    BUDGET_ENVIRONMENT
+  );
+  const locationAnchor = env?.location?.trim() || '（上轮未记地点）';
+  const environmentSoftLockBlock = clip(
+    `上一镜环境锚：${locationAnchor}；若【玩家意图】未明确长途移动或换场，旁白不宜无铺垫跳变主场景。`,
     BUDGET_ENVIRONMENT
   );
   const recentPhraseLines = memory.recentPhrases
@@ -768,6 +781,9 @@ export function buildPrompt(
     '',
     '【环境记忆】',
     environmentBlock,
+    '',
+    '【空间锚（软锁）】',
+    environmentSoftLockBlock,
     '',
     '【最近使用的表达】',
     recentPhrasesBlock,

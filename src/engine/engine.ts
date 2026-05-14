@@ -11,6 +11,7 @@ import {
 import { updateMemory } from './memory-manager';
 import { collectAddressWarnings, collectHistoricalWarnings } from './historical-context';
 import { parseResponse, validateParse } from './response-parser';
+import { assertDialogueSpeakersAllowed } from './npc-dialogue-speaker-policy';
 import { LLMConfigError, LLMTransportError, ParseResponseError } from '../errors';
 import { beginTimer, logEngine, logLatencySummary, recordLatency } from './logger';
 import { PROMPT_PROFILE_RULES, type PromptProfileContext } from './prompt-profile-rules';
@@ -131,6 +132,7 @@ async function obtainParsedResult(session: Session, prompt: string): Promise<Par
     if (!validateParse(parsed)) {
       throw new ParseResponseError('结构校验未通过');
     }
+    assertDialogueSpeakersAllowed(session.scenarioId, parsed);
     const historicalHits = collectHistoricalWarnings(session.scenarioId, parsed);
     const addressHits = collectAddressWarnings(
       session.scenarioId,

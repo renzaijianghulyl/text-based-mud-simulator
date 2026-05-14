@@ -110,6 +110,9 @@ describe('engine unit', () => {
     ];
     expect(optionalDirectors.some((x) => prompt.includes(x))).toBe(true);
     expect(prompt).toContain('【环境记忆】');
+    expect(prompt).toContain('【空间锚（软锁）】');
+    expect(prompt).toContain('上一镜环境锚：虎牢关前营帐');
+    expect(prompt).toContain('勿用陌生正名作 dialogue 的 speaker');
     expect(prompt).toContain('【最近使用的表达】');
     expect(prompt).toContain('【感官多样性引导】');
     expect(prompt).toContain('【环境演进引导】');
@@ -122,6 +125,31 @@ describe('engine unit', () => {
     expect(prompt).toContain('增量');
     expect(prompt).toContain('吕布');
     expect(prompt).toContain('我想先示好，再探口风');
+  });
+
+  it('buildPrompt OC 背景含坐骑关键词时注入非人导演条', () => {
+    const prompt = buildPrompt(
+      {
+        current: {
+          id: 'lv-bu',
+          name: '吕布',
+          personality: '高傲',
+          motivation: '证明武力',
+          relationship: 0,
+        },
+      },
+      {
+        recentSummaryLines: [],
+        recentPhrases: [],
+        keyEvents: [],
+        cumulativeState: { totalRounds: 1, hp: 100, maxHp: 100 },
+      },
+      '长嘶一声',
+      'hulaguan',
+      undefined,
+      { mode: 'oc', name: '赤影', background: '天角兽马，随军代步' }
+    );
+    expect(prompt).toContain('【玩家：非人/坐骑侧】');
   });
 
   it('buildPrompt 在开局意图时应包含剧本开场参考与开局导演', () => {

@@ -34,6 +34,38 @@ describe('engine.process branches', () => {
     vi.doUnmock('../engine/llm-adapter');
   });
 
+  it('非法 dialogue speaker 会触发解析重试一次并成功', async () => {
+    vi.resetModules();
+    vi.doMock('../engine/llm-adapter', () => ({
+      callLLM: vi
+        .fn()
+        .mockResolvedValueOnce(
+          JSON.stringify({
+            scenes: [
+              { type: 'narration', content: '风紧' },
+              { type: 'dialogue', speaker: '__幻觉人__', content: '……' },
+            ],
+            stateChanges: { hp: 0, relationship: 0 },
+          })
+        )
+        .mockResolvedValueOnce(
+          JSON.stringify({
+            scenes: [
+              { type: 'narration', content: '重试后合法' },
+              { type: 'dialogue', speaker: '吕布', content: '来。' },
+            ],
+            stateChanges: { hp: 0, relationship: 0 },
+          })
+        ),
+    }));
+
+    const { process } = await import('../engine/engine');
+    const session = buildDemoSession('u-speaker-retry', 'hulaguan');
+    const res = await process(session, '试探');
+    expect(res.narration).toContain('重试后合法');
+    vi.doUnmock('../engine/llm-adapter');
+  });
+
   it('重试后仍失败会返回生成失败', async () => {
     vi.resetModules();
     vi.doMock('../engine/llm-adapter', () => ({
